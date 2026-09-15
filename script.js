@@ -106,6 +106,17 @@
     sections.forEach(function (s) { observer.observe(s); });
   }
 
+  /* ---- Portrait ---------------------------------------------------------
+     Hide the frame rather than show a broken image if the photo is absent. */
+  var portrait = document.getElementById("portrait");
+  if (portrait) {
+    var shot = portrait.querySelector("img");
+    if (shot) {
+      if (shot.complete && shot.naturalWidth === 0) portrait.hidden = true;
+      shot.addEventListener("error", function () { portrait.hidden = true; });
+    }
+  }
+
   /* ---- Method spine: stagger the phases in, once ------------------------
      The one place on the page a stagger earns its keep — it reads as a
      sequence, which is what the section is actually describing. */
