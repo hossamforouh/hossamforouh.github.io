@@ -90,9 +90,12 @@
 
   /* ----- Motion ----- */
   --ease: cubic-bezier(.2, .8, .2, 1);
+  --t-press: 110ms;   /* press feedback — must feel instant */
   --t-fast: 120ms;
   --t-base: 180ms;
   --t-slow: 260ms;
+  --t-enter: 420ms;   /* page-load and in-view entrances */
+  --stagger: 45ms;
 
   /* ----- Layout ----- */
   --wrap:    1140px;
@@ -301,6 +304,9 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
               color var(--t-base) var(--ease),
               border-color var(--t-base) var(--ease);
 }
+.btn:active, .chip:active, .icon-btn:active { transform: scale(0.985); }
+.btn, .chip, .icon-btn { transition: transform var(--t-press) var(--ease); }
+
 .btn-primary { background: var(--brand-deep); color: var(--on-brand); }
 .btn-primary:hover { background: var(--brand); color: var(--on-brand); }
 
@@ -554,6 +560,57 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 }
 .section-tint .tags li { background: var(--surface); }
 
+/* ---- Engagement disclosure -------------------------------------------- */
+@keyframes disclose {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+.project details[open] .p-detail {
+  animation: disclose var(--t-slow) var(--ease) backwards;
+}
+
+/* Progressive enhancement: real height animation on browsers that have it. */
+@supports selector(::details-content) {
+  .project details { interpolate-size: allow-keywords; }
+  .project details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size var(--t-slow) var(--ease),
+                content-visibility var(--t-slow) allow-discrete;
+  }
+  .project details[open]::details-content { block-size: auto; }
+}
+
+/* ---- Filtered results ------------------------------------------------- */
+@keyframes settle {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.projects.is-filtering .project:not([hidden]) {
+  animation: settle var(--t-base) var(--ease) backwards;
+}
+
+/* ---- Entrances --------------------------------------------------------
+   Both are opt-in via a class the script adds, so with JavaScript off or
+   motion reduced the content is simply there — never parked at opacity 0. */
+.js-motion .intro-copy > * { animation: settle var(--t-enter) var(--ease) backwards; }
+.js-motion .intro-copy > *:nth-child(1) { animation-delay: 0ms; }
+.js-motion .intro-copy > *:nth-child(2) { animation-delay: 60ms; }
+.js-motion .intro-copy > *:nth-child(3) { animation-delay: 120ms; }
+.js-motion .intro-copy > *:nth-child(4) { animation-delay: 180ms; }
+.js-motion .intro-copy > *:nth-child(5) { animation-delay: 240ms; }
+.js-motion .factcard { animation: settle var(--t-enter) var(--ease) 200ms backwards; }
+
+.js-motion .steps.is-in li { animation: settle var(--t-enter) var(--ease) backwards; }
+.js-motion .steps.is-in li:nth-child(1) { animation-delay: calc(var(--stagger) * 0); }
+.js-motion .steps.is-in li:nth-child(2) { animation-delay: calc(var(--stagger) * 1); }
+.js-motion .steps.is-in li:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+.js-motion .steps.is-in li:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+.js-motion .steps.is-in li:nth-child(5) { animation-delay: calc(var(--stagger) * 4); }
+.js-motion .steps.is-in li:nth-child(6) { animation-delay: calc(var(--stagger) * 5); }
+.js-motion .steps.is-in li:nth-child(7) { animation-delay: calc(var(--stagger) * 6); }
+.js-motion .steps.is-in li:nth-child(8) { animation-delay: calc(var(--stagger) * 7); }
+
 /* --------------------------------------------------------------------------
    12. APPROACH — the method spine.
    This is the one object on the site only a Fusion implementation consultant
@@ -762,6 +819,11 @@ html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 
 /* Declared last so it beats the rule above at equal specificity. */
 @media (prefers-reduced-motion: reduce) {
-  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  * {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-delay: 0s !important;
+  }
+  .btn:active, .chip:active, .icon-btn:active { transform: none; }
   html { scroll-behavior: auto; }
 }
