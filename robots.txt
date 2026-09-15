@@ -1,0 +1,5 @@
+# https://hossamforouh.github.io/robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://hossamforouh.github.io/sitemap.xml
