@@ -2,13 +2,21 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Forouh Design System</title>
+<title>Design System — Hossam Forouh</title>
 <meta name="description" content="The design system behind hossamforouh.github.io — colour, type, space, shape and components.">
+<link rel="canonical" href="https://hossamforouh.github.io/design-system.html">
+<meta name="robots" content="index, follow">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#d84048">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap">
+<script>
+  try {
+    var t = localStorage.getItem("hf-theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400..800&display=swap">
 <link rel="stylesheet" href="styles.css">
 
 <style>
@@ -33,7 +41,8 @@
   .swatch-name { display: block; font-size: var(--fs-label); font-weight: var(--w-semibold); color: var(--ink); }
   .swatch-var { display: block; font-size: var(--fs-caption); color: var(--muted); }
 
-  .ds-table { width: 100%; border-collapse: collapse; margin-top: var(--s-6); }
+  .ds-scroll { overflow-x: auto; margin-top: var(--s-6); }
+  .ds-table { width: 100%; border-collapse: collapse; }
   .ds-table th, .ds-table td {
     text-align: left; vertical-align: baseline;
     padding: var(--s-3) var(--s-4) var(--s-3) 0;
@@ -54,7 +63,7 @@
 
   .space-row { display: flex; align-items: center; gap: var(--s-4); padding-block: var(--s-2); }
   .space-bar { height: 16px; background: var(--brand); border-radius: var(--r-sm); }
-  .space-label { font-size: var(--fs-label); color: var(--muted); white-space: nowrap; }
+  .space-label { font-size: var(--fs-label); color: var(--muted); }
 
   .demo {
     display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3);
@@ -98,8 +107,8 @@
 <header class="masthead">
   <div class="wrap masthead-inner">
     <a class="brandmark" href="index.html" aria-label="Hossam Forouh — home">
-      <img class="wordmark wordmark-light" src="logo.png" alt="Hossam Forouh" width="640" height="94">
-      <img class="wordmark wordmark-dark" src="logo-dark.png" alt="" width="640" height="94">
+      <img class="wordmark wordmark-light" src="logo.png" alt="Hossam Forouh" width="354" height="52">
+      <img class="wordmark wordmark-dark" src="logo-dark.png" alt="" width="354" height="52">
     </a>
     <nav class="mainnav" aria-label="Sections">
       <a href="#colour">Colour</a>
@@ -147,9 +156,9 @@
       <p class="demo-label">Brand</p>
       <div class="ds-grid">
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand)"></div>
-          <div class="swatch-meta"><span class="swatch-name">Forouh red</span><span class="swatch-var">--brand · #D84048</span></div></div>
+          <div class="swatch-meta"><span class="swatch-name">Forouh red</span><span class="swatch-var">--brand · #D84048 · accents only</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand-deep)"></div>
-          <div class="swatch-meta"><span class="swatch-name">Red deep</span><span class="swatch-var">--brand-deep · small text</span></div></div>
+          <div class="swatch-meta"><span class="swatch-name">Red deep</span><span class="swatch-var">--brand-deep · #B0333A · text &amp; fills</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand-tint)"></div>
           <div class="swatch-meta"><span class="swatch-name">Red tint</span><span class="swatch-var">--brand-tint · badges</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--ok)"></div>
@@ -252,7 +261,7 @@
         <div class="space-row"><div class="space-bar" style="width:96px"></div><span class="space-label">--s-9 · 96px · section padding (64 tablet, 48 phone)</span></div>
       </div>
 
-      <table class="ds-table">
+      <div class="ds-scroll"><table class="ds-table">
         <caption class="visually-hidden">Layout values</caption>
         <thead><tr><th>Value</th><th>Token</th><th>Purpose</th></tr></thead>
         <tbody>
@@ -261,7 +270,7 @@
           <tr><td>24px</td><td class="ds-token">--gutter</td><td>Side padding, dropping to 20px on phones</td></tr>
           <tr><td>1000 / 860 / 560</td><td class="ds-token">breakpoints</td><td>Columns collapse, nav hides, figures stack</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
   </section>
 
@@ -290,7 +299,8 @@
       </div>
 
       <p class="demo-label">Motion</p>
-      <table class="ds-table">
+      <div class="ds-scroll"><table class="ds-table">
+        <caption class="visually-hidden">Motion durations and easing</caption>
         <thead><tr><th>Value</th><th>Token</th><th>Purpose</th></tr></thead>
         <tbody>
           <tr><td>120ms</td><td class="ds-token">--t-fast</td><td>Colour changes on hover</td></tr>
@@ -298,7 +308,7 @@
           <tr><td>260ms</td><td class="ds-token">--t-slow</td><td>Larger state changes</td></tr>
           <tr><td>cubic-bezier(.2,.8,.2,1)</td><td class="ds-token">--ease</td><td>The single easing curve used everywhere</td></tr>
         </tbody>
-      </table>
+      </table></div>
       <ul class="ds-rules">
         <li><strong>Only transform and colour animate.</strong> Nothing animates width, height or position, so no layout shift.</li>
         <li><strong>All motion is cut to 0.01ms under prefers-reduced-motion.</strong></li>
