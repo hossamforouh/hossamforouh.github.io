@@ -117,6 +117,19 @@
     }
   }
 
+  /* ---- CV download ------------------------------------------------------
+     Shown only once we know the file is actually there, so the button is
+     never a dead link. */
+  var cvLinks = Array.prototype.slice.call(document.querySelectorAll(".cv-link"));
+  if (cvLinks.length) {
+    fetch("cv.pdf", { method: "HEAD" })
+      .then(function (res) {
+        if (!res.ok) return;
+        cvLinks.forEach(function (a) { a.hidden = false; });
+      })
+      .catch(function () { /* leave the buttons hidden */ });
+  }
+
   /* ---- Method spine: stagger the phases in, once ------------------------
      The one place on the page a stagger earns its keep — it reads as a
      sequence, which is what the section is actually describing. */
