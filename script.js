@@ -1,14 +1,12 @@
 (function () {
   "use strict";
 
-  /* ---- Theme toggle: remembers the choice, otherwise follows the OS ---- */
+  /* ---- Theme toggle -----------------------------------------------------
+     The saved theme is stamped on <html> by an inline script in <head>, before
+     first paint, so the page never flashes the wrong theme. This only handles
+     the click. */
   var root = document.documentElement;
   var toggle = document.getElementById("theme-toggle");
-
-  try {
-    var saved = localStorage.getItem("hf-theme");
-    if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
-  } catch (e) { /* storage blocked — keep the OS theme */ }
 
   function currentTheme() {
     var stamped = root.getAttribute("data-theme");
@@ -16,15 +14,23 @@
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
 
+  function describeToggle() {
+    if (!toggle) return;
+    var next = currentTheme() === "light" ? "dark" : "light";
+    toggle.setAttribute("aria-label", "Switch to " + next + " theme");
+  }
+
   if (toggle) {
+    describeToggle();
     toggle.addEventListener("click", function () {
       var next = currentTheme() === "light" ? "dark" : "light";
       root.setAttribute("data-theme", next);
-      try { localStorage.setItem("hf-theme", next); } catch (e) { /* ignore */ }
+      try { localStorage.setItem("hf-theme", next); } catch (e) { /* storage blocked */ }
+      describeToggle();
     });
   }
 
-  /* ---- Engagement filter: show only projects that used the chosen module ---- */
+  /* ---- Engagement filter ------------------------------------------------ */
   var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
   var projects = Array.prototype.slice.call(document.querySelectorAll(".project"));
   var countEl = document.getElementById("filter-count");
@@ -44,13 +50,17 @@
 
   chips.forEach(function (chip) {
     chip.addEventListener("click", function () {
-      chips.forEach(function (c) { c.classList.remove("is-on"); });
+      chips.forEach(function (c) {
+        c.classList.remove("is-on");
+        c.setAttribute("aria-pressed", "false");
+      });
       chip.classList.add("is-on");
+      chip.setAttribute("aria-pressed", "true");
       applyFilter(chip.getAttribute("data-filter"));
     });
   });
 
-  /* ---- Highlight the nav item for the section currently in view ---- */
+  /* ---- Highlight the nav item for the section currently in view --------- */
   var links = Array.prototype.slice.call(document.querySelectorAll('.mainnav a[href^="#"]'));
   var sections = links
     .map(function (a) { return document.querySelector(a.getAttribute("href")); })
@@ -71,7 +81,10 @@
       }
 
       links.forEach(function (a) {
-        a.classList.toggle("is-current", a.getAttribute("href") === "#" + active);
+        var on = a.getAttribute("href") === "#" + active;
+        a.classList.toggle("is-current", on);
+        if (on) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
       });
     }, { rootMargin: "-90px 0px -60% 0px", threshold: 0 });
 
