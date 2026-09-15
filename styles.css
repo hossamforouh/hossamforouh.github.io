@@ -1,6 +1,6 @@
 /* ==========================================================================
    HOSSAM FOROUH — DESIGN SYSTEM
-   Oracle-inspired: Oracle red, near-black, warm neutrals, one type family.
+   Built on the Forouh wordmark: its red and ink, with Oracle-style structure.
    Every value below is a token. Components never hard-code a colour or size.
    See design-system.html for the rendered style guide.
    ========================================================================== */
@@ -12,29 +12,29 @@
   /* Surfaces */
   --page:        #ffffff;
   --surface:     #ffffff;
-  --tint:        #f6f4f2;   /* warm neutral, not grey */
-  --tint-2:      #edeae5;
+  --tint:        #f4f5f2;   /* warm neutral, not grey */
+  --tint-2:      #e9ebe5;
 
   /* Text */
-  --ink:         #161513;   /* near-black, Oracle's is warm not blue */
-  --body:        #4e4b47;
-  --muted:       #78746e;
+  --ink:         #171a17;   /* near-black, tuned to the wordmark ink */
+  --body:        #4b514b;
+  --muted:       #767c76;
 
   /* Lines */
-  --rule:        #dedbd6;
-  --rule-strong: #c2beb7;
+  --rule:        #dcded8;
+  --rule-strong: #c0c4bd;
 
-  /* Brand — Oracle red */
-  --brand:       #c74634;   /* fills, large type, rules */
-  --brand-deep:  #a5382a;   /* small text and links: passes AA on white */
-  --brand-tint:  #fbece9;
+  /* Brand — sampled from the Forouh wordmark */
+  --brand:       #d84048;   /* fills, large type, rules */
+  --brand-deep:  #b0333a;   /* small text and links: passes AA on white */
+  --brand-tint:  #fcecee;
   --on-brand:    #ffffff;
 
   /* Inverted band */
-  --band:        #161513;
+  --band:        #171a17;
   --band-ink:    #ffffff;
-  --band-body:   #b7b2ab;
-  --band-rule:   #33302c;
+  --band-body:   #b3b8b2;
+  --band-rule:   #333833;
 
   /* Status */
   --ok:          #2f7d46;
@@ -102,25 +102,25 @@
 /* System dark, unless the viewer explicitly chose light */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --page:        #171614;
-    --surface:     #1e1d1a;
-    --tint:        #1e1d1a;
-    --tint-2:      #272522;
-    --ink:         #f4f2ef;
-    --body:        #b7b2ab;
-    --muted:       #918c85;
-    --rule:        #332f2b;
-    --rule-strong: #4a453f;
-    --brand:       #ee6b57;
-    --brand-deep:  #f2897a;
-    --brand-tint:  #2b1c18;
-    --on-brand:    #1a0d0a;
-    --band:        #100f0e;
-    --band-ink:    #f4f2ef;
-    --band-body:   #a9a49d;
-    --band-rule:   #2e2b27;
+    --page:        #151715;
+    --surface:     #1d201c;
+    --tint:        #1d201c;
+    --tint-2:      #262a25;
+    --ink:         #f1f3ef;
+    --body:        #b2b8b1;
+    --muted:       #8c928b;
+    --rule:        #2f332e;
+    --rule-strong: #454a44;
+    --brand:       #f06a72;
+    --brand-deep:  #f4888f;
+    --brand-tint:  #2c1a1c;
+    --on-brand:    #1a0c0e;
+    --band:        #0f110f;
+    --band-ink:    #f1f3ef;
+    --band-body:   #a6aca5;
+    --band-rule:   #2b2f2a;
     --ok:          #5fb36c;
-    --logo-plate:  #f3f1ee;
+    --logo-plate:  #f2f3f0;
     --e-1: 0 1px 2px rgba(0, 0, 0, .4);
     --e-2: 0 2px 6px rgba(0, 0, 0, .45);
     --e-3: 0 8px 24px rgba(0, 0, 0, .5);
@@ -129,25 +129,25 @@
 
 /* Explicit dark choice wins over a light OS */
 :root[data-theme="dark"] {
-  --page:        #171614;
-  --surface:     #1e1d1a;
-  --tint:        #1e1d1a;
-  --tint-2:      #272522;
-  --ink:         #f4f2ef;
-  --body:        #b7b2ab;
-  --muted:       #918c85;
-  --rule:        #332f2b;
-  --rule-strong: #4a453f;
-  --brand:       #ee6b57;
-  --brand-deep:  #f2897a;
-  --brand-tint:  #2b1c18;
-  --on-brand:    #1a0d0a;
-  --band:        #100f0e;
-  --band-ink:    #f4f2ef;
-  --band-body:   #a9a49d;
-  --band-rule:   #2e2b27;
+  --page:        #151715;
+  --surface:     #1d201c;
+  --tint:        #1d201c;
+  --tint-2:      #262a25;
+  --ink:         #f1f3ef;
+  --body:        #b2b8b1;
+  --muted:       #8c928b;
+  --rule:        #2f332e;
+  --rule-strong: #454a44;
+  --brand:       #f06a72;
+  --brand-deep:  #f4888f;
+  --brand-tint:  #2c1a1c;
+  --on-brand:    #1a0c0e;
+  --band:        #0f110f;
+  --band-ink:    #f1f3ef;
+  --band-body:   #a6aca5;
+  --band-rule:   #2b2f2a;
   --ok:          #5fb36c;
-  --logo-plate:  #f3f1ee;
+  --logo-plate:  #f2f3f0;
   --e-1: 0 1px 2px rgba(0, 0, 0, .4);
   --e-2: 0 2px 6px rgba(0, 0, 0, .45);
   --e-3: 0 8px 24px rgba(0, 0, 0, .5);
@@ -200,7 +200,7 @@ a:hover { color: var(--brand); }
 }
 .skip:focus { left: 0; }
 
-/* Oracle-style brand bar across the very top of the page */
+/* Brand bar across the very top of the page */
 .brandbar { height: 4px; background: var(--brand); }
 
 /* --------------------------------------------------------------------------
@@ -216,19 +216,23 @@ a:hover { color: var(--brand); }
   padding-block: var(--s-3);
 }
 
-.brandmark { display: flex; align-items: center; gap: var(--s-3); text-decoration: none; flex: none; }
-.brandmark-logo { width: 30px; height: 30px; flex: none; border-radius: var(--r-md); }
-.brandmark-text { display: block; }
-.brandmark-name {
-  display: block; color: var(--ink);
-  font-size: var(--fs-body); font-weight: var(--w-bold);
-  letter-spacing: var(--tracking-tight); line-height: 1.2;
+/* The masthead carries the real wordmark. Two files, because the "forouh."
+   half is near-black in one theme and near-white in the other. */
+.brandmark { display: block; text-decoration: none; flex: none; line-height: 0; }
+.wordmark { display: block; width: auto; height: 26px; }
+.wordmark-dark { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .wordmark-light { display: none; }
+  :root:not([data-theme="light"]) .wordmark-dark  { display: block; }
 }
-.brandmark-role {
-  display: block; color: var(--muted);
-  font-size: var(--fs-caption); font-weight: var(--w-medium);
-  letter-spacing: 0.03em; text-transform: uppercase;
-}
+:root[data-theme="dark"] .wordmark-light { display: none; }
+:root[data-theme="dark"] .wordmark-dark  { display: block; }
+:root[data-theme="light"] .wordmark-light { display: block; }
+:root[data-theme="light"] .wordmark-dark  { display: none; }
+
+/* Footer lockup */
+.colophon .wordmark { height: 22px; }
 
 .mainnav { display: flex; gap: var(--s-1); margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .mainnav::-webkit-scrollbar { display: none; }
