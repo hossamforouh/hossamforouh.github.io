@@ -398,6 +398,23 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
 .intro-text { max-width: var(--measure); margin-top: var(--s-5); font-size: var(--fs-lead); }
 .intro-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
 
+/* Right-hand column of the hero: portrait above the summary. */
+.intro-aside { display: flex; flex-direction: column; gap: var(--s-5); }
+
+.portrait {
+  margin: 0;
+  background: var(--logo-plate);   /* the shot is on white, so it keeps a light plate in both themes */
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.portrait img {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 8%;          /* bias to the head, not the middle of the frame */
+}
+.portrait[hidden] { display: none; }
+
 .factcard {
   background: transparent;
   border: 0; border-top: 2px solid var(--ink);
@@ -779,6 +796,7 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   :root { --s-9: 64px; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .intro-grid, .two-col, .cred-layout, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
+  .portrait { max-width: 260px; }
   .figures-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .figures-grid > div:nth-child(3) { padding-left: 0; border-left: 0; }
 }
@@ -807,6 +825,7 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   .figures-grid > div:first-child { border-top: 0; padding-top: 0; }
   .p-side { width: 100%; justify-content: space-between; }
   .project summary { align-items: flex-start; }
+  .portrait { max-width: 220px; }
   .p-logo { width: 84px; height: 48px; }
   .p-logo img { max-width: 72px; max-height: 26px; }
   .masthead-inner { gap: var(--s-2); }
