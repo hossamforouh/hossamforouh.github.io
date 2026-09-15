@@ -42,6 +42,8 @@
   var projects = Array.prototype.slice.call(document.querySelectorAll(".project"));
   var countEl = document.getElementById("filter-count");
 
+  var list = document.getElementById("dossiers");
+
   function applyFilter(key) {
     var shown = 0;
     projects.forEach(function (item) {
@@ -50,8 +52,17 @@
       item.hidden = !match;
       if (match) shown++;
     });
+    if (list) {
+      // Hide the tier heading while filtered, or it labels nothing.
+      list.classList.toggle("is-filtered", key !== "all");
+      list.classList.toggle("is-empty", shown === 0);
+    }
     if (countEl) {
-      countEl.textContent = shown + (shown === 1 ? " engagement" : " engagements");
+      // State the relation, not just the number — "1 engagement" cannot be told
+      // apart from a broken filter.
+      countEl.textContent = key === "all"
+        ? "Showing all " + projects.length + " engagements"
+        : "Showing " + shown + " of " + projects.length;
     }
   }
 
@@ -66,7 +77,6 @@
       applyFilter(chip.getAttribute("data-filter"));
 
       // Re-trigger the settle animation on whatever is now showing.
-      var list = document.getElementById("dossiers");
       if (list && allowMotion) {
         list.classList.remove("is-filtering");
         void list.offsetWidth;              // force reflow so the animation restarts
@@ -130,18 +140,4 @@
       .catch(function () { /* leave the buttons hidden */ });
   }
 
-  /* ---- Method spine: stagger the phases in, once ------------------------
-     The one place on the page a stagger earns its keep — it reads as a
-     sequence, which is what the section is actually describing. */
-  var steps = document.querySelector(".steps");
-  if (steps && allowMotion && "IntersectionObserver" in window) {
-    var stepWatcher = new IntersectionObserver(function (entries, obs) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-in");
-        obs.unobserve(entry.target);
-      });
-    }, { rootMargin: "0px 0px -15% 0px", threshold: 0.1 });
-    stepWatcher.observe(steps);
-  }
 })();
