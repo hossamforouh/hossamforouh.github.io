@@ -316,6 +316,20 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
 .btn-invert { background: var(--band-ink); color: var(--band); }
 .btn-invert:hover { background: var(--brand); color: var(--on-brand); }
 
+.btn-ico {
+  width: 17px; height: 17px; margin-right: var(--s-2);
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.btn[hidden] { display: none; }
+
+/* Ghost button that has to sit on the dark contact band */
+.btn-onband { background: transparent; color: var(--band-ink); border-color: var(--band-rule); }
+.btn-onband:hover { border-color: var(--band-ink); color: var(--band-ink); }
+
+.contact-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+.contact-copy .contact-actions .btn { margin-top: 0; }
+
 .masthead .btn { min-height: 38px; padding: 0 var(--s-4); font-size: var(--fs-small); }
 
 /* --------------------------------------------------------------------------
