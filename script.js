@@ -1,6 +1,13 @@
 (function () {
   "use strict";
 
+  /* ---- Motion opt-in ----------------------------------------------------
+     Entrance animations are enabled by this class, so a visitor with
+     JavaScript off or reduced motion on sees the finished page immediately
+     rather than content waiting to be revealed. */
+  var allowMotion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (allowMotion) document.documentElement.classList.add("js-motion");
+
   /* ---- Theme toggle -----------------------------------------------------
      The saved theme is stamped on <html> by an inline script in <head>, before
      first paint, so the page never flashes the wrong theme. This only handles
@@ -57,6 +64,14 @@
       chip.classList.add("is-on");
       chip.setAttribute("aria-pressed", "true");
       applyFilter(chip.getAttribute("data-filter"));
+
+      // Re-trigger the settle animation on whatever is now showing.
+      var list = document.getElementById("dossiers");
+      if (list && allowMotion) {
+        list.classList.remove("is-filtering");
+        void list.offsetWidth;              // force reflow so the animation restarts
+        list.classList.add("is-filtering");
+      }
     });
   });
 
@@ -89,5 +104,20 @@
     }, { rootMargin: "-90px 0px -60% 0px", threshold: 0 });
 
     sections.forEach(function (s) { observer.observe(s); });
+  }
+
+  /* ---- Method spine: stagger the phases in, once ------------------------
+     The one place on the page a stagger earns its keep — it reads as a
+     sequence, which is what the section is actually describing. */
+  var steps = document.querySelector(".steps");
+  if (steps && allowMotion && "IntersectionObserver" in window) {
+    var stepWatcher = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-in");
+        obs.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -15% 0px", threshold: 0.1 });
+    stepWatcher.observe(steps);
   }
 })();
