@@ -346,14 +346,6 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
   width: 10px; height: 2px; background: var(--brand);
 }
 
-.ruled { display: flex; flex-direction: column; }
-.ruled li {
-  padding-block: var(--s-3);
-  border-bottom: 1px solid var(--rule);
-  font-size: var(--fs-small); color: var(--ink);
-}
-.ruled li:first-child { border-top: 1px solid var(--rule); }
-
 /* --------------------------------------------------------------------------
    6. SECTIONS
    -------------------------------------------------------------------------- */
@@ -365,8 +357,8 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
 .section-sub { margin-top: var(--s-3); max-width: 52ch; font-size: var(--fs-lead); color: var(--body); }
 
 .two-col {
-  display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-  gap: var(--s-9); align-items: start;
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: var(--s-8); align-items: start;
 }
 
 /* --------------------------------------------------------------------------
@@ -391,12 +383,29 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
   color: var(--muted); margin-bottom: var(--s-3);
 }
 .intro h1 { font-size: var(--fs-h1); font-weight: var(--w-black); letter-spacing: -0.035em; max-width: 16ch; }
-.lede {
-  font-size: var(--fs-h4); font-weight: var(--w-semibold); color: var(--brand);
-  margin-top: var(--s-2);
-}
 .intro-text { max-width: var(--measure); margin-top: var(--s-5); font-size: var(--fs-lead); }
 .intro-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+
+/* Scope at a glance. Replaces the old full-width dark figures band — same
+   four numbers, a fraction of the weight. */
+.scope {
+  display: flex; flex-wrap: wrap;
+  gap: var(--s-3) var(--s-6);
+  margin-top: var(--s-6); padding-top: var(--s-5);
+  border-top: 1px solid var(--rule);
+}
+.scope li {
+  font-size: var(--fs-small); color: var(--muted);
+  display: flex; align-items: baseline; gap: var(--s-2);
+}
+.scope-n {
+  font-size: var(--fs-h3); font-weight: var(--w-black); color: var(--ink);
+  letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums;
+}
+.scope-n span { color: var(--brand); }
+
+/* Module list in the About aside: wraps as a block, not a single row. */
+.tags-block { margin-top: var(--s-1); }
 
 /* Right-hand column of the hero: portrait above the summary. */
 .intro-aside { display: flex; flex-direction: column; gap: var(--s-5); }
@@ -435,24 +444,6 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
   color: var(--muted); margin-bottom: 2px;
 }
 .factcard dd { margin: 0; font-size: var(--fs-small); color: var(--ink); line-height: var(--lh-snug); }
-
-/* --------------------------------------------------------------------------
-   8. KEY FIGURES BAND
-   -------------------------------------------------------------------------- */
-.figures { background: var(--band); color: var(--band-body); }
-.figures-grid {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--s-5); padding-block: var(--s-7);
-}
-.figures-grid > div { padding-left: var(--s-5); border-left: 1px solid var(--band-rule); }
-.figures-grid > div:first-child { padding-left: 0; border-left: 0; }
-.fig-n {
-  font-size: var(--fs-figure); font-weight: var(--w-black); color: var(--band-ink);
-  line-height: 1; letter-spacing: var(--tracking-tight);
-  font-variant-numeric: tabular-nums;
-}
-.fig-n span { color: var(--brand); }
-.fig-l { font-size: var(--fs-small); margin-top: var(--s-2); line-height: var(--lh-snug); }
 
 /* --------------------------------------------------------------------------
    9. SIDENOTE
@@ -619,141 +610,6 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 .js-motion .intro-copy > *:nth-child(5) { animation-delay: 240ms; }
 .js-motion .factcard { animation: settle var(--t-enter) var(--ease) 200ms backwards; }
 
-.js-motion .steps.is-in li { animation: settle var(--t-enter) var(--ease) backwards; }
-.js-motion .steps.is-in li:nth-child(1) { animation-delay: calc(var(--stagger) * 0); }
-.js-motion .steps.is-in li:nth-child(2) { animation-delay: calc(var(--stagger) * 1); }
-.js-motion .steps.is-in li:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
-.js-motion .steps.is-in li:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
-.js-motion .steps.is-in li:nth-child(5) { animation-delay: calc(var(--stagger) * 4); }
-.js-motion .steps.is-in li:nth-child(6) { animation-delay: calc(var(--stagger) * 5); }
-.js-motion .steps.is-in li:nth-child(7) { animation-delay: calc(var(--stagger) * 6); }
-.js-motion .steps.is-in li:nth-child(8) { animation-delay: calc(var(--stagger) * 7); }
-
-/* --------------------------------------------------------------------------
-   12. APPROACH — the method spine.
-   This is the one object on the site only a Fusion implementation consultant
-   would ever build, so it is the one place the brand red runs at full scale.
-   -------------------------------------------------------------------------- */
-.section-band {
-  background: var(--band); color: var(--band-body);
-  padding-block: calc(var(--s-9) * 1.4);
-}
-.section-band .section-head h2 { color: var(--band-ink); }
-.section-band .section-sub { color: var(--band-body); }
-
-.steps {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid var(--band-rule); border-left: 1px solid var(--band-rule);
-}
-.steps li {
-  border-right: 1px solid var(--band-rule); border-bottom: 1px solid var(--band-rule);
-  padding: var(--s-5);
-  display: flex; flex-direction: column; gap: var(--s-2);
-}
-.st-n {
-  font-size: var(--fs-step); font-weight: var(--w-black);
-  line-height: 1; letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
-  color: var(--brand);
-  margin-bottom: var(--s-2);
-}
-.steps h3 { font-size: var(--fs-body); font-weight: var(--w-bold); color: var(--band-ink); }
-.steps p { font-size: var(--fs-small); line-height: var(--lh-snug); color: var(--band-body); }
-.st-d { margin-top: auto; padding-top: var(--s-4); }
-.st-d span {
-  display: block;
-  font-size: var(--fs-caption); font-weight: var(--w-bold);
-  letter-spacing: var(--tracking-label); text-transform: uppercase;
-  color: var(--muted);
-}
-.st-d code {
-  display: block; margin-top: 2px;
-  font-family: var(--font); font-size: var(--fs-small);
-  font-weight: var(--w-semibold); color: var(--band-ink);
-  font-variant-numeric: tabular-nums;
-}
-
-/* --------------------------------------------------------------------------
-   13. CAREER HISTORY
-   -------------------------------------------------------------------------- */
-.history { display: flex; flex-direction: column; }
-.history > li {
-  display: grid; grid-template-columns: 150px minmax(0, 1fr);
-  gap: var(--s-7);
-  padding-block: var(--s-6);
-  border-top: 1px solid var(--rule);
-}
-.history > li:last-child { border-bottom: 1px solid var(--rule); }
-.h-when {
-  font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ink);
-  font-variant-numeric: tabular-nums; line-height: var(--lh-snug);
-}
-.h-dash { color: var(--brand); font-weight: var(--w-regular); }
-.h-body h3 { font-size: var(--fs-h3); }
-.h-org {
-  font-size: var(--fs-body); font-weight: var(--w-semibold); color: var(--ink);
-  margin-top: 2px; margin-bottom: var(--s-4);
-}
-
-/* --------------------------------------------------------------------------
-   14. EXPERTISE PANELS
-   -------------------------------------------------------------------------- */
-.panels {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: var(--s-7) var(--s-6);
-}
-.panel { display: flex; flex-direction: column; gap: var(--s-3); }
-.panel h3 {
-  font-size: var(--fs-body); font-weight: var(--w-bold);
-  padding-bottom: var(--s-3);
-  border-bottom: 1px solid var(--ink);
-}
-
-/* --------------------------------------------------------------------------
-   15. CREDENTIALS
-   -------------------------------------------------------------------------- */
-.cred-layout {
-  display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: var(--s-9); align-items: start;
-}
-.sub-head {
-  font-size: var(--fs-caption); font-weight: var(--w-bold);
-  letter-spacing: var(--tracking-label); text-transform: uppercase;
-  color: var(--muted); margin-bottom: var(--s-4);
-}
-.cert-table { width: 100%; border-collapse: collapse; }
-.cert-table th {
-  text-align: left; vertical-align: top;
-  font-size: var(--fs-body); font-weight: var(--w-medium); color: var(--ink);
-  padding: var(--s-4) var(--s-4) var(--s-4) 0;
-  border-bottom: 1px solid var(--rule);
-}
-.cert-table tr:first-child th, .cert-table tr:first-child td { border-top: 1px solid var(--rule); }
-.cert-table td {
-  text-align: right; white-space: nowrap; vertical-align: top;
-  font-size: var(--fs-small); color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  padding: var(--s-4) 0; border-bottom: 1px solid var(--rule);
-}
-
-.degree {
-  background: transparent;
-  border: 0; border-top: 2px solid var(--ink);
-  padding: var(--s-5) 0 0;
-}
-.d-title { font-size: var(--fs-h4); font-weight: var(--w-bold); color: var(--ink); letter-spacing: var(--tracking-tight); }
-.d-school { font-size: var(--fs-body); font-weight: var(--w-semibold); color: var(--muted); margin-top: 2px; }
-.d-facts { margin: var(--s-4) 0 0; display: flex; flex-direction: column; }
-.d-facts > div {
-  display: flex; justify-content: space-between; gap: var(--s-4);
-  padding-block: var(--s-3); border-top: 1px solid var(--rule);
-}
-.d-facts dt { font-size: var(--fs-small); color: var(--muted); }
-.d-facts dd {
-  margin: 0; font-size: var(--fs-small); color: var(--ink);
-  font-weight: var(--w-semibold); font-variant-numeric: tabular-nums;
-}
-
 /* --------------------------------------------------------------------------
    16. CONTACT + FOOTER
    -------------------------------------------------------------------------- */
@@ -795,7 +651,6 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
    -------------------------------------------------------------------------- */
 @media (max-width: 1000px) {
   :root { --s-9: 64px; }
-  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .intro-grid, .two-col, .cred-layout, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
   .portrait { max-width: 184px; }
   .figures-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -817,7 +672,6 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 
 @media (max-width: 560px) {
   :root { --s-9: 48px; --gutter: 20px; }
-  .steps { grid-template-columns: minmax(0, 1fr); }
   .figures-grid { grid-template-columns: minmax(0, 1fr); }
   .figures-grid > div {
     padding-left: 0; border-left: 0;
