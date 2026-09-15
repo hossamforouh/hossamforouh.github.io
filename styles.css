@@ -403,6 +403,7 @@ a:hover { color: var(--brand-deep); text-decoration-thickness: 2px; }
 
 .portrait {
   margin: 0;
+  max-width: 208px;                /* a portrait, not a billboard — the words lead */
   background: var(--logo-plate);   /* the shot is on white, so it keeps a light plate in both themes */
   border-radius: var(--r-md);
   overflow: hidden;
@@ -796,7 +797,7 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   :root { --s-9: 64px; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .intro-grid, .two-col, .cred-layout, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
-  .portrait { max-width: 260px; }
+  .portrait { max-width: 184px; }
   .figures-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .figures-grid > div:nth-child(3) { padding-left: 0; border-left: 0; }
 }
@@ -825,7 +826,7 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   .figures-grid > div:first-child { border-top: 0; padding-top: 0; }
   .p-side { width: 100%; justify-content: space-between; }
   .project summary { align-items: flex-start; }
-  .portrait { max-width: 220px; }
+  .portrait { max-width: 160px; }
   .p-logo { width: 84px; height: 48px; }
   .p-logo img { max-width: 72px; max-height: 26px; }
   .masthead-inner { gap: var(--s-2); }
