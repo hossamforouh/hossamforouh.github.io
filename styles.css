@@ -474,16 +474,19 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .portrait {
   margin: 0;
   max-width: 208px;                /* a portrait, not a billboard — the words lead */
-  padding: var(--s-2);             /* the shot's own white sits inside a plate instead of bleeding to the edge */
+  aspect-ratio: 1;
+  padding: var(--s-2);             /* a ring of plate, so the shot's own white never meets the page edge */
   background: var(--logo-plate);
   border: 1px solid var(--rule-strong);
-  border-radius: var(--r-md);
+  border-radius: var(--r-pill);
+  overflow: hidden;
 }
 .portrait img {
-  display: block; width: 100%; height: auto; border-radius: var(--r-sm);
-  aspect-ratio: 4 / 5;
+  display: block; width: 100%; height: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--r-pill);
   object-fit: cover;
-  object-position: 50% 8%;          /* bias to the head, not the middle of the frame */
+  object-position: 50% 0%;          /* the shot has headroom below the chin, so crop from the top */
 }
 .portrait[hidden] { display: none; }
 
