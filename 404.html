@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Hossam Forouh</title>
+<meta name="robots" content="noindex, follow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#d84048">
+<style>
+  /* Self-contained: this page has to render even when styles.css is what 404'd. */
+  :root {
+    color-scheme: light dark;
+    --page: #ffffff; --ink: #171a17; --muted: #666c66; --brand: #b0333a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --page: #151715; --ink: #f1f3ef; --muted: #8c928b; --brand: #f06a72; }
+  }
+  body {
+    margin: 0; min-height: 100vh; min-height: 100dvh;
+    display: grid; place-items: center; padding: 24px;
+    background: var(--page); color: var(--ink);
+    font: 16px/1.6 "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  main { max-width: 34rem; }
+  .code {
+    font-size: .75rem; font-weight: 700; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--brand); margin: 0 0 12px;
+  }
+  h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 800; letter-spacing: -.03em; margin: 0 0 12px; }
+  p.lead { color: var(--muted); margin: 0 0 28px; }
+  a.btn {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px;
+    border-radius: 4px; background: var(--brand); color: #fff;
+    text-decoration: none; font-weight: 600;
+  }
+  a.btn:hover { opacity: .9; }
+  .alt { display: block; margin-top: 20px; font-size: .875rem; color: var(--muted); }
+  .alt a { color: var(--muted); }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+</style>
+
+<main>
+  <p class="code">Error 404</p>
+  <h1>This page doesn't exist</h1>
+  <p class="lead">The link may be out of date, or the address may have a typo in it.</p>
+  <a class="btn" href="/">Back to the homepage</a>
+  <span class="alt">Or email <a href="mailto:hossamforouh@icloud.com">hossamforouh@icloud.com</a></span>
+</main>
+</html>
