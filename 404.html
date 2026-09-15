@@ -6,14 +6,30 @@
 <meta name="robots" content="noindex, follow">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#d84048">
+<script>
+  try {
+    var t = localStorage.getItem("hf-theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+</script>
 <style>
   /* Self-contained: this page has to render even when styles.css is what 404'd. */
   :root {
-    color-scheme: light dark;
-    --page: #ffffff; --ink: #171a17; --muted: #666c66; --brand: #b0333a;
+    color-scheme: light;
+    --page: #ffffff; --ink: #171a17; --muted: #666c66;
+    --brand: #d84048; --brand-deep: #b0333a;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --page: #151715; --ink: #f1f3ef; --muted: #8c928b; --brand: #f06a72; }
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #151715; --ink: #f1f3ef; --muted: #8c928b;
+      --brand: #e2626a; --brand-deep: #ee878d;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #151715; --ink: #f1f3ef; --muted: #8c928b;
+    --brand: #e2626a; --brand-deep: #ee878d;
   }
   body {
     margin: 0; min-height: 100vh; min-height: 100dvh;
@@ -24,13 +40,13 @@
   main { max-width: 34rem; }
   .code {
     font-size: .75rem; font-weight: 700; letter-spacing: .11em;
-    text-transform: uppercase; color: var(--brand); margin: 0 0 12px;
+    text-transform: uppercase; color: var(--brand-deep); margin: 0 0 12px;
   }
   h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 800; letter-spacing: -.03em; margin: 0 0 12px; }
-  p.lead { color: var(--muted); margin: 0 0 28px; }
+  p.lead { color: var(--muted); margin: 0 0 32px; }
   a.btn {
-    display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px;
-    border-radius: 4px; background: var(--brand); color: #fff;
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 24px;
+    border-radius: 4px; background: var(--brand-deep); color: #fff;
     text-decoration: none; font-weight: 600;
   }
   a.btn:hover { opacity: .9; }
