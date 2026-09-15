@@ -35,7 +35,8 @@
     gap: var(--s-4); margin-top: var(--s-6);
   }
 
-  .swatch { border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; }
+  .swatch { border: 1px solid var(--rule-strong); border-radius: var(--r-md); overflow: hidden; }
+  .swatch-chip { box-shadow: inset 0 0 0 1px var(--rule-strong); }
   .swatch-chip { height: 72px; }
   .swatch-meta { padding: var(--s-3); background: var(--surface); }
   .swatch-name { display: block; font-size: var(--fs-label); font-weight: var(--w-semibold); color: var(--ink); }
@@ -156,9 +157,9 @@
       <p class="demo-label">Brand</p>
       <div class="ds-grid">
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand)"></div>
-          <div class="swatch-meta"><span class="swatch-name">Forouh red</span><span class="swatch-var">--brand · #D84048 · accents only</span></div></div>
+          <div class="swatch-meta"><span class="swatch-name">Forouh red</span><span class="swatch-var">--brand · accents only</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand-deep)"></div>
-          <div class="swatch-meta"><span class="swatch-name">Red deep</span><span class="swatch-var">--brand-deep · #B0333A · text &amp; fills</span></div></div>
+          <div class="swatch-meta"><span class="swatch-name">Red deep</span><span class="swatch-var">--brand-deep · text &amp; fills</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand-tint)"></div>
           <div class="swatch-meta"><span class="swatch-name">Red tint</span><span class="swatch-var">--brand-tint · badges</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--ok)"></div>
@@ -174,7 +175,7 @@
         <div class="swatch"><div class="swatch-chip" style="background:var(--tint-2)"></div>
           <div class="swatch-meta"><span class="swatch-name">Tint 2</span><span class="swatch-var">--tint-2</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--band)"></div>
-          <div class="swatch-meta"><span class="swatch-name">Band</span><span class="swatch-var">--band · figures, contact</span></div></div>
+          <div class="swatch-meta"><span class="swatch-name">Band</span><span class="swatch-var">--band · contact</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--ink)"></div>
           <div class="swatch-meta"><span class="swatch-name">Ink</span><span class="swatch-var">--ink · headings</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--body)"></div>
@@ -187,9 +188,9 @@
 
       <p class="demo-label">Contrast rules</p>
       <ul class="ds-rules">
-        <li><strong>Small text on white uses --brand-deep, not --brand.</strong> The wordmark red at 16px measures 4.4:1 on white — just under the 4.5:1 minimum — so a deeper #B0333A carries links and small text.</li>
+        <li><strong>Small text uses --brand-deep, not --brand.</strong> The wordmark red measures 4.4:1 on white, just under the 4.5:1 minimum, so each theme defines a variant tuned to pass on its own ground — darker in light, lighter in dark.</li>
         <li><strong>--brand is for fills, large type and rules</strong> — places where 3:1 is the bar.</li>
-        <li><strong>Dark theme lightens the red to #F06A72.</strong> The same red on a near-black ground would be too dim to read.</li>
+        <li><strong>Dark theme lightens the red without saturating it.</strong> Hue is held to within half a degree across both themes; only lightness moves, so it stays the same red rather than turning salmon.</li>
         <li><strong>Colour never carries meaning alone.</strong> The availability dot is paired with the words next to it.</li>
       </ul>
     </div>
@@ -207,19 +208,19 @@
 
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-h1);font-weight:var(--w-black);letter-spacing:var(--tracking-tight);line-height:var(--lh-tight)">Hossam Magdy Forouh</span>
-        <p class="type-facts">Display · --fs-h1 · 800 · clamp(2.25rem → 3.5rem) · tracking −0.02em</p>
+        <p class="type-facts">Display · --fs-h1 · 800 · clamp(2.5rem → 3.375rem) · tracking −0.03em</p>
       </div>
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-h2);font-weight:var(--w-bold);letter-spacing:var(--tracking-tight)">Client projects</span>
-        <p class="type-facts">Section heading · --fs-h2 · 700 · clamp(1.625rem → 2.125rem)</p>
+        <p class="type-facts">Section heading · --fs-h2 · 700 · clamp(1.875rem → 2.375rem) · tracking −0.022em</p>
       </div>
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-h3);font-weight:var(--w-bold);letter-spacing:var(--tracking-tight)">Oracle SCM Experienced Consultant</span>
-        <p class="type-facts">Subheading · --fs-h3 · 700 · 24px</p>
+        <p class="type-facts">Figure · --fs-h3 · 700 · 28px</p>
       </div>
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-h4);font-weight:var(--w-bold);letter-spacing:var(--tracking-tight)">Saudi Cement Company</span>
-        <p class="type-facts">Card title · --fs-h4 · 700 · 20px</p>
+        <p class="type-facts">Client name · --fs-h4 · 650 · 22px · tracking −0.008em</p>
       </div>
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-lead);font-weight:var(--w-regular);line-height:var(--lh-normal)">I implement Oracle Fusion Cloud supply chain systems.</span>
@@ -227,11 +228,11 @@
       </div>
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-body);font-weight:var(--w-regular);line-height:var(--lh-normal)">Directed functional analysis sessions to architect the solution and map complex manufacturing requirements.</span>
-        <p class="type-facts">Body · --fs-body · 400 · 16px · measure capped at 68ch</p>
+        <p class="type-facts">Body · --fs-body · 400 · 16px · measure capped at 62ch</p>
       </div>
       <div class="type-row">
         <span class="type-sample overline">Engagements</span>
-        <p class="type-facts">Overline / kicker · --fs-caption · 700 · 12px · tracking +0.08em · uppercase</p>
+        <p class="type-facts">Overline / kicker · --fs-caption · 550 · 12px · tracking +0.07em · uppercase</p>
       </div>
       <div class="type-row">
         <span class="type-sample" style="font-size:var(--fs-body);font-variant-numeric:tabular-nums;font-weight:var(--w-semibold)">Oct 2022 — Present · 3.84 · +20 101 898 8989</span>
@@ -245,8 +246,8 @@
     <div class="wrap">
       <h2>Space</h2>
       <p class="ds-note">
-        A 4px base. Nothing on the site uses a value outside this ladder, which is what keeps the
-        vertical rhythm even from section to section.
+        A 4px base. Layout spacing stays on this ladder. Optical nudges under 4px — hairline offsets,
+        baseline corrections — sit outside it deliberately.
       </p>
 
       <div style="margin-top:var(--s-6)">
@@ -266,9 +267,9 @@
         <thead><tr><th>Value</th><th>Token</th><th>Purpose</th></tr></thead>
         <tbody>
           <tr><td>1140px</td><td class="ds-token">--wrap</td><td>Maximum content width on desktop</td></tr>
-          <tr><td>68ch</td><td class="ds-token">--measure</td><td>Maximum line length for running text</td></tr>
+          <tr><td>62ch</td><td class="ds-token">--measure</td><td>Maximum line length for running text</td></tr>
           <tr><td>24px</td><td class="ds-token">--gutter</td><td>Side padding, dropping to 20px on phones</td></tr>
-          <tr><td>1000 / 860 / 560</td><td class="ds-token">breakpoints</td><td>Columns collapse, nav hides, figures stack</td></tr>
+          <tr><td>1000 / 860 / 560</td><td class="ds-token">breakpoints</td><td>Columns collapse, nav becomes a scrolling rail, engagement rows stack</td></tr>
         </tbody>
       </table></div>
     </div>
@@ -279,9 +280,10 @@
     <div class="wrap">
       <h2>Shape &amp; depth</h2>
       <p class="ds-note">
-        Corners stay tight. Enterprise software reads as precise, not soft, so the largest radius
-        anywhere on the site is 8px and most edges are 2–4px. Depth is carried by hairlines first
-        and shadow second.
+        Corners stay tight. Enterprise software reads as precise, not soft, so most edges are 2–4px;
+        8px is held in reserve and the pill is used only for the availability dot. Depth is carried
+        by hairlines first and shadow second — in dark mode a black shadow is invisible, so elevation
+        there adds a light inset ring instead.
       </p>
 
       <div class="shape-row">
@@ -303,14 +305,16 @@
         <caption class="visually-hidden">Motion durations and easing</caption>
         <thead><tr><th>Value</th><th>Token</th><th>Purpose</th></tr></thead>
         <tbody>
-          <tr><td>120ms</td><td class="ds-token">--t-fast</td><td>Colour changes on hover</td></tr>
-          <tr><td>180ms</td><td class="ds-token">--t-base</td><td>Nav underline, chevron rotation, borders</td></tr>
-          <tr><td>260ms</td><td class="ds-token">--t-slow</td><td>Larger state changes</td></tr>
+          <tr><td>110ms</td><td class="ds-token">--t-press</td><td>Press feedback on buttons and chips</td></tr>
+          <tr><td>180ms</td><td class="ds-token">--t-base</td><td>Hover colour, nav underline, chevron rotation</td></tr>
+          <tr><td>260ms</td><td class="ds-token">--t-slow</td><td>The engagement disclosure</td></tr>
+          <tr><td>420ms</td><td class="ds-token">--t-enter</td><td>Page-load and in-view entrances</td></tr>
+          <tr><td>60ms</td><td class="ds-token">--stagger</td><td>Delay between staggered items</td></tr>
           <tr><td>cubic-bezier(.2,.8,.2,1)</td><td class="ds-token">--ease</td><td>The single easing curve used everywhere</td></tr>
         </tbody>
       </table></div>
       <ul class="ds-rules">
-        <li><strong>Only transform and colour animate.</strong> Nothing animates width, height or position, so no layout shift.</li>
+        <li><strong>Colour and transform animate almost everywhere.</strong> The one exception is the engagement disclosure, which animates its own <code>block-size</code> through <code>::details-content</code> where the browser supports it, and falls back to a fade.</li>
         <li><strong>All motion is cut to 0.01ms under prefers-reduced-motion.</strong></li>
       </ul>
     </div>
@@ -377,7 +381,7 @@
         <li><strong>Whitespace over boxes.</strong> Sections are separated by space and a hairline, not by stacking everything into cards.</li>
         <li><strong>One type family, five weights.</strong> A second typeface would add noise without adding hierarchy.</li>
         <li><strong>Both themes are designed, not inverted.</strong> The dark theme has its own red, its own neutrals and its own contrast check.</li>
-        <li><strong>Accessible by default.</strong> 44px minimum tap targets, visible focus rings, 4.5:1 body contrast, and a skip link before the header.</li>
+        <li><strong>Accessible by default.</strong> 44px tap targets in content and 38px in the masthead bar, visible focus rings, 4.5:1 body contrast, and a skip link before the header.</li>
       </ul>
     </div>
   </section>
