@@ -20,6 +20,8 @@
   --band-body:   #bed2e6;
   --band-rule:   #23507f;
 
+  --logo-plate:  #ffffff;
+
   --ok:          #1e7a4d;
   --focus:       #1a6bb8;
 
@@ -54,6 +56,8 @@
     --band-body:   #a4bcd3;
     --band-rule:   #23415e;
 
+    --logo-plate:  #f4f7fa;
+
     --ok:          #4cba86;
     --focus:       #7fb2e0;
   }
@@ -78,6 +82,8 @@
   --band-ink:    #eaf1f8;
   --band-body:   #a4bcd3;
   --band-rule:   #23415e;
+
+  --logo-plate:  #f4f7fa;
 
   --ok:          #4cba86;
   --focus:       #7fb2e0;
@@ -373,6 +379,25 @@ a:hover { color: var(--brand-hover); }
 }
 .project summary::-webkit-details-marker { display: none; }
 
+.p-lead { display: flex; align-items: center; gap: var(--s2); min-width: 0; }
+
+/* Client logos sit on a light plate in both themes — they are drawn for light grounds. */
+.p-logo {
+  flex: none;
+  width: 58px; height: 58px;
+  display: grid; place-items: center;
+  background: var(--logo-plate);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.p-logo img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+.p-logo-mono {
+  font-family: var(--f-head); font-weight: 600; font-size: 17px;
+  color: var(--brand); background: var(--brand-tint);
+  letter-spacing: .01em;
+}
+
 .p-main { display: block; min-width: 0; }
 .p-name {
   display: block;
@@ -582,6 +607,7 @@ details[open] .chev { transform: rotate(180deg); }
   .figures-grid > div:first-child { border-top: 0; padding-top: 0; }
   .p-side { width: 100%; justify-content: space-between; }
   .project summary { align-items: flex-start; }
+  .p-logo { width: 48px; height: 48px; }
   .brandmark-role { display: none; }
   .toolbar { align-items: flex-start; }
 }
