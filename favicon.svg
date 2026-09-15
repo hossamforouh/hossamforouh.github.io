@@ -1,15 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HF">
-  <!-- Oracle-red plate; letters drawn as rectangles so they stay crisp at 16px
-       and never depend on a font being available. -->
-  <rect width="64" height="64" rx="8" fill="#d84048"/>
-  <g fill="#ffffff">
-    <!-- H -->
-    <rect x="10" y="17" width="6" height="30"/>
-    <rect x="24" y="17" width="6" height="30"/>
-    <rect x="10" y="29" width="20" height="6"/>
-    <!-- F -->
-    <rect x="38" y="17" width="6" height="30"/>
-    <rect x="38" y="17" width="16" height="6"/>
-    <rect x="38" y="29" width="13" height="6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="hf.">
+  <!-- "hf." lifted from the Forouh wordmark: red h, ink f, red period.
+       Drawn as strokes so it needs no font and stays legible at 16px.
+       The plate is opaque so the mark reads on light and dark browser chrome. -->
+  <rect width="64" height="64" rx="10" fill="#ffffff"/>
+  <g fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- h — red, as in "hossam" -->
+    <path d="M12 13V51" stroke="#d84048"/>
+    <path d="M12 34c0-5 3.5-8 8-8s8 3 8 8v17" stroke="#d84048"/>
+    <!-- f — ink, as in "forouh" -->
+    <path d="M48.5 16c-1.4-1.6-3-2.4-5-2.4-4 0-6.5 2.8-6.5 7.6v29.8" stroke="#171a17"/>
+    <path d="M34 30h12" stroke="#171a17"/>
   </g>
+  <!-- the period, always red -->
+  <circle cx="55.5" cy="47.6" r="4.2" fill="#d84048"/>
 </svg>
