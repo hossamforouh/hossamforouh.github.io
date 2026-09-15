@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forouh Design System</title>
+<meta name="description" content="The design system behind hossamforouh.github.io — colour, type, space, shape and components.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#c74634">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+
+<style>
+  /* Page-specific layout for the style guide itself. Every colour and size
+     below still comes from the same tokens the site uses. */
+  .ds-hero { padding-block: var(--s-8) var(--s-7); }
+  .ds-hero h1 { font-size: var(--fs-h1); font-weight: var(--w-black); }
+  .ds-hero p { max-width: var(--measure); margin-top: var(--s-4); font-size: var(--fs-lead); }
+
+  .ds-section { padding-block: var(--s-8); border-top: 1px solid var(--rule); }
+  .ds-section > .wrap > h2 { font-size: var(--fs-h2); }
+  .ds-note { max-width: var(--measure); margin-top: var(--s-3); }
+
+  .ds-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: var(--s-4); margin-top: var(--s-6);
+  }
+
+  .swatch { border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; }
+  .swatch-chip { height: 72px; }
+  .swatch-meta { padding: var(--s-3); background: var(--surface); }
+  .swatch-name { display: block; font-size: var(--fs-label); font-weight: var(--w-semibold); color: var(--ink); }
+  .swatch-var { display: block; font-size: var(--fs-caption); color: var(--muted); }
+
+  .ds-table { width: 100%; border-collapse: collapse; margin-top: var(--s-6); }
+  .ds-table th, .ds-table td {
+    text-align: left; vertical-align: baseline;
+    padding: var(--s-3) var(--s-4) var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ds-table th {
+    font-size: var(--fs-caption); font-weight: var(--w-bold);
+    letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted);
+  }
+  .ds-table td { font-size: var(--fs-small); color: var(--body); }
+  .ds-table td:first-child { color: var(--ink); font-weight: var(--w-medium); white-space: nowrap; }
+  .ds-table .ds-token { color: var(--muted); font-size: var(--fs-label); white-space: nowrap; }
+
+  .type-row { padding-block: var(--s-4); border-bottom: 1px solid var(--rule); }
+  .type-row:first-of-type { border-top: 1px solid var(--rule); }
+  .type-sample { color: var(--ink); display: block; }
+  .type-facts { margin-top: var(--s-2); font-size: var(--fs-label); color: var(--muted); }
+
+  .space-row { display: flex; align-items: center; gap: var(--s-4); padding-block: var(--s-2); }
+  .space-bar { height: 16px; background: var(--brand); border-radius: var(--r-sm); }
+  .space-label { font-size: var(--fs-label); color: var(--muted); white-space: nowrap; }
+
+  .demo {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3);
+    margin-top: var(--s-5); padding: var(--s-5);
+    background: var(--tint); border: 1px solid var(--rule); border-radius: var(--r-md);
+  }
+  .demo-stack { display: block; }
+  .demo-label {
+    font-size: var(--fs-caption); font-weight: var(--w-bold);
+    letter-spacing: var(--tracking-label); text-transform: uppercase;
+    color: var(--muted); margin-top: var(--s-6);
+  }
+
+  .shape-row { display: flex; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-5); }
+  .shape-box {
+    width: 96px; height: 72px;
+    display: grid; place-items: end center; padding-bottom: var(--s-2);
+    background: var(--tint-2); border: 1px solid var(--rule);
+    font-size: var(--fs-caption); color: var(--muted);
+  }
+  .elev-box {
+    width: 140px; height: 84px;
+    display: grid; place-items: end center; padding-bottom: var(--s-2);
+    background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-md);
+    font-size: var(--fs-caption); color: var(--muted);
+  }
+
+  .ds-rules { display: flex; flex-direction: column; gap: var(--s-4); max-width: var(--measure); margin-top: var(--s-5); }
+  .ds-rules li { position: relative; padding-left: var(--s-6); }
+  .ds-rules li::before {
+    content: ""; position: absolute; left: 0; top: .6em;
+    width: 12px; height: 3px; background: var(--brand);
+  }
+  .ds-rules strong { color: var(--ink); font-weight: var(--w-semibold); }
+</style>
+
+<a class="skip" href="#ds-main">Skip to content</a>
+
+<div class="brandbar" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <a class="brandmark" href="index.html">
+      <img class="brandmark-logo" src="favicon.svg" alt="" width="30" height="30">
+      <span class="brandmark-text">
+        <span class="brandmark-name">Hossam Forouh</span>
+        <span class="brandmark-role">Design system</span>
+      </span>
+    </a>
+    <nav class="mainnav" aria-label="Sections">
+      <a href="#colour">Colour</a>
+      <a href="#type">Type</a>
+      <a href="#space">Space</a>
+      <a href="#shape">Shape</a>
+      <a href="#components">Components</a>
+      <a href="#principles">Principles</a>
+    </nav>
+    <div class="masthead-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Switch colour theme">
+        <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.6M12 18.8v2.6M2.6 12h2.6M18.8 12h2.6M5.3 5.3l1.9 1.9M16.8 16.8l1.9 1.9M18.7 5.3l-1.9 1.9M7.2 16.8l-1.9 1.9"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z"/></svg>
+      </button>
+      <a class="btn btn-primary" href="index.html">Back to site</a>
+    </div>
+  </div>
+</header>
+
+<main id="ds-main">
+
+  <section class="ds-hero">
+    <div class="wrap">
+      <p class="kicker">Design system</p>
+      <h1>The rules behind the site</h1>
+      <p>
+        Every colour, size and component on hossamforouh.github.io comes from the tokens on this page.
+        The direction takes its cue from Oracle's own design language — a decisive red against warm
+        near-black, wide margins, square-ish edges and a single type family carrying the whole hierarchy.
+        This page is rendered with the same stylesheet, so what you see here is what the site uses.
+      </p>
+    </div>
+  </section>
+
+  <!-- COLOUR -->
+  <section id="colour" class="ds-section">
+    <div class="wrap">
+      <h2>Colour</h2>
+      <p class="ds-note">
+        One accent, used decisively and sparingly. Oracle red carries every call to action, every
+        section rule and every active state. Neutrals are warm rather than blue-grey, which is what
+        keeps the red from looking like a generic alert colour.
+      </p>
+
+      <p class="demo-label">Brand</p>
+      <div class="ds-grid">
+        <div class="swatch"><div class="swatch-chip" style="background:var(--brand)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Oracle red</span><span class="swatch-var">--brand · #C74634</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--brand-deep)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Red deep</span><span class="swatch-var">--brand-deep · small text</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--brand-tint)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Red tint</span><span class="swatch-var">--brand-tint · badges</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--ok)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Available</span><span class="swatch-var">--ok · status only</span></div></div>
+      </div>
+
+      <p class="demo-label">Surface &amp; ink</p>
+      <div class="ds-grid">
+        <div class="swatch"><div class="swatch-chip" style="background:var(--page)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Page</span><span class="swatch-var">--page</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--tint)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Tint</span><span class="swatch-var">--tint · alternating bands</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--tint-2)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Tint 2</span><span class="swatch-var">--tint-2</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--band)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Band</span><span class="swatch-var">--band · figures, contact</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--ink)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Ink</span><span class="swatch-var">--ink · headings</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--body)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Body</span><span class="swatch-var">--body · paragraphs</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--muted)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Muted</span><span class="swatch-var">--muted · labels, dates</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--rule)"></div>
+          <div class="swatch-meta"><span class="swatch-name">Rule</span><span class="swatch-var">--rule · hairlines</span></div></div>
+      </div>
+
+      <p class="demo-label">Contrast rules</p>
+      <ul class="ds-rules">
+        <li><strong>Small text on white uses --brand-deep, not --brand.</strong> Oracle red at 16px falls just under the 4.5:1 minimum; the deeper red clears it.</li>
+        <li><strong>--brand is for fills, large type and rules</strong> — places where 3:1 is the bar.</li>
+        <li><strong>Dark theme lightens the red to #EE6B57.</strong> The same red on a near-black ground would be too dim to read.</li>
+        <li><strong>Colour never carries meaning alone.</strong> The availability dot is paired with the words next to it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section id="type" class="ds-section">
+    <div class="wrap">
+      <h2>Type</h2>
+      <p class="ds-note">
+        One family — <strong>Public Sans</strong> — across the whole site, which is how Oracle handles
+        type too. Hierarchy comes from weight and size, never from a second typeface. Numbers use
+        tabular figures so columns of dates and figures line up.
+      </p>
+
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-h1);font-weight:var(--w-black);letter-spacing:var(--tracking-tight);line-height:var(--lh-tight)">Hossam Magdy Forouh</span>
+        <p class="type-facts">Display · --fs-h1 · 800 · clamp(2.25rem → 3.5rem) · tracking −0.02em</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-h2);font-weight:var(--w-bold);letter-spacing:var(--tracking-tight)">Client projects</span>
+        <p class="type-facts">Section heading · --fs-h2 · 700 · clamp(1.625rem → 2.125rem)</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-h3);font-weight:var(--w-bold);letter-spacing:var(--tracking-tight)">Oracle SCM Experienced Consultant</span>
+        <p class="type-facts">Subheading · --fs-h3 · 700 · 24px</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-h4);font-weight:var(--w-bold);letter-spacing:var(--tracking-tight)">Saudi Cement Company</span>
+        <p class="type-facts">Card title · --fs-h4 · 700 · 20px</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-lead);font-weight:var(--w-regular);line-height:var(--lh-normal)">I implement Oracle Fusion Cloud supply chain systems.</span>
+        <p class="type-facts">Lead paragraph · --fs-lead · 400 · 18px · line-height 1.6</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-body);font-weight:var(--w-regular);line-height:var(--lh-normal)">Directed functional analysis sessions to architect the solution and map complex manufacturing requirements.</span>
+        <p class="type-facts">Body · --fs-body · 400 · 16px · measure capped at 68ch</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample overline">Engagements</span>
+        <p class="type-facts">Overline / kicker · --fs-caption · 700 · 12px · tracking +0.08em · uppercase</p>
+      </div>
+      <div class="type-row">
+        <span class="type-sample" style="font-size:var(--fs-body);font-variant-numeric:tabular-nums;font-weight:var(--w-semibold)">Oct 2022 — Present · 3.84 · +20 101 898 8989</span>
+        <p class="type-facts">Tabular figures · used for every date, GPA and phone number</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPACE -->
+  <section id="space" class="ds-section">
+    <div class="wrap">
+      <h2>Space</h2>
+      <p class="ds-note">
+        A 4px base. Nothing on the site uses a value outside this ladder, which is what keeps the
+        vertical rhythm even from section to section.
+      </p>
+
+      <div style="margin-top:var(--s-6)">
+        <div class="space-row"><div class="space-bar" style="width:4px"></div><span class="space-label">--s-1 · 4px · icon nudges</span></div>
+        <div class="space-row"><div class="space-bar" style="width:8px"></div><span class="space-label">--s-2 · 8px · chip gaps, tag gaps</span></div>
+        <div class="space-row"><div class="space-bar" style="width:12px"></div><span class="space-label">--s-3 · 12px · list item spacing</span></div>
+        <div class="space-row"><div class="space-bar" style="width:16px"></div><span class="space-label">--s-4 · 16px · paragraph spacing</span></div>
+        <div class="space-row"><div class="space-bar" style="width:24px"></div><span class="space-label">--s-5 · 24px · card padding, page gutter</span></div>
+        <div class="space-row"><div class="space-bar" style="width:32px"></div><span class="space-label">--s-6 · 32px · block separation</span></div>
+        <div class="space-row"><div class="space-bar" style="width:48px"></div><span class="space-label">--s-7 · 48px · heading to content</span></div>
+        <div class="space-row"><div class="space-bar" style="width:64px"></div><span class="space-label">--s-8 · 64px · column gap</span></div>
+        <div class="space-row"><div class="space-bar" style="width:96px"></div><span class="space-label">--s-9 · 96px · section padding (64 tablet, 48 phone)</span></div>
+      </div>
+
+      <table class="ds-table">
+        <caption class="visually-hidden">Layout values</caption>
+        <thead><tr><th>Value</th><th>Token</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>1140px</td><td class="ds-token">--wrap</td><td>Maximum content width on desktop</td></tr>
+          <tr><td>68ch</td><td class="ds-token">--measure</td><td>Maximum line length for running text</td></tr>
+          <tr><td>24px</td><td class="ds-token">--gutter</td><td>Side padding, dropping to 20px on phones</td></tr>
+          <tr><td>1000 / 860 / 560</td><td class="ds-token">breakpoints</td><td>Columns collapse, nav hides, figures stack</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SHAPE -->
+  <section id="shape" class="ds-section">
+    <div class="wrap">
+      <h2>Shape &amp; depth</h2>
+      <p class="ds-note">
+        Corners stay tight. Enterprise software reads as precise, not soft, so the largest radius
+        anywhere on the site is 8px and most edges are 2–4px. Depth is carried by hairlines first
+        and shadow second.
+      </p>
+
+      <div class="shape-row">
+        <div class="shape-box" style="border-radius:var(--r-sm)">--r-sm · 2px</div>
+        <div class="shape-box" style="border-radius:var(--r-md)">--r-md · 4px</div>
+        <div class="shape-box" style="border-radius:var(--r-lg)">--r-lg · 8px</div>
+        <div class="shape-box" style="border-radius:var(--r-pill)">--r-pill</div>
+      </div>
+
+      <p class="demo-label">Elevation</p>
+      <div class="shape-row">
+        <div class="elev-box" style="box-shadow:var(--e-1)">--e-1 · cards</div>
+        <div class="elev-box" style="box-shadow:var(--e-2)">--e-2 · hover</div>
+        <div class="elev-box" style="box-shadow:var(--e-3)">--e-3 · overlays</div>
+      </div>
+
+      <p class="demo-label">Motion</p>
+      <table class="ds-table">
+        <thead><tr><th>Value</th><th>Token</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>120ms</td><td class="ds-token">--t-fast</td><td>Colour changes on hover</td></tr>
+          <tr><td>180ms</td><td class="ds-token">--t-base</td><td>Nav underline, chevron rotation, borders</td></tr>
+          <tr><td>260ms</td><td class="ds-token">--t-slow</td><td>Larger state changes</td></tr>
+          <tr><td>cubic-bezier(.2,.8,.2,1)</td><td class="ds-token">--ease</td><td>The single easing curve used everywhere</td></tr>
+        </tbody>
+      </table>
+      <ul class="ds-rules">
+        <li><strong>Only transform and colour animate.</strong> Nothing animates width, height or position, so no layout shift.</li>
+        <li><strong>All motion is cut to 0.01ms under prefers-reduced-motion.</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section id="components" class="ds-section">
+    <div class="wrap">
+      <h2>Components</h2>
+      <p class="ds-note">These are live — the same classes the site uses, rendered here from the same stylesheet.</p>
+
+      <p class="demo-label">Buttons — one primary per view</p>
+      <div class="demo">
+        <span class="btn btn-primary">Email me</span>
+        <span class="btn btn-ghost">View engagements</span>
+      </div>
+
+      <p class="demo-label">Filter chips</p>
+      <div class="demo">
+        <span class="chip is-on">All</span>
+        <span class="chip">Inventory</span>
+        <span class="chip">Procurement</span>
+        <span class="chip">Product Hub</span>
+      </div>
+
+      <p class="demo-label">Badges and module tags</p>
+      <div class="demo">
+        <span class="badge badge-strong">Full-cycle implementation</span>
+        <span class="badge">Functional support</span>
+        <ul class="tags"><li>Inventory Management</li><li>Supplier Portal</li><li>Sourcing</li></ul>
+      </div>
+
+      <p class="demo-label">Section kicker</p>
+      <div class="demo"><span class="demo-stack"><span class="kicker">Engagements</span></span></div>
+
+      <p class="demo-label">Bulleted list — red tick, not a dot</p>
+      <div class="demo">
+        <ul class="bullets">
+          <li>Authored the Future Process Model (RD.011) and Master Data Management documents.</li>
+          <li>Managed data migration with FBDI and ADFDI templates.</li>
+        </ul>
+      </div>
+
+      <p class="demo-label">Fact card</p>
+      <div class="demo">
+        <div class="factcard" style="max-width:320px">
+          <h3 class="factcard-title">At a glance</h3>
+          <dl>
+            <div><dt>Experience</dt><dd>5+ years on Oracle Fusion Cloud</dd></div>
+            <div><dt>Location</dt><dd>Cairo, Egypt</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section id="principles" class="ds-section">
+    <div class="wrap">
+      <h2>Principles</h2>
+      <ul class="ds-rules">
+        <li><strong>Structure carries the meaning.</strong> Dates sit in their own column, modules in their own row, deliverables under their own label. The layout should be readable before anyone reads a word.</li>
+        <li><strong>Red is a signal, not a decoration.</strong> If everything is red, nothing is. It marks the primary action, the current section and the start of a list — nothing else.</li>
+        <li><strong>Whitespace over boxes.</strong> Sections are separated by space and a hairline, not by stacking everything into cards.</li>
+        <li><strong>One type family, five weights.</strong> A second typeface would add noise without adding hierarchy.</li>
+        <li><strong>Both themes are designed, not inverted.</strong> The dark theme has its own red, its own neutrals and its own contrast check.</li>
+        <li><strong>Accessible by default.</strong> 44px minimum tap targets, visible focus rings, 4.5:1 body contrast, and a skip link before the header.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div class="wrap colophon-inner">
+      <p>Design system — Hossam Magdy Forouh</p>
+      <p><a href="index.html">Back to the site</a></p>
+    </div>
+  </footer>
+
+</main>
+
+<script src="script.js"></script>
+</html>
