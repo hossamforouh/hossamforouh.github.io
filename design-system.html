@@ -5,7 +5,7 @@
 <title>Forouh Design System</title>
 <meta name="description" content="The design system behind hossamforouh.github.io — colour, type, space, shape and components.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#c74634">
+<meta name="theme-color" content="#d84048">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap">
@@ -97,12 +97,9 @@
 
 <header class="masthead">
   <div class="wrap masthead-inner">
-    <a class="brandmark" href="index.html">
-      <img class="brandmark-logo" src="favicon.svg" alt="" width="30" height="30">
-      <span class="brandmark-text">
-        <span class="brandmark-name">Hossam Forouh</span>
-        <span class="brandmark-role">Design system</span>
-      </span>
+    <a class="brandmark" href="index.html" aria-label="Hossam Forouh — home">
+      <img class="wordmark wordmark-light" src="logo.png" alt="Hossam Forouh" width="640" height="94">
+      <img class="wordmark wordmark-dark" src="logo-dark.png" alt="" width="640" height="94">
     </a>
     <nav class="mainnav" aria-label="Sections">
       <a href="#colour">Colour</a>
@@ -142,15 +139,15 @@
     <div class="wrap">
       <h2>Colour</h2>
       <p class="ds-note">
-        One accent, used decisively and sparingly. Oracle red carries every call to action, every
-        section rule and every active state. Neutrals are warm rather than blue-grey, which is what
-        keeps the red from looking like a generic alert colour.
+        One accent, used decisively and sparingly. The red is taken straight from the Forouh wordmark, and it carries every call to action, every
+        section rule and every active state. Neutrals are pulled from the wordmark’s ink, which is what
+        keeps the red from reading as a generic alert colour.
       </p>
 
       <p class="demo-label">Brand</p>
       <div class="ds-grid">
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand)"></div>
-          <div class="swatch-meta"><span class="swatch-name">Oracle red</span><span class="swatch-var">--brand · #C74634</span></div></div>
+          <div class="swatch-meta"><span class="swatch-name">Forouh red</span><span class="swatch-var">--brand · #D84048</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand-deep)"></div>
           <div class="swatch-meta"><span class="swatch-name">Red deep</span><span class="swatch-var">--brand-deep · small text</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:var(--brand-tint)"></div>
@@ -181,9 +178,9 @@
 
       <p class="demo-label">Contrast rules</p>
       <ul class="ds-rules">
-        <li><strong>Small text on white uses --brand-deep, not --brand.</strong> Oracle red at 16px falls just under the 4.5:1 minimum; the deeper red clears it.</li>
+        <li><strong>Small text on white uses --brand-deep, not --brand.</strong> The wordmark red at 16px measures 4.4:1 on white — just under the 4.5:1 minimum — so a deeper #B0333A carries links and small text.</li>
         <li><strong>--brand is for fills, large type and rules</strong> — places where 3:1 is the bar.</li>
-        <li><strong>Dark theme lightens the red to #EE6B57.</strong> The same red on a near-black ground would be too dim to read.</li>
+        <li><strong>Dark theme lightens the red to #F06A72.</strong> The same red on a near-black ground would be too dim to read.</li>
         <li><strong>Colour never carries meaning alone.</strong> The availability dot is paired with the words next to it.</li>
       </ul>
     </div>
