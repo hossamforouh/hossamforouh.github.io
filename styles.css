@@ -434,6 +434,26 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .identity-name { font-size: var(--fs-lead); font-weight: var(--w-bold); color: var(--ink); line-height: var(--lh-snug); }
 .identity-role { font-size: var(--fs-small); color: var(--muted); line-height: var(--lh-snug); }
 
+/* Arabic name: same weight as the English, set in a face drawn for Arabic. */
+.identity-ar {
+  display: inline-block;
+  font-family: "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif;
+  font-weight: 500; color: var(--muted);
+}
+.name-sep { margin-inline: var(--s-1); color: var(--rule-strong); font-weight: 400; }
+
+.identity-place {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin-top: 2px;
+  font-size: var(--fs-small); color: var(--body); line-height: var(--lh-snug);
+}
+.place-ico {
+  width: 14px; height: 14px; flex: none;
+  fill: none; stroke: var(--brand); stroke-width: 2; stroke-linejoin: round;
+}
+.place-sep { color: var(--rule-strong); }
+.local-time { font-variant-numeric: tabular-nums; }
+
 .availability {
   display: inline-flex; align-items: center; gap: var(--s-2);
   margin-left: auto; padding: var(--s-1) var(--s-3);
@@ -686,7 +706,35 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 /* --------------------------------------------------------------------------
    16. CONTACT + FOOTER
    -------------------------------------------------------------------------- */
-.contact { background: var(--band); color: var(--band-body); padding-block: var(--s-9); }
+.contact { position: relative; background: var(--band); color: var(--band-body); padding-block: var(--s-9); }
+
+/* Najdi touch: the band's top edge is stepped like the crenellations
+   (sharafat) on Riyadh's mud-brick walls, with a row of the small
+   triangular wall vents beneath. Both are CSS masks painted in theme
+   tokens, so they follow light and dark mode. */
+.contact::before,
+.contact::after {
+  content: ""; position: absolute; left: 0; right: 0;
+  pointer-events: none;
+  -webkit-mask-repeat: repeat-x; mask-repeat: repeat-x;
+  -webkit-mask-position: center top; mask-position: center top;
+}
+.contact::before {
+  top: -19px; height: 20px;
+  background: var(--band);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 56px 20px; mask-size: 56px 20px;
+}
+.contact::after {
+  top: var(--s-6); height: 10px;
+  background: var(--band-rule);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M24 10L28 2L32 10Z'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M24 10L28 2L32 10Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 56px 10px; mask-size: 56px 10px;
+}
+.contact > .wrap { position: relative; }
+.cl-time { color: var(--band-body); font-variant-numeric: tabular-nums; }
 .contact-grid {
   display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: var(--s-9); align-items: start;
@@ -746,6 +794,9 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   .portrait { width: 60px; height: 60px; }
   .availability { margin-left: 0; order: 3; }
   .identity-text { flex: 1; }
+  .identity-ar { display: block; text-align: left; }
+  .name-sep { display: none; }
+  .contact::after { top: var(--s-4); }
   .scope { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s-7); }
   .scope li { padding: var(--s-4) 0 var(--s-4) var(--s-4); }
   .scope li:nth-child(odd) { padding-left: 0; border-left: 0; }

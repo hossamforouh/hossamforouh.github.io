@@ -127,6 +127,29 @@
     }
   }
 
+  /* ---- Riyadh local time ------------------------------------------------
+     Tells a recruiter in another time zone whether it is a good moment to
+     call. Without JavaScript the markup still reads "GMT+3". */
+  var clocks = Array.prototype.slice.call(document.querySelectorAll(".local-time"));
+  if (clocks.length && window.Intl) {
+    var fmt;
+    try {
+      fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Riyadh", hour: "2-digit", minute: "2-digit", hour12: false });
+    } catch (e) { fmt = null; }
+
+    function tick() {
+      var now = fmt.format(new Date());
+      clocks.forEach(function (el) {
+        el.textContent = now + " local time (GMT+3)";
+        el.setAttribute("datetime", now);
+      });
+    }
+    if (fmt) {
+      tick();
+      setInterval(tick, 30000);          // minute precision is enough
+    }
+  }
+
   /* ---- Email buttons ----------------------------------------------------
      A mailto link does nothing for visitors with no mail app set up (most
      webmail users). So the button also copies the address and says so; the
