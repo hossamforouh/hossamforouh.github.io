@@ -486,7 +486,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   aspect-ratio: 1;
   border-radius: var(--r-pill);
   object-fit: cover;
-  object-position: 50% 0%;          /* the shot has headroom below the chin, so crop from the top */
+  object-position: 50% 50%;         /* square source, so nothing to crop */
 }
 .portrait[hidden] { display: none; }
 
