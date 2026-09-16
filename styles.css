@@ -422,74 +422,78 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* --------------------------------------------------------------------------
    7. INTRODUCTION
    -------------------------------------------------------------------------- */
-.intro { padding-block: 72px; }
-.intro-grid {
-  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: var(--s-9); align-items: center;
+.intro { padding-block: var(--s-8) var(--s-7); }
+
+/* Identity row: photo + name + role, availability pushed to the far edge. */
+.identity {
+  display: flex; align-items: center; gap: var(--s-4);
+  padding-bottom: var(--s-6); margin-bottom: var(--s-7);
+  border-bottom: 1px solid var(--rule);
 }
+.identity-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.identity-name { font-size: var(--fs-lead); font-weight: var(--w-bold); color: var(--ink); line-height: var(--lh-snug); }
+.identity-role { font-size: var(--fs-small); color: var(--muted); line-height: var(--lh-snug); }
 
 .availability {
   display: inline-flex; align-items: center; gap: var(--s-2);
+  margin-left: auto; padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--rule); border-radius: var(--r-pill);
   font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ok);
-  margin-bottom: var(--s-5);
+  white-space: nowrap;
 }
 .dot { width: 8px; height: 8px; border-radius: var(--r-pill); background: var(--ok); }
 
-.hero-name { font-size: var(--fs-small); margin-bottom: var(--s-3); }
-.intro h1 {
-  font-size: var(--fs-h1); font-weight: var(--w-black);
-  letter-spacing: var(--tracking-display); line-height: var(--lh-display);
-  max-width: 18ch;
-}
-.intro-text {
-  max-width: var(--measure); margin-top: var(--s-5);
-  font-size: var(--fs-lead); font-weight: var(--w-lead); line-height: var(--lh-lead);
-}
-.intro-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
-
-/* Scope at a glance. Replaces the old full-width dark figures band — same
-   four numbers, a fraction of the weight. */
-.scope {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));   /* four equal columns, number above label */
-  gap: var(--s-3) var(--s-6);
-  margin-top: var(--s-6); padding-top: var(--s-5);
-  border-top: 1px solid var(--rule);
-}
-.scope li {
-  font-size: var(--fs-small); color: var(--muted); line-height: var(--lh-snug);
-  display: flex; flex-direction: column; gap: var(--s-1);
-}
-.scope-n {
-  font-size: var(--fs-h3); font-weight: var(--w-bold); color: var(--ink);
-  letter-spacing: var(--tracking-tight);
-}
-.scope-n span { color: var(--brand); font-size: .7em; vertical-align: .08em; }
-
-/* Module list in the About aside: wraps as a block, not a single row. */
-.tags-block { margin-top: var(--s-1); }
-
-/* Right-hand column of the hero: just the portrait, centred against the words. */
-.intro-aside { display: flex; justify-content: center; }
-
+/* Portrait: small, with a thin brand-red ring set off by a gap of page colour. */
 .portrait {
-  margin: 0;
-  width: 100%;
-  max-width: 300px;                /* the only thing in its column, so it can breathe */
-  aspect-ratio: 1;
-  padding: var(--s-2);             /* a ring of plate, so the shot's own white never meets the page edge */
-  background: var(--logo-plate);
-  border: 1px solid var(--rule);
+  flex: none; margin: 0;
+  width: 72px; height: 72px;
+  padding: 3px;
+  border: 2px solid var(--brand);
   border-radius: var(--r-pill);
-  overflow: hidden;
 }
 .portrait img {
   display: block; width: 100%; height: 100%;
-  aspect-ratio: 1;
   border-radius: var(--r-pill);
-  object-fit: cover;
-  object-position: 50% 50%;         /* square source, so nothing to crop */
+  object-fit: cover; object-position: 50% 20%;
 }
 .portrait[hidden] { display: none; }
+
+/* Headline left, supporting line and actions right, both sitting on one baseline. */
+.intro-grid {
+  display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: var(--s-8); align-items: end;
+}
+.intro h1 {
+  font-size: var(--fs-h1); font-weight: var(--w-black);
+  letter-spacing: var(--tracking-display); line-height: var(--lh-display);
+  max-width: 16ch; text-wrap: balance;
+}
+.intro-text {
+  font-size: var(--fs-lead); font-weight: var(--w-lead); line-height: var(--lh-lead);
+}
+.intro-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-5); }
+
+/* Four numbers across the full width, split by hairlines. */
+.scope {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: var(--s-8);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.scope li {
+  display: flex; flex-direction: column; gap: var(--s-1);
+  padding: var(--s-5) var(--s-5);
+  font-size: var(--fs-small); color: var(--muted); line-height: var(--lh-snug);
+}
+.scope li + li { border-left: 1px solid var(--rule); }
+.scope li:first-child { padding-left: 0; }
+.scope-n {
+  font-size: var(--fs-h2); font-weight: var(--w-bold); color: var(--ink);
+  letter-spacing: var(--tracking-tight); line-height: 1;
+}
+.scope-n span { color: var(--brand); font-size: .6em; vertical-align: .35em; margin-left: 1px; }
+
+/* Module list in the About aside: wraps as a block, not a single row. */
+.tags-block { margin-top: var(--s-1); }
 
 .factcard {
   background: transparent;
@@ -671,13 +675,13 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 /* ---- Entrances --------------------------------------------------------
    Both are opt-in via a class the script adds, so with JavaScript off or
    motion reduced the content is simply there — never parked at opacity 0. */
-.js-motion .intro-copy > * { animation: settle var(--t-enter) var(--ease) backwards; }
-.js-motion .intro-copy > *:nth-child(1) { animation-delay: calc(var(--stagger) * 0); }
-.js-motion .intro-copy > *:nth-child(2) { animation-delay: calc(var(--stagger) * 1); }
-.js-motion .intro-copy > *:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
-.js-motion .intro-copy > *:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
-.js-motion .intro-copy > *:nth-child(5) { animation-delay: calc(var(--stagger) * 4); }
-.js-motion .intro-aside { animation: settle var(--t-enter) var(--ease) calc(var(--stagger) * 3) backwards; }
+.js-motion .identity,
+.js-motion .intro h1,
+.js-motion .intro-side,
+.js-motion .scope { animation: settle var(--t-enter) var(--ease) backwards; }
+.js-motion .intro h1    { animation-delay: calc(var(--stagger) * 1); }
+.js-motion .intro-side  { animation-delay: calc(var(--stagger) * 2); }
+.js-motion .scope       { animation-delay: calc(var(--stagger) * 3); }
 
 /* --------------------------------------------------------------------------
    16. CONTACT + FOOTER
@@ -719,9 +723,7 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 @media (max-width: 1000px) {
   :root { --s-9: 64px; }
   .intro-grid, .two-col, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
-  /* Stacked: the photo leads, small and left-aligned with the text. */
-  .intro-aside { order: -1; justify-content: flex-start; }
-  .portrait { max-width: 144px; }
+  .intro-grid { gap: var(--s-5); }
 }
 
 @media (max-width: 860px) {
@@ -739,8 +741,15 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   :root { --s-9: 48px; --gutter: 20px; }
   .p-side { width: 100%; justify-content: space-between; }
   .project summary { align-items: flex-start; }
-  .portrait { max-width: 120px; }
-  .scope { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .intro { padding-block: var(--s-7) var(--s-6); }
+  .identity { flex-wrap: wrap; row-gap: var(--s-3); margin-bottom: var(--s-6); padding-bottom: var(--s-5); }
+  .portrait { width: 60px; height: 60px; }
+  .availability { margin-left: 0; order: 3; }
+  .identity-text { flex: 1; }
+  .scope { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s-7); }
+  .scope li { padding: var(--s-4) 0 var(--s-4) var(--s-4); }
+  .scope li:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .scope li:nth-child(n+3) { border-top: 1px solid var(--rule); }
   .p-logo { width: 84px; height: 48px; }
   .p-logo img { max-width: 72px; max-height: 26px; }
   .masthead-inner { gap: var(--s-2); }

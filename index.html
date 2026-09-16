@@ -44,7 +44,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400..800&display=swap">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 
 <a class="skip" href="#main">Skip to content</a>
 
@@ -77,38 +77,48 @@
 
   <!-- Introduction -->
   <section class="intro" id="top">
-    <div class="wrap intro-grid">
-      <div class="intro-copy">
-        <p class="availability"><span class="dot" aria-hidden="true"></span> Available for new Oracle Fusion SCM engagements</p>
-        <p class="hero-name">Hossam Magdy Forouh — Oracle SCM Functional Consultant</p>
-        <h1>Oracle Fusion SCM, configured by someone who used to write the code.</h1>
-        <p class="intro-text">
-          Consultant at Raya International Services. Five years on Fusion Cloud across a cement
-          plant, a Kuwaiti bank and a school group — including the Procurement to Temenos
-          integration at Warba Bank, which I designed and configured end to end.
-        </p>
-        <ul class="scope">
-          <li><span class="scope-n">5<span>+</span></span> years on Fusion Cloud</li>
-          <li><span class="scope-n">2</span> full-cycle implementations</li>
-          <li><span class="scope-n">5</span> client engagements</li>
-          <li><span class="scope-n">3</span> countries</li>
-        </ul>
+    <div class="wrap">
 
-        <div class="intro-actions">
-          <a class="btn btn-primary" href="mailto:hossamforouh@icloud.com">Email me</a>
-          <a class="btn btn-ghost cv-link" id="cv-hero" hidden
-             href="cv.pdf" download="Hossam-Forouh-Oracle-SCM-Consultant-CV.pdf">
-            <svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2"/></svg> Download CV
-          </a>
+      <!-- Who: photo, name and role read as one unit -->
+      <div class="identity">
+        <figure class="portrait" id="portrait">
+          <img src="portrait.jpg" alt="Hossam Magdy Forouh"
+               width="640" height="640" fetchpriority="high" decoding="async">
+        </figure>
+        <div class="identity-text">
+          <p class="identity-name">Hossam Magdy Forouh</p>
+          <p class="identity-role">Oracle SCM Functional Consultant · Raya International Services</p>
+        </div>
+        <p class="availability"><span class="dot" aria-hidden="true"></span> Available for new engagements</p>
+      </div>
+
+      <!-- What: the headline, with the supporting line and actions beside it -->
+      <div class="intro-grid">
+        <h1>Oracle Fusion SCM, configured by someone who used to write the code.</h1>
+        <div class="intro-side">
+          <p class="intro-text">
+            Five years on Fusion Cloud across a cement plant, a Kuwaiti bank and a school group —
+            including the Procurement to Temenos integration at Warba Bank, which I designed and
+            configured end to end.
+          </p>
+          <div class="intro-actions">
+            <a class="btn btn-primary" href="mailto:hossamforouh@icloud.com">Email me</a>
+            <a class="btn btn-ghost cv-link" id="cv-hero" hidden
+               href="cv.pdf" download="Hossam-Forouh-Oracle-SCM-Consultant-CV.pdf">
+              <svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2"/></svg> Download CV
+            </a>
+          </div>
         </div>
       </div>
 
-      <aside class="intro-aside">
-        <figure class="portrait" id="portrait">
-          <img src="portrait.jpg" alt="Hossam Magdy Forouh, Oracle SCM Functional Consultant"
-               width="640" height="640" fetchpriority="high" decoding="async">
-        </figure>
-      </aside>
+      <!-- Proof: four numbers across the full width -->
+      <ul class="scope">
+        <li><span class="scope-n">5<span>+</span></span> years on Fusion Cloud</li>
+        <li><span class="scope-n">2</span> full-cycle implementations</li>
+        <li><span class="scope-n">5</span> client engagements</li>
+        <li><span class="scope-n">3</span> countries</li>
+      </ul>
+
     </div>
   </section>
 
