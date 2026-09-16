@@ -425,7 +425,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .intro { padding-block: 72px; }
 .intro-grid {
   display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: var(--s-9); align-items: start;
+  gap: var(--s-9); align-items: center;
 }
 
 .availability {
@@ -450,14 +450,14 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* Scope at a glance. Replaces the old full-width dark figures band — same
    four numbers, a fraction of the weight. */
 .scope {
-  display: flex; flex-wrap: wrap;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));   /* four equal columns, number above label */
   gap: var(--s-3) var(--s-6);
   margin-top: var(--s-6); padding-top: var(--s-5);
   border-top: 1px solid var(--rule);
 }
 .scope li {
-  font-size: var(--fs-small); color: var(--muted);
-  display: flex; align-items: baseline; gap: var(--s-2);
+  font-size: var(--fs-small); color: var(--muted); line-height: var(--lh-snug);
+  display: flex; flex-direction: column; gap: var(--s-1);
 }
 .scope-n {
   font-size: var(--fs-h3); font-weight: var(--w-bold); color: var(--ink);
@@ -468,16 +468,17 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* Module list in the About aside: wraps as a block, not a single row. */
 .tags-block { margin-top: var(--s-1); }
 
-/* Right-hand column of the hero: portrait above the summary. */
-.intro-aside { display: flex; flex-direction: column; gap: var(--s-5); }
+/* Right-hand column of the hero: just the portrait, centred against the words. */
+.intro-aside { display: flex; justify-content: center; }
 
 .portrait {
   margin: 0;
-  max-width: 208px;                /* a portrait, not a billboard — the words lead */
+  width: 100%;
+  max-width: 300px;                /* the only thing in its column, so it can breathe */
   aspect-ratio: 1;
   padding: var(--s-2);             /* a ring of plate, so the shot's own white never meets the page edge */
   background: var(--logo-plate);
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--rule);
   border-radius: var(--r-pill);
   overflow: hidden;
 }
@@ -718,7 +719,9 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 @media (max-width: 1000px) {
   :root { --s-9: 64px; }
   .intro-grid, .two-col, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
-  .portrait { max-width: 184px; }
+  /* Stacked: the photo leads, small and left-aligned with the text. */
+  .intro-aside { order: -1; justify-content: flex-start; }
+  .portrait { max-width: 144px; }
 }
 
 @media (max-width: 860px) {
@@ -736,7 +739,8 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   :root { --s-9: 48px; --gutter: 20px; }
   .p-side { width: 100%; justify-content: space-between; }
   .project summary { align-items: flex-start; }
-  .portrait { max-width: 160px; }
+  .portrait { max-width: 120px; }
+  .scope { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .p-logo { width: 84px; height: 48px; }
   .p-logo img { max-width: 72px; max-height: 26px; }
   .masthead-inner { gap: var(--s-2); }
