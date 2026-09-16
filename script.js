@@ -127,6 +127,56 @@
     }
   }
 
+  /* ---- Email buttons ----------------------------------------------------
+     A mailto link does nothing for visitors with no mail app set up (most
+     webmail users). So the button also copies the address and says so; the
+     mail app still opens for anyone who has one. */
+  var status = document.getElementById("copy-status");
+  var mailButtons = Array.prototype.slice.call(document.querySelectorAll('a.btn[href^="mailto:"]'));
+
+  // Older copy method, used when the Clipboard API is missing or refused.
+  function legacyCopy(text) {
+    var field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.opacity = "0";
+    document.body.appendChild(field);
+    field.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(field);
+    return ok;
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).catch(function () {
+        if (!legacyCopy(text)) throw new Error("copy failed");
+      });
+    }
+    return legacyCopy(text) ? Promise.resolve() : Promise.reject(new Error("copy failed"));
+  }
+
+  mailButtons.forEach(function (btn) {
+    var label = btn.textContent;
+    var timer;
+
+    btn.addEventListener("click", function () {
+      var address = btn.getAttribute("href").replace("mailto:", "");
+
+      copyText(address).then(function () {
+        btn.textContent = "Email copied";
+        if (status) status.textContent = address + " copied to clipboard";
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          btn.textContent = label;
+          if (status) status.textContent = "";
+        }, 2500);
+      }).catch(function () { /* copy blocked: the mailto link still runs */ });
+    });
+  });
+
   /* ---- CV download ------------------------------------------------------
      Shown only once we know the file is actually there, so the button is
      never a dead link. */
