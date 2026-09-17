@@ -119,7 +119,7 @@
   --h-wordmark:   26px;
   --h-control:    44px;
   --h-control-sm: 38px;
-  --h-masthead:   90px;   /* kept in step with rootMargin in script.js */
+  --h-masthead:   90px;   /* fallback; script.js sets the measured header height */
   --z-skip:  100;
 }
 
@@ -308,7 +308,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   background: transparent; color: var(--body);
   border: 1px solid var(--rule); border-radius: var(--r-md);
   cursor: pointer;
-  transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+  transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease), transform var(--t-press) var(--ease);
 }
 .icon-btn:hover { color: var(--brand-deep); border-color: var(--brand-deep); }
 .icon-btn svg {
@@ -337,10 +337,10 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   text-decoration: none; cursor: pointer;
   transition: background-color var(--t-base) var(--ease),
               color var(--t-base) var(--ease),
-              border-color var(--t-base) var(--ease);
+              border-color var(--t-base) var(--ease),
+              transform var(--t-press) var(--ease);
 }
 .btn:active, .chip:active, .icon-btn:active { transform: scale(0.985); }
-.btn, .chip, .icon-btn { transition: transform var(--t-press) var(--ease); }
 
 .btn-primary { background: var(--brand-deep); color: var(--on-brand); }
 .btn-primary:hover { background: var(--brand-hover); color: var(--on-brand); }
@@ -359,7 +359,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .btn[hidden] { display: none; }
 
 /* Ghost button that has to sit on the dark contact band */
-.btn-onband { background: transparent; color: var(--band-ink); border-color: var(--band-rule); }
+.btn-onband { background: transparent; color: var(--band-ink); border-color: var(--band-body); }
 .btn-onband:hover { border-color: var(--band-ink); color: var(--band-ink); }
 
 .contact-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
@@ -372,7 +372,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    -------------------------------------------------------------------------- */
 /* Every uppercase label in the system is declared once, here. The selectors
    below override only what genuinely differs. */
-.kicker, .factcard-title, .factcard dt, .sidenote h3,
+.kicker, .sidenote h3,
 .p-row h4, .cl-label, .badge, .hero-name, .tier-label {
   font-size: var(--fs-caption);
   font-weight: var(--w-label);
@@ -404,7 +404,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    6. SECTIONS
    -------------------------------------------------------------------------- */
 .section { padding-block: 88px 72px; }
-.section-tint { background: var(--tint); }
+.section-tint { background: var(--tint); border-block: 1px solid var(--rule); }
 
 .section-head { max-width: var(--measure); margin-bottom: var(--s-7); }
 .section-head h2 { font-size: var(--fs-h2); max-width: 24ch; }
@@ -492,10 +492,11 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   font-size: var(--fs-lead); font-weight: var(--w-lead); line-height: var(--lh-lead);
 }
 .intro-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-5); }
+.intro-actions .btn-primary { min-width: 9.5rem; }
 
-/* Four numbers across the full width, split by hairlines. */
+/* Three numbers across the full width, split by hairlines. */
 .scope {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: var(--s-8);
   border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
 }
@@ -511,21 +512,6 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   letter-spacing: var(--tracking-tight); line-height: 1;
 }
 .scope-n span { color: var(--brand); font-size: .6em; vertical-align: .35em; margin-left: 1px; }
-
-/* Module list in the About aside: wraps as a block, not a single row. */
-.tags-block { margin-top: var(--s-1); }
-
-.factcard {
-  background: transparent;
-  border: 0; border-top: 2px solid var(--ink);
-  padding: var(--s-5) 0 0;
-}
-.factcard-title { padding-bottom: var(--s-3); border-bottom: 1px solid var(--rule); }
-.factcard dl { margin: 0; display: flex; flex-direction: column; }
-.factcard dl > div { padding-block: var(--s-3); border-bottom: 1px solid var(--rule); }
-.factcard dl > div:last-child { border-bottom: 0; padding-bottom: 0; }
-.factcard dt { margin-bottom: var(--s-1); }
-.factcard dd { margin: 0; font-size: var(--fs-small); color: var(--ink); line-height: var(--lh-snug); }
 
 /* --------------------------------------------------------------------------
    9. SIDENOTE
@@ -552,7 +538,8 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   cursor: pointer;
   transition: background-color var(--t-base) var(--ease),
               color var(--t-base) var(--ease),
-              border-color var(--t-base) var(--ease);
+              border-color var(--t-base) var(--ease),
+              transform var(--t-press) var(--ease);
 }
 .chip:hover { color: var(--brand-deep); border-color: var(--brand-deep); }
 .chip.is-on {
@@ -591,7 +578,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   transition: border-left-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease);
 }
 .project details[open] { border-left-color: var(--brand); box-shadow: var(--e-1); }
-.project summary:hover { box-shadow: var(--e-2); }
+.project details:has(> summary:hover) { box-shadow: var(--e-2); }
 .project summary:hover .chev { stroke: var(--ink); }
 .project summary:focus-visible { outline-offset: -2px; border-radius: var(--r-sm); }
 .project details:focus-within { border-left-color: var(--brand); }
@@ -699,9 +686,6 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 .js-motion .intro h1,
 .js-motion .intro-side,
 .js-motion .scope { animation: settle var(--t-enter) var(--ease) backwards; }
-.js-motion .intro h1    { animation-delay: calc(var(--stagger) * 1); }
-.js-motion .intro-side  { animation-delay: calc(var(--stagger) * 2); }
-.js-motion .scope       { animation-delay: calc(var(--stagger) * 3); }
 
 /* --------------------------------------------------------------------------
    16. CONTACT + FOOTER
@@ -756,14 +740,12 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 .contact-list a:hover { color: var(--brand-on-band); }
 .cl-plain { color: var(--band-ink); font-size: var(--fs-body); }
 
-.colophon { background: var(--page); border-top: 1px solid var(--rule); }
+.colophon { background: var(--page); }
 .colophon-inner {
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-2);
   padding-block: var(--s-5);
   font-size: var(--fs-small); color: var(--muted);
 }
-.colophon a { color: var(--muted); }
-.colophon a:hover { color: var(--brand-deep); }
 
 /* --------------------------------------------------------------------------
    17. RESPONSIVE
@@ -772,6 +754,7 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   :root { --s-9: 64px; }
   .intro-grid, .two-col, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
   .intro-grid { gap: var(--s-5); }
+  .sidenote { border-top: 1px solid var(--rule); padding-top: var(--s-5); }
 }
 
 @media (max-width: 860px) {
@@ -787,22 +770,25 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
 
 @media (max-width: 560px) {
   :root { --s-9: 48px; --gutter: 20px; }
-  .p-side { width: 100%; justify-content: space-between; }
+  .p-side { width: 100%; flex: 1 1 100%; min-width: 0; justify-content: space-between; }
+  .p-side .badge { white-space: normal; }   /* long badges wrap instead of pushing the chevron off-screen */
   .project summary { align-items: flex-start; }
-  .intro { padding-block: var(--s-7) var(--s-6); }
-  .identity { flex-wrap: wrap; row-gap: var(--s-3); margin-bottom: var(--s-6); padding-bottom: var(--s-5); }
+  .intro { padding-block: var(--s-6); }
+  .intro h1 { font-size: 2.125rem; max-width: none; }
+  .mainnav { display: none; }
+  .identity { flex-wrap: wrap; row-gap: var(--s-3); margin-bottom: var(--s-5); padding-bottom: var(--s-5); }
   .portrait { width: 60px; height: 60px; }
   .availability { margin-left: 0; order: 3; }
   .identity-text { flex: 1; }
   .identity-ar { display: block; text-align: left; }
   .name-sep { display: none; }
   .contact::after { top: var(--s-4); }
-  .scope { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s-7); }
-  .scope li { padding: var(--s-4) 0 var(--s-4) var(--s-4); }
-  .scope li:nth-child(odd) { padding-left: 0; border-left: 0; }
-  .scope li:nth-child(n+3) { border-top: 1px solid var(--rule); }
-  .p-logo { width: 84px; height: 48px; }
-  .p-logo img { max-width: 72px; max-height: 26px; }
+  .contact-list li { flex-direction: column; align-items: flex-start; gap: var(--s-1); }
+  .scope { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-7); }
+  .scope li { flex-direction: row; align-items: baseline; gap: var(--s-3); padding: var(--s-3) 0; }
+  .scope li + li { border-left: 0; border-top: 1px solid var(--rule); }
+  .p-logo { width: 72px; height: 48px; }
+  .p-logo img { max-width: 60px; max-height: 34px; }
   .masthead-inner { gap: var(--s-2); }
   :root { --h-wordmark: 20px; }
   .masthead .btn { padding: 0 var(--s-3); }
