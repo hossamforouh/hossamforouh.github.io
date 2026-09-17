@@ -303,10 +303,18 @@
       fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Riyadh", hour: "2-digit", minute: "2-digit", hour12: false });
     } catch (e) { fmt = null; }
 
+    // Weekday only for the contact clock: answers "is it a working day in Riyadh?"
+    var dayFmt;
+    try {
+      dayFmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Riyadh", weekday: "short" });
+    } catch (e) { dayFmt = null; }
+
     function tick() {
-      var now = fmt.format(new Date());
+      var date = new Date();
+      var now = fmt.format(date);
       clocks.forEach(function (el) {
-        el.textContent = now + " GMT+3";
+        var day = (dayFmt && el.hasAttribute("data-weekday")) ? dayFmt.format(date) + " " : "";
+        el.textContent = day + now + " GMT+3";
         el.setAttribute("datetime", now);
       });
     }
@@ -321,7 +329,7 @@
      webmail users). So the button also copies the address and says so; the
      mail app still opens for anyone who has one. */
   var status = document.getElementById("copy-status");
-  var mailButtons = Array.prototype.slice.call(document.querySelectorAll('a.btn[href^="mailto:"]'));
+  var mailButtons = Array.prototype.slice.call(document.querySelectorAll('a.btn[href^="mailto:"], .contact-list a[href^="mailto:"]'));
 
   // Older copy method, used when the Clipboard API is missing or refused.
   function legacyCopy(text) {
@@ -349,17 +357,30 @@
 
   mailButtons.forEach(function (btn) {
     var label = btn.textContent;
+    var isButton = btn.classList.contains("btn");
     var timer;
 
     btn.addEventListener("click", function () {
       var address = btn.getAttribute("href").replace("mailto:", "").split("?")[0];
 
       copyText(address).then(function () {
-        btn.textContent = "Copied";
+        if (isButton) {
+          // Lock the width first so the row does not jump when the label changes
+          if (!btn.style.minWidth) btn.style.minWidth = btn.offsetWidth + "px";
+          btn.textContent = "Email copied";
+        } else {
+          // Plain link: the address stays visible, a small note appears after it
+          btn.classList.add("is-copied");
+        }
         if (status) status.textContent = address + " copied to clipboard";
         clearTimeout(timer);
         timer = setTimeout(function () {
-          btn.textContent = label;
+          if (isButton) {
+            btn.textContent = label;
+            btn.style.minWidth = "";
+          } else {
+            btn.classList.remove("is-copied");
+          }
           if (status) status.textContent = "";
         }, 2500);
       }).catch(function () { /* copy blocked: the mailto link still runs */ });
@@ -378,5 +399,10 @@
       })
       .catch(function () { /* leave the buttons hidden */ });
   }
+
+  /* ---- Footer year ------------------------------------------------------
+     Keeps the copyright current; the markup's 2026 is the no-JS fallback. */
+  var copyYear = document.querySelector(".copy-year");
+  if (copyYear) copyYear.textContent = String(new Date().getFullYear());
 
 })();
