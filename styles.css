@@ -608,11 +608,14 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .show-tab:hover { color: var(--ink); }
 .show-tab[aria-selected="true"] { color: var(--ink); font-weight: var(--w-semibold); }
 
+/* One height per tab: square marks get more height so they read the same size as wide ones */
+.show-tab { --logo-h: 32px; }
+:is(#tab-thiqah, #tab-shift, #tab-nis) { --logo-h: 36px; }
 .show-tab-logo {
   display: block;
-  height: 28px; width: auto; max-width: 96px;
+  height: var(--logo-h); width: auto; max-width: 96px;
   object-fit: contain; object-position: left center;
-  filter: grayscale(1); opacity: .7;
+  filter: grayscale(1); opacity: .85;
   transition: filter var(--t-base) var(--ease), opacity var(--t-base) var(--ease);
 }
 .show-tab:hover .show-tab-logo,
@@ -753,7 +756,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* Key contributions: numbered step tags, no check icons, no red dash */
 .contribs { display: flex; flex-direction: column; gap: var(--s-1); }
 .contribs li {
-  display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: var(--s-3);
+  display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: var(--s-3);
   margin-inline: calc(-1 * var(--s-2)); padding: var(--s-2);
   border-radius: var(--r-md);
   font-size: var(--fs-body); line-height: 1.55; text-wrap: pretty;
@@ -819,6 +822,8 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   font-variant-numeric: tabular-nums; white-space: nowrap;
   transform: rotate(-2deg);
 }
+/* The method name, visible, so the codes read as OUM deliverables and not serial numbers */
+.stamp-k { font-weight: var(--w-bold); letter-spacing: var(--tracking-label); }
 
 /* The path: six stops, always all six, in the same order */
 .path { margin: var(--s-5) 0; }
@@ -901,11 +906,18 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 }
 .record-modules-k { margin-right: var(--s-2); font-weight: var(--w-semibold); color: var(--ink); }
 .record-legend {
-  display: flex; align-items: center; gap: var(--s-2);
+  display: flex; flex-wrap: wrap; align-items: center;
+  column-gap: var(--s-4); row-gap: var(--s-1);
   margin-top: var(--s-2);
   font-size: var(--fs-caption); line-height: var(--lh-label); color: var(--muted);
 }
+/* Each sample stays with its words when the legend wraps */
+.legend-item { display: inline-flex; align-items: center; gap: var(--s-2); }
 .legend-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--brand); }
+/* Unlit sample: the same hollow solid dot the path uses (dashed stays the Temenos branch) */
+.legend-dot.is-open { background: var(--surface); border: 1.5px solid var(--rule-strong); }
+/* Sheet number: static, echoes the 01 / 05 counter, works without JavaScript */
+.record-folio { margin-left: auto; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* ---- Two-way highlight: stop <-> bullet (pointer only, no extra tab stops) */
 @media (hover: hover) {
@@ -958,6 +970,11 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   background: var(--logo-plate); border-radius: var(--r-sm);
 }
 
+/* ---- Sticky sheet: travels beside long contribution lists (two columns only) */
+@media (min-width: 761px) and (min-height: 720px) {
+  .record { position: sticky; top: calc(var(--h-masthead) + var(--s-5)); align-self: start; }
+}
+
 /* ---- Responsive --------------------------------------------------------- */
 @media (max-width: 1000px) {
   .show { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s-5); }
@@ -976,7 +993,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   }
   .show-tabs::-webkit-scrollbar { display: none; }
   .show-tab { flex: 0 0 auto; }
-  .show-tab-logo { height: 24px; max-width: 72px; }
+  .show-tab-logo { height: calc(var(--logo-h) * .85); max-width: 80px; }
   #engagements .show-tab:focus-visible { outline-offset: -2px; }
 }
 
@@ -1080,7 +1097,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   .show-bar, .show-pager { display: none !important; }
   .show + .show { margin-top: var(--s-6); padding-top: var(--s-6); border-top: 1px solid var(--rule); }
   .show { break-inside: avoid; }
-  .record { box-shadow: none; }
+  .record { box-shadow: none; position: relative; }
 }
 
 /* --------------------------------------------------------------------------
