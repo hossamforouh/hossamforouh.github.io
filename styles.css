@@ -429,7 +429,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    -------------------------------------------------------------------------- */
 .intro { padding-block: var(--s-8) var(--s-7); }
 
-/* Identity row: photo + name + role, availability pushed to the far edge. */
+/* Identity row: photo, name, role and place read as one unit. */
 .identity {
   display: flex; align-items: center; gap: var(--s-4);
   padding-bottom: var(--s-6); margin-bottom: var(--s-7);
@@ -438,6 +438,10 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .identity-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .identity-name { font-size: var(--fs-lead); font-weight: var(--w-bold); color: var(--ink); line-height: var(--lh-snug); }
 .identity-role { font-size: var(--fs-small); color: var(--muted); line-height: var(--lh-snug); }
+/* The title is what a recruiter screens for: ink and body size, but lighter than the name. */
+.role-title { font-size: var(--fs-body); font-weight: var(--w-medium); color: var(--ink); }
+.role-org { white-space: nowrap; }
+.role-sep { color: var(--rule-strong); }
 
 /* Arabic name: same weight as the English, set in a face drawn for Arabic. */
 .identity-ar {
@@ -459,15 +463,6 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .place-sep { color: var(--rule-strong); }
 .local-time { font-variant-numeric: tabular-nums; }
 
-.availability {
-  display: inline-flex; align-items: center; gap: var(--s-2);
-  margin-left: auto; padding: var(--s-1) var(--s-3);
-  border: 1px solid var(--rule); border-radius: var(--r-pill);
-  font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ok);
-  white-space: nowrap;
-}
-.dot { width: 8px; height: 8px; border-radius: var(--r-pill); background: var(--ok); }
-
 /* Portrait: small, with a thin brand-red ring set off by a gap of page colour. */
 .portrait {
   flex: none; margin: 0;
@@ -483,10 +478,10 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 }
 .portrait[hidden] { display: none; }
 
-/* Headline left, supporting line and actions right, both sitting on one baseline. */
+/* Headline left, supporting line and actions right, both starting on one top line. */
 .intro-grid {
   display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: var(--s-8); align-items: end;
+  gap: var(--s-8); align-items: start;
 }
 .intro h1 {
   font-size: clamp(2.5rem, 4.2vw, 3rem); font-weight: var(--w-black);
@@ -505,7 +500,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .scope {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: var(--s-8);
-  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  border-top: 1px solid var(--rule);
 }
 .scope li {
   display: flex; flex-direction: column; gap: var(--s-1);
@@ -517,6 +512,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .scope-n {
   font-size: var(--fs-h2); font-weight: var(--w-bold); color: var(--ink);
   letter-spacing: var(--tracking-tight); line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .scope-n span { color: var(--brand); font-size: .6em; vertical-align: .35em; margin-left: 1px; }
 
@@ -1170,6 +1166,12 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   .sidenote { border-top: 1px solid var(--rule); padding-top: var(--s-5); }
 }
 
+/* Role line: employer drops to its own line before it can split. */
+@media (max-width: 760px) {
+  .role-org { display: block; }
+  .role-sep { display: none; }
+}
+
 @media (max-width: 860px) {
   /* The nav becomes a scrolling section rail rather than disappearing. */
   .masthead-inner { flex-wrap: wrap; justify-content: space-between; }
@@ -1187,16 +1189,19 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   .intro-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .intro-actions .btn-primary { min-width: 0; }
   .mainnav { display: none; }
-  .identity { flex-wrap: wrap; row-gap: var(--s-3); margin-bottom: var(--s-5); padding-bottom: var(--s-5); }
+  .identity { flex-wrap: wrap; align-items: flex-start; row-gap: var(--s-3); margin-bottom: var(--s-5); padding-bottom: var(--s-5); }
   .portrait { width: 60px; height: 60px; }
-  .availability { margin-left: 0; order: 3; }
+  /* Time on its own line, indented past the pin (14px icon + 6px gap) */
+  .place-sep { display: none; }
+  .identity-place .local-time { flex-basis: 100%; padding-left: 20px; }
+  .intro-text { font-size: var(--fs-body); line-height: var(--lh-lead); }
   .identity-text { flex: 1; }
   .identity-ar { display: block; text-align: left; }
   .name-sep { display: none; }
   .contact::after { top: var(--s-4); }
   .contact-list li { flex-direction: column; align-items: flex-start; gap: var(--s-1); }
   .scope { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-7); }
-  .scope li { flex-direction: row; align-items: baseline; gap: var(--s-3); padding: var(--s-3) 0; }
+  .scope li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); align-items: baseline; column-gap: var(--s-3); padding: var(--s-3) 0; }
   .scope li + li { border-left: 0; border-top: 1px solid var(--rule); }
   .masthead-inner { gap: var(--s-2); }
   :root { --h-wordmark: 20px; }

@@ -375,9 +375,6 @@
       .then(function (res) {
         if (!res.ok) return;
         cvLinks.forEach(function (a) { a.hidden = false; });
-        // Download CV replaces the stand-in LinkedIn button in the hero.
-        var heroLinkedIn = document.getElementById("linkedin-hero");
-        if (heroLinkedIn) heroLinkedIn.hidden = true;
       })
       .catch(function () { /* leave the buttons hidden */ });
   }
