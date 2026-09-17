@@ -483,10 +483,12 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   gap: var(--s-8); align-items: end;
 }
 .intro h1 {
-  font-size: var(--fs-h1); font-weight: var(--w-black);
+  font-size: clamp(2.5rem, 4.2vw, 3rem); font-weight: var(--w-black);
   letter-spacing: var(--tracking-display); line-height: var(--lh-display);
-  max-width: 16ch; text-wrap: balance;
+  text-wrap: balance;
 }
+/* Two parallel sentences, one per line, so the pair never breaks mid-phrase. */
+.intro-line { display: block; }
 .intro-text {
   font-size: var(--fs-lead); font-weight: var(--w-lead); line-height: var(--lh-lead);
 }
@@ -1146,7 +1148,9 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 @media (max-width: 560px) {
   :root { --s-9: 48px; --gutter: 20px; }
   .intro { padding-block: var(--s-6); }
-  .intro h1 { font-size: 2.125rem; max-width: none; }
+  .intro h1 { font-size: clamp(1.75rem, 7.8vw, 2.125rem); }
+  .intro-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .intro-actions .btn-primary { min-width: 0; }
   .mainnav { display: none; }
   .identity { flex-wrap: wrap; row-gap: var(--s-3); margin-bottom: var(--s-5); padding-bottom: var(--s-5); }
   .portrait { width: 60px; height: 60px; }
