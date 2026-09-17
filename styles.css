@@ -39,7 +39,7 @@
   --band-ink:    #ffffff;
   --band-body:   #b3b8b2;
   --band-rule:   #333833;
-  --band-vent:   #4d534c;   /* Najdi wall vents: quiet but clearly drawn */
+  --band-skyline: #4d534c;  /* Riyadh skyline line on the band: quiet but clearly drawn */
 
   /* Status */
   --ok:          #2f7d46;
@@ -148,7 +148,7 @@
     --band-ink:    #f1f3ef;
     --band-body:   #a6aca5;
     --band-rule:   #3d423c;
-    --band-vent:   #555b54;
+    --band-skyline: #555b54;
     --ok:          #5fb36c;
     --logo-plate:  #e8eae5;
     --e-1: 0 0 0 1px rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.6);
@@ -183,7 +183,7 @@
   --band-ink:    #f1f3ef;
   --band-body:   #a6aca5;
   --band-rule:   #3d423c;
-  --band-vent:   #555b54;
+  --band-skyline: #555b54;
   --ok:          #5fb36c;
   --logo-plate:  #e8eae5;
   --e-1: 0 0 0 1px rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.6);
@@ -997,7 +997,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   }
 }
 
-/* ---- Najdi mark: the contact band's sharafat, small -------------------- */
+/* ---- Najdi mark: sharafat from Riyadh's mud-brick walls, small --------- */
 .najdi-mark {
   width: 168px; height: 10px;
   margin: var(--s-6) 0;
@@ -1162,30 +1162,21 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    -------------------------------------------------------------------------- */
 .contact { position: relative; background: var(--band); color: var(--band-body); padding-block: var(--s-9); }
 
-/* Najdi touch: the band's top edge is stepped like the crenellations
-   (sharafat) on Riyadh's mud-brick walls, with a row of the small
-   triangular wall vents beneath. Both are CSS masks painted in theme
-   tokens, so they follow light and dark mode. */
-.contact::before,
-.contact::after {
-  content: ""; position: absolute; left: 0; right: 0;
-  pointer-events: none;
-  -webkit-mask-repeat: repeat-x; mask-repeat: repeat-x;
-  -webkit-mask-position: center top; mask-position: center top;
-}
+/* Riyadh touch: a thin skyline line across the top of the band, with
+   Al Faisaliah (globe and spire) and Kingdom Centre (opening and skybridge)
+   among low-rise blocks. One SVG mask painted in a theme token, so it
+   follows light and dark mode; drawn once at a fixed size, centred and
+   cropped rather than repeated, so both towers stay in view on phones. */
 .contact::before {
-  top: -19px; height: 20px;
-  background: var(--band);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E");
-          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E");
-  -webkit-mask-size: 56px 20px; mask-size: 56px 20px;
-}
-.contact::after {
-  top: var(--s-6); height: 10px;
-  background: var(--band-vent);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M23 10L28 1L33 10Z'/%3E%3C/svg%3E");
-          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M23 10L28 1L33 10Z'/%3E%3C/svg%3E");
-  -webkit-mask-size: 56px 10px; mask-size: 56px 10px;
+  content: ""; position: absolute; left: 0; right: 0;
+  top: var(--s-5); height: 48px;
+  pointer-events: none;
+  background: var(--band-skyline);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='48'%3E%3ClinearGradient id='f' gradientUnits='userSpaceOnUse' x2='1600'%3E%3Cstop offset='0' stop-opacity='0'/%3E%3Cstop offset='.25'/%3E%3Cstop offset='.75'/%3E%3Cstop offset='1' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cpath d='M0 46H70V42H92V44H124V46H128V44H162V41H174V43H232V42H258V41H268V46H272V41H290V40H358V46H366V39H378V46H382V40H404V39H414V46H418V37H448V46H456V36H478V38H500V37H514V46H522V36H534V46H538V36H572V37H596V46H600V37H618V46H622V40H640V34H652V46H656V38H676V46H680V33H694V46H696L705 10V5M705 10L714 46H720V39H734V34H744V46H750V41H772V46H778V31H790V38H810V46H816V35H838V46H844V40H858V46H865V41H887L889 1Q895 29 901 1L903 41H925V46H932V37H950V30H960V46H966V39H988V46H994V35H1004V46H1010V34H1022V46H1026V36H1040V37H1070V36H1082V46H1086V36H1108V46H1116V36H1146V46H1150V37H1162V39H1192V46H1200V38H1210V46H1218V37H1248V38H1270V41H1292V40H1322V41H1340V39H1378V41H1404V46H1408V41H1422V40H1448V44H1464V43H1478V41H1494V42H1518V43H1530V46H1600M890.8 9H899.2' fill='none' stroke='url(%23f)' stroke-width='1.5'/%3E%3Ccircle cx='705' cy='16' r='2.75'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='48'%3E%3ClinearGradient id='f' gradientUnits='userSpaceOnUse' x2='1600'%3E%3Cstop offset='0' stop-opacity='0'/%3E%3Cstop offset='.25'/%3E%3Cstop offset='.75'/%3E%3Cstop offset='1' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cpath d='M0 46H70V42H92V44H124V46H128V44H162V41H174V43H232V42H258V41H268V46H272V41H290V40H358V46H366V39H378V46H382V40H404V39H414V46H418V37H448V46H456V36H478V38H500V37H514V46H522V36H534V46H538V36H572V37H596V46H600V37H618V46H622V40H640V34H652V46H656V38H676V46H680V33H694V46H696L705 10V5M705 10L714 46H720V39H734V34H744V46H750V41H772V46H778V31H790V38H810V46H816V35H838V46H844V40H858V46H865V41H887L889 1Q895 29 901 1L903 41H925V46H932V37H950V30H960V46H966V39H988V46H994V35H1004V46H1010V34H1022V46H1026V36H1040V37H1070V36H1082V46H1086V36H1108V46H1116V36H1146V46H1150V37H1162V39H1192V46H1200V38H1210V46H1218V37H1248V38H1270V41H1292V40H1322V41H1340V39H1378V41H1404V46H1408V41H1422V40H1448V44H1464V43H1478V41H1494V42H1518V43H1530V46H1600M890.8 9H899.2' fill='none' stroke='url(%23f)' stroke-width='1.5'/%3E%3Ccircle cx='705' cy='16' r='2.75'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center top; mask-position: center top;
+  -webkit-mask-size: 1600px 48px; mask-size: 1600px 48px;
 }
 .contact > .wrap { position: relative; }
 .cl-time { color: var(--band-body); font-variant-numeric: tabular-nums; }
@@ -1227,6 +1218,8 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    -------------------------------------------------------------------------- */
 @media (max-width: 1000px) {
   :root { --s-9: 64px; }
+  /* Room for the skyline line above the Contact kicker once padding shrinks */
+  .contact { padding-top: calc(var(--s-9) + var(--s-7)); }
   .intro-grid, .two-col, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
   .intro-grid { gap: var(--s-5); }
   .sidenote { border-top: 1px solid var(--rule); padding-top: var(--s-5); }
@@ -1264,7 +1257,6 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   .identity-text { flex: 1; }
   .identity-ar { display: block; text-align: left; }
   .name-sep { display: none; }
-  .contact::after { top: var(--s-4); }
   .contact-list li { flex-direction: column; align-items: flex-start; gap: var(--s-1); }
   .scope { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-7); }
   .scope li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); align-items: baseline; column-gap: var(--s-3); padding: var(--s-3) 0; }
