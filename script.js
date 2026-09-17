@@ -37,121 +37,192 @@
     });
   }
 
-  /* ---- Project filter ---------------------------------------------------
-     Hides non-Saudi columns in the coverage table and their ledger entries.
-     Column spans are recounted so the table never gains a phantom column. */
-  var chips = Array.prototype.slice.call(document.querySelectorAll("#engagements .chip"));
-  var cov = document.getElementById("coverage");
-  var ledger = document.getElementById("ledger");
-  var entries = Array.prototype.slice.call(document.querySelectorAll("#ledger .entry"));
-  var countEl = document.getElementById("filter-count");
+  /* ---- Projects showcase ------------------------------------------------
+     One project at a time, switched by tabs, arrows or the phone pager.
+     Without JavaScript the controls stay hidden and every project is shown.
+     Entrances play only on a switch, never on page load, so nothing the
+     visitor is already reading blinks out. The stage height follows the
+     active project; the controls sit above it, so they never move.
+     Wrapped in its own function so its names never collide with the rest
+     of this file (for example the later "status" variable). */
+  (function () {
+    var showcase = document.getElementById("showcase");
+    if (!showcase) return;
 
-  function applyFilter(key) {
-    var off = {};
-    var shown = 0;
+    var toArray = function (list) { return Array.prototype.slice.call(list); };
+    var panels = toArray(showcase.querySelectorAll(".show"));
+    var tabs = toArray(showcase.querySelectorAll(".show-tab"));
+    var tablist = showcase.querySelector(".show-tabs");
+    var bar = showcase.querySelector(".show-bar");
+    var pager = showcase.querySelector(".show-pager");
+    var live = document.getElementById("show-status");
+    var count = panels.length;
+    if (!count || tabs.length !== count || !tablist) return;
 
-    // Ledger entries decide which client columns are switched off.
-    entries.forEach(function (entry) {
-      var match = key === "all" || entry.getAttribute("data-place") === key;
-      entry.hidden = !match;
-      if (match) {
-        shown++;
-      } else {
-        off[entry.getAttribute("data-col")] = true;
-      }
-    });
+    // Browsers with find-in-page for hidden content (Chrome) get "until-found".
+    var untilFound = "onbeforematch" in document.body;
+    var current = -1;
 
-    if (cov) {
-      // Hide every header and cell that belongs to a hidden column
-      // (group rows carry their own data-col cells, so no span recount is needed).
-      Array.prototype.slice.call(cov.querySelectorAll("[data-col]")).forEach(function (cell) {
-        cell.hidden = !!off[cell.getAttribute("data-col")];
+    function fullName(i) {
+      var h = panels[i].querySelector(".show-name");
+      return h ? h.textContent : "";
+    }
+    function shortName(i) {
+      var s = tabs[i].querySelector(".show-tab-name");
+      return s ? s.textContent : fullName(i);
+    }
+    function hidePanel(panel) {
+      if (untilFound) panel.setAttribute("hidden", "until-found");
+      else panel.hidden = true;
+    }
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function indexOfId(id) {
+      for (var k = 0; k < count; k++) if (panels[k].id === id) return k;
+      return -1;
+    }
+    function hashIndex() {
+      var id = location.hash.slice(1);
+      try { id = decodeURIComponent(id); } catch (e) { /* keep raw */ }
+      return id ? indexOfId(id) : -1;
+    }
+
+    // Keep the active tab visible inside the scrolling strip, horizontally only,
+    // so the page itself never jumps. Instant on purpose: Chrome cancels one
+    // smooth scroll when another starts, and the pager may scroll the page too.
+    function revealTab(tab) {
+      var strip = tablist.getBoundingClientRect();
+      var box = tab.getBoundingClientRect();
+      if (box.left >= strip.left && box.right <= strip.right) return;
+      tablist.scrollLeft += (box.left - strip.left) - (strip.width - box.width) / 2;
+    }
+
+    // Replay the entrance on a panel (motion only).
+    function playEntrance(panel) {
+      if (!allowMotion) return;
+      panel.classList.remove("is-entering");
+      void panel.offsetWidth;              // force reflow so the animations restart
+      panel.classList.add("is-entering");
+    }
+
+    // opts: user (update the URL), announce (live region), animate
+    function select(i, opts) {
+      opts = opts || {};
+      i = ((i % count) + count) % count;
+      var changed = i !== current;
+      current = i;
+
+      tabs.forEach(function (tab, k) {
+        var on = k === i;
+        tab.setAttribute("aria-selected", on ? "true" : "false");
+        tab.tabIndex = on ? 0 : -1;
       });
-
-      // Tier headers and colgroups: span only the columns still showing.
-      Array.prototype.slice.call(cov.querySelectorAll("[data-cols]")).forEach(function (el) {
-        var n = el.getAttribute("data-cols").split(" ").filter(function (c) {
-          return !off[c];
-        }).length;
-        if (el.tagName === "COLGROUP") {
-          el.setAttribute("span", Math.max(n, 1));   // span cannot be 0
+      panels.forEach(function (panel, k) {
+        // Only the visible project is a Tab stop. A hidden="until-found" panel
+        // still has a box, so it must also leave the Tab order.
+        if (k === i) {
+          panel.removeAttribute("hidden");
+          panel.setAttribute("tabindex", "0");
         } else {
-          el.hidden = n === 0;
-          el.setAttribute("colspan", Math.max(n, 1));
+          hidePanel(panel);
+          panel.removeAttribute("tabindex");
+          panel.classList.remove("is-entering");
         }
       });
-    }
 
-    if (countEl) {
-      // State the relation, not just the number.
-      countEl.textContent = key === "all"
-        ? ""
-        : "Showing " + shown + " of " + entries.length;
-    }
-  }
-
-  // Drop the class once settle ends, so it never outranks the :target tint later.
-  if (ledger) {
-    ledger.addEventListener("animationend", function (e) {
-      if (e.animationName === "settle") ledger.classList.remove("is-filtering");
-    });
-  }
-
-  chips.forEach(function (chip) {
-    chip.addEventListener("click", function () {
-      chips.forEach(function (c) {
-        c.classList.remove("is-on");
-        c.setAttribute("aria-pressed", "false");
+      // Counter, arrow labels and pager names follow the neighbours.
+      var prev = (i - 1 + count) % count;
+      var next = (i + 1) % count;
+      toArray(showcase.querySelectorAll(".show-count-now")).forEach(function (el) {
+        el.textContent = pad(i + 1);
       });
-      chip.classList.add("is-on");
-      chip.setAttribute("aria-pressed", "true");
-      applyFilter(chip.getAttribute("data-filter"));
+      toArray(showcase.querySelectorAll("[data-dir]")).forEach(function (btn) {
+        var back = btn.getAttribute("data-dir") === "-1";
+        var to = back ? prev : next;
+        btn.setAttribute("aria-label", (back ? "Previous" : "Next") + " project: " + fullName(to));
+        var nameEl = btn.querySelector(".pager-name");
+        if (nameEl) nameEl.textContent = shortName(to);
+      });
 
-      // Re-trigger the settle animation on whatever is now showing.
-      if (ledger && allowMotion) {
-        ledger.classList.remove("is-filtering");
-        void ledger.offsetWidth;              // force reflow so the animation restarts
-        ledger.classList.add("is-filtering");
+      if (opts.announce && live) {
+        live.textContent = fullName(i) + ", project " + (i + 1) + " of " + count;
       }
-    });
-  });
-
-  /* ---- Coverage table: column highlight and entrance ------------------- */
-  if (cov) {
-    // Pointer or keyboard on a client column tints that column and reddens its marks.
-    var setHl = function (e) {
-      var cell = e.target.closest ? e.target.closest("[data-col]") : null;
-      if (cell) cov.setAttribute("data-hl", cell.getAttribute("data-col"));
-      else cov.removeAttribute("data-hl");
-    };
-    var clearHl = function () { cov.removeAttribute("data-hl"); };
-
-    // Mouse hover only on devices with a real hover pointer: a touch tap fires
-    // mouseover but never mouseleave, which would leave a column stuck red.
-    if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
-      cov.addEventListener("mouseover", setHl);
-      cov.addEventListener("mouseleave", clearHl);
+      if (opts.user && history.replaceState) {
+        try { history.replaceState(null, "", "#" + panels[i].id); } catch (e) { /* file:// etc. */ }
+      }
+      revealTab(tabs[i]);
+      if (changed && opts.animate) playEntrance(panels[i]);
     }
-    cov.addEventListener("focusin", setHl);
-    // Following a client link never leaves a column lit behind.
-    cov.addEventListener("click", clearHl);
-    cov.addEventListener("focusout", function (e) {
-      if (!cov.contains(e.relatedTarget)) cov.removeAttribute("data-hl");
+
+    /* Init: reveal the controls and wire up the tab pattern */
+    showcase.classList.add("is-showcase");
+    if (bar) bar.hidden = false;
+    if (pager) pager.hidden = false;
+    panels.forEach(function (panel, k) {
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", tabs[k].id);
+      // Find-in-page matched text inside a hidden project: switch to it.
+      panel.addEventListener("beforematch", function () {
+        select(k, { announce: false });
+      });
     });
 
-    // Marks scale in once, column by column, when the table first scrolls into view.
-    if (allowMotion && "IntersectionObserver" in window) {
-      var covObserver = new IntersectionObserver(function (seen) {
-        if (seen[0] && seen[0].isIntersecting) {
-          cov.classList.add("is-in");
-          covObserver.disconnect();
+    var start = hashIndex();
+    select(start >= 0 ? start : 0);
+    if (start >= 0) {
+      // The browser could not scroll to a target that was hidden, so do it once.
+      requestAnimationFrame(function () {
+        showcase.scrollIntoView({ block: "start", behavior: "auto" });
+      });
+    }
+
+    tabs.forEach(function (tab, k) {
+      tab.addEventListener("click", function () {
+        select(k, { user: true, animate: true });
+      });
+    });
+
+    // Arrow keys, Home and End move between tabs (automatic activation).
+    tablist.addEventListener("keydown", function (e) {
+      var from = tabs.indexOf(e.target.closest ? e.target.closest(".show-tab") : null);
+      if (from < 0) return;
+      var to;
+      switch (e.key) {
+        case "ArrowRight": to = from + 1; break;
+        case "ArrowLeft":  to = from - 1; break;
+        case "Home":       to = 0; break;
+        case "End":        to = count - 1; break;
+        default: return;
+      }
+      e.preventDefault();
+      select(to, { user: true, animate: true });
+      tabs[current].focus();
+    });
+
+    // Previous / next buttons (desktop arrows and the phone pager). Focus stays put.
+    toArray(showcase.querySelectorAll(".show-arrow, .pager-btn")).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var dir = parseInt(btn.getAttribute("data-dir"), 10) || 1;
+        select(current + dir, { user: true, announce: true, animate: true });
+
+        // The pager sits below the project: bring the tab strip back if it is off-screen.
+        if (btn.classList.contains("pager-btn") && bar) {
+          var masthead = document.querySelector(".masthead");
+          var top = masthead ? masthead.offsetHeight : 0;
+          if (bar.getBoundingClientRect().top < top) {
+            bar.scrollIntoView({ block: "start", behavior: allowMotion ? "smooth" : "auto" });
+          }
         }
-      }, { threshold: 0.2 });
-      covObserver.observe(cov);
-    } else {
-      cov.classList.add("is-in");
-    }
-  }
+      });
+    });
+
+    // Links like #p-nis, from anywhere on the page or typed in the address bar.
+    window.addEventListener("hashchange", function () {
+      var k = hashIndex();
+      if (k < 0) return;
+      select(k, { announce: true, animate: true });
+      showcase.scrollIntoView({ block: "start", behavior: allowMotion ? "smooth" : "auto" });
+    });
+  })();
 
   /* ---- Highlight the nav item for the section currently in view --------- */
   var links = Array.prototype.slice.call(document.querySelectorAll('.mainnav a[href^="#"]'));

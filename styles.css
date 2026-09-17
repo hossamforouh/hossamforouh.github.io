@@ -372,7 +372,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    -------------------------------------------------------------------------- */
 /* Every uppercase label in the system is declared once, here. The selectors
    below override only what genuinely differs. */
-.kicker, .sidenote h3, .cl-label, .hero-name {
+.kicker, .sidenote h3, .cl-label, .hero-name, .record-kicker {
   font-size: var(--fs-caption);
   font-weight: var(--w-label);
   letter-spacing: var(--tracking-label);
@@ -522,13 +522,6 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* --------------------------------------------------------------------------
    10. FILTER CHIPS
    -------------------------------------------------------------------------- */
-.toolbar {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--s-5); flex-wrap: wrap;
-  padding-bottom: var(--s-5); margin-bottom: var(--s-5);
-  border-bottom: 1px solid var(--rule);
-}
-.filters { display: flex; flex-wrap: wrap; gap: var(--s-2); }
 .chip {
   min-height: var(--h-control); padding: 0 var(--s-4);
   font-family: var(--font); font-size: var(--fs-small); font-weight: var(--w-label);
@@ -545,193 +538,382 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   background: var(--brand-deep); border-color: var(--brand-deep);
   color: var(--on-brand);
 }
-.result-count { font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* --------------------------------------------------------------------------
-   11. PROJECTS — coverage matrix and delivery ledger
+   11. PROJECTS — showcase and delivery record
    --------------------------------------------------------------------------
-   This block REPLACES all current CSS for the engagements section.
-   Delete these selectors from styles.css (see notes.md for line numbers):
+   One project at a time: a portfolio card on the left, a paper "Delivery
+   record" on the right with six delivery stops lit from the project's own
+   bullets. Without JavaScript every project is shown, stacked.
 
-   Section 5 shared uppercase label list: remove only
-     .p-row h4, .badge, .tier-label
-   Section 11 (all of it except the settle keyframes and .js-motion entrances):
-     .projects
-     .tier-label
-     .projects.is-filtered .tier-label
-     .projects-empty
-     .projects.is-empty .projects-empty
-     .project[hidden]
-     .project details
-     .project details[open]
-     .project details:has(> summary:hover)
-     .project summary:hover .chev
-     .project summary:focus-visible
-     .project details:focus-within
-     .project summary
-     .project summary::-webkit-details-marker
-     .p-lead
-     .p-logo, .p-logo img
-     .p-main, .p-name, .p-meta
-     .p-side
-     .badge, .section-tint .badge:not(.badge-strong), .badge-strong
-     .chev, details[open] .chev
-     .p-detail, .p-row, .p-row + .p-row, .p-row h4, .p-when
-     .tags, .tags li, .section-tint .tags li
-     @keyframes disclose
-     .project details[open] .p-detail
-     @supports selector(::details-content) { .project details ... }
-     .projects.is-filtering .project:not([hidden])
-   Section 17 (responsive):
-     @media (max-width: 860px)  .p-row
-     @media (max-width: 560px)  .p-side, .p-side .badge, .project summary,
-                                .p-logo, .p-logo img
-   KEEP: @keyframes settle and the .js-motion entrance rule (this block uses settle).
+   Local component variable: --fold (paper corner).
    -------------------------------------------------------------------------- */
 
-/* Shared sheet: the one surface both the matrix and the ledger sit on */
+/* Shared sheet surface (kept for design-system.html) */
 .sheet {
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--r-md);
 }
 
-/* ---- Coverage matrix ---------------------------------------------------- */
-.cov-sheet { padding: var(--s-4) var(--s-5); }
+/* ---- Showcase controls --------------------------------------------------- */
+.showcase { position: relative; }
 
-/* Fixed layout: the label column is set once, the client columns share the rest equally */
-.cov { width: 100%; border-collapse: collapse; table-layout: fixed; }
-.cov .cov-tiers td { width: 240px; padding: 0; }
-.cov th,
-.cov td {
-  padding: 0 var(--s-3);
-  font-weight: var(--w-regular);
-  text-align: center; vertical-align: middle;
+.show-bar {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--s-5);
+  margin-bottom: var(--s-6);
+  /* The rule is painted as a background so the active underline can sit on it,
+     even inside the scrolling tab strip on phones. */
+  background: linear-gradient(var(--rule), var(--rule)) left bottom / 100% 1px no-repeat;
 }
+.show-bar[hidden],
+.show-pager[hidden] { display: none; }
 
-/* Tier headers: the existing framing, sentence case, with a hairline under each */
-.cov .cov-tiers th {
+.show-tabs { display: flex; gap: var(--s-1); min-width: 0; }
+
+.show-tab {
   position: relative;
-  padding: var(--s-2) var(--s-3);
-  text-align: left; vertical-align: bottom;
-  font-size: var(--fs-small); font-weight: var(--w-semibold);
-  color: var(--ink); line-height: var(--lh-snug);
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+  gap: var(--s-2);
+  min-height: var(--h-control);
+  padding: var(--s-2) var(--s-3) var(--s-3);
+  background: none; border: 0;
+  font: inherit; font-size: var(--fs-small); font-weight: var(--w-medium);
+  line-height: var(--lh-snug); white-space: nowrap;
+  color: var(--body);
+  cursor: pointer;
+  transition: color var(--t-base) var(--ease);
 }
-.cov .cov-tiers th::after {
-  content: ""; position: absolute; left: var(--s-3); right: var(--s-3); bottom: 0;
-  height: 1px; background: var(--rule-strong);
-}
+.show-tab:hover { color: var(--ink); }
+.show-tab[aria-selected="true"] { color: var(--ink); font-weight: var(--w-semibold); }
 
-/* Client columns: identity lives in the header, no clicks needed */
-.cov .cov-clients th {
-  padding: var(--s-4) var(--s-3);
-  text-align: left; vertical-align: top;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.cov .cov-clients .cov-corner {
-  padding-left: 0;
-  vertical-align: bottom;
-  font-size: var(--fs-small); font-weight: var(--w-medium);
-  color: var(--muted); line-height: var(--lh-snug);
-}
-/* A long word breaks rather than spilling out of a narrow column */
-.cov .cov-tiers th,
-.cov .cov-clients th { overflow-wrap: break-word; }
-
-.cov-client {
+.show-tab-logo {
   display: block;
-  color: var(--ink); text-decoration: none;
-  font-size: var(--fs-body); font-weight: var(--w-semibold); line-height: var(--lh-snug);
-}
-.cov-client:hover { color: var(--ink); }
-.cov-client:hover :is(.cov-full, .cov-short) {
-  color: var(--brand-deep);
-  text-decoration: underline; text-underline-offset: 3px;
-}
-.cov-logo {
-  display: block;
-  height: 28px; width: auto; max-width: 88px;
+  height: 28px; width: auto; max-width: 96px;
   object-fit: contain; object-position: left center;
+  filter: grayscale(1); opacity: .7;
+  transition: filter var(--t-base) var(--ease), opacity var(--t-base) var(--ease);
+}
+.show-tab:hover .show-tab-logo,
+.show-tab[aria-selected="true"] .show-tab-logo { filter: none; opacity: 1; }
+
+/* Active tab: a 2px red underline drawn from the left */
+.show-tab::after {
+  content: ""; position: absolute;
+  left: var(--s-3); right: var(--s-3); bottom: 0;
+  height: 2px; background: var(--brand);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t-base) var(--ease);
+}
+.show-tab[aria-selected="true"]::after { transform: none; }
+
+/* Quiet divider between full-cycle and the other projects. No text label. */
+.show-tab[data-group-start] { margin-left: var(--s-3); }
+.show-tab[data-group-start]::before {
+  content: ""; position: absolute;
+  left: calc(-1 * var(--s-2)); top: var(--s-3); bottom: var(--s-3);
+  width: 1px; background: var(--rule-strong);
+}
+
+.show-nav {
+  display: flex; align-items: center; gap: var(--s-2);
+  flex: none;
+  padding-bottom: var(--s-2);
+}
+.show-arrow {
+  display: grid; place-items: center;
+  inline-size: var(--h-control); block-size: var(--h-control); padding: 0;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule-strong); border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: border-color var(--t-base) var(--ease), color var(--t-base) var(--ease), transform var(--t-press) var(--ease);
+}
+.show-arrow:hover { border-color: var(--brand-deep); color: var(--brand-deep); }
+.show-arrow:active, .pager-btn:active { transform: scale(0.97); }
+
+.show-count {
+  min-width: 4.5ch; text-align: center;
+  font-size: var(--fs-small); color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.show-count-now { color: var(--ink); font-weight: var(--w-semibold); }
+
+/* Mobile pager: never shown above 760px, even when the script un-hides it */
+.show-pager { display: none; }
+
+/* Focus: an ink ring on the control, never a red box around the card */
+#engagements :is(.show-tab, .show-arrow, .pager-btn, .show):focus-visible {
+  outline: 2px solid var(--ink); outline-offset: 3px;
+}
+#engagements :is(.show-tab, .pager-btn):focus-visible { border-radius: var(--r-sm); }
+#engagements .show:focus-visible { border-radius: var(--r-lg); }
+
+/* ---- The featured project ----------------------------------------------- */
+.show {
+  position: relative; isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-areas: "head record" "body record";
+  grid-template-rows: auto 1fr;
+  column-gap: var(--s-6);
+  align-items: start;
+}
+/* The left card, drawn behind head + body without an extra wrapper */
+.show::before {
+  content: "";
+  grid-column: 1; grid-row: 1 / 3; align-self: stretch;
+  z-index: -1;
+  background: var(--surface);
+  border: 1px solid var(--rule); border-radius: var(--r-lg);
+}
+/* hidden="until-found" is left to the browser (it keeps the box but skips the
+   content, so find-in-page can still reach it); only a plain hidden attribute
+   removes the panel. As a block, the skipped panel collapses to zero height
+   (a grid would keep its gaps). */
+.show[hidden]:not([hidden="until-found"]) { display: none; }
+.show[hidden="until-found"] { display: block; }
+
+/* No JavaScript: every project, stacked, with a rule between them */
+.showcase:not(.is-showcase) .show + .show {
+  margin-top: var(--s-7); padding-top: var(--s-7);
+  border-top: 1px solid var(--rule);
+}
+
+.show-head { grid-area: head; padding: var(--s-6) var(--s-6) 0; }
+.show-body { grid-area: body; padding: var(--s-5) var(--s-6) var(--s-6); }
+
+.show-plate {
+  display: inline-flex;
+  padding: 6px 10px; margin-bottom: var(--s-4);
+  background: var(--logo-plate); border-radius: var(--r-sm);
+}
+.show-logo {
+  display: block;
+  height: 36px; width: auto; max-width: 132px;
+  object-fit: contain;
+}
+.show-name {
+  font-size: var(--fs-h4); font-weight: var(--w-heading);
+  letter-spacing: var(--tracking-h4); line-height: var(--lh-heading);
+}
+.show-meta {
+  margin-top: var(--s-2);
+  font-size: var(--fs-small); letter-spacing: var(--tracking-small); color: var(--body);
+}
+
+.pills { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4); }
+.pill {
+  display: inline-flex; align-items: center;
+  min-height: 28px; padding: 0 var(--s-3);
+  border: 1px solid var(--rule); border-radius: var(--r-pill);
+  font-size: var(--fs-caption); font-weight: var(--w-medium);
+  line-height: var(--lh-label); color: var(--ink);
+}
+.pill.is-full {
+  background: var(--brand-tint); border-color: transparent;
+  color: var(--brand-deep); font-weight: var(--w-semibold);
+}
+
+.show-line {
+  margin-top: var(--s-4);
+  font-size: var(--fs-lead); font-weight: var(--w-lead);
+  line-height: var(--lh-lead); color: var(--ink);
+  text-wrap: pretty;
+}
+
+.show-label {
   margin-bottom: var(--s-3);
-}
-.cov-short { display: none; }
-.cov-meta {
-  display: block; margin-top: var(--s-1);
-  font-size: var(--fs-small); color: var(--body); line-height: var(--lh-snug);
-}
-.cov-type {
-  display: block; margin-top: var(--s-2);
-  font-size: var(--fs-small); font-weight: var(--w-medium);
-  color: var(--body); line-height: var(--lh-snug);
-}
-.cov-type.is-full { color: var(--brand-deep); font-weight: var(--w-semibold); }
-
-/* Tier divider: one quiet vertical hairline between the two kinds of work */
-.cov [data-col="3"],
-.cov .cov-tiers th[data-cols="3 4 5"] { border-left: 1px solid var(--rule); }
-
-/* Module groups: plain sentence-case row labels. The row keeps its five empty
-   column cells so the tier divider and the column highlight run unbroken. */
-.cov .cov-group th {
-  padding: var(--s-5) 0 var(--s-2);
-  text-align: left;
-  font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ink);
-}
-.cov tbody:first-of-type .cov-group th { padding-top: var(--s-4); }
-
-.cov tbody tr:not(.cov-group) > * { height: 44px; border-top: 1px solid var(--rule); }
-.cov tbody th[scope="row"] {
-  padding-left: 0;
-  text-align: left;
-  font-size: var(--fs-body); color: var(--body); line-height: var(--lh-snug);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-small); font-weight: var(--w-semibold);
+  letter-spacing: normal; line-height: var(--lh-label);
 }
 
-/* Marks: every listed module is an ink square; not listed is a faint dot */
-.mark {
-  display: inline-block; width: 12px; height: 12px;
-  border-radius: var(--r-sm);
-  background: var(--ink);
-  vertical-align: middle;
+/* Key contributions: numbered step tags, no check icons, no red dash */
+.contribs { display: flex; flex-direction: column; gap: var(--s-1); }
+.contribs li {
+  display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: var(--s-3);
+  margin-inline: calc(-1 * var(--s-2)); padding: var(--s-2);
+  border-radius: var(--r-md);
+  font-size: var(--fs-body); line-height: 1.55; text-wrap: pretty;
   transition: background-color var(--t-base) var(--ease);
 }
-.cov tbody tr:not(.cov-group) > td:not(.is-on)::before {
-  content: ""; display: inline-block;
-  width: 4px; height: 4px; border-radius: var(--r-pill);
-  background: var(--rule-strong);
-  vertical-align: middle;
+.step-tag {
+  justify-self: start;
+  display: inline-flex; align-items: center;
+  height: 22px; margin-top: 2px; padding: 0 6px;
+  background: var(--brand-tint); color: var(--brand-deep);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-caption); font-weight: var(--w-semibold);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  transition: background-color var(--t-base) var(--ease);
 }
-.cov-fn { margin-left: 2px; color: var(--muted); }
-.cov-note { margin-top: var(--s-3); font-size: var(--fs-small); color: var(--muted); }
 
-/* Highlight: the only place red enters the matrix */
+/* ---- The visual: a delivery record -------------------------------------- */
+.record {
+  --fold: 22px;
+  grid-area: record;
+  position: relative;
+  margin: 0;
+  padding: var(--s-6);
+  background: var(--surface);
+  border: 1px solid var(--rule); border-radius: var(--r-md);
+  box-shadow: var(--e-2);
+}
+/* The only paper cue: one turned-down corner. A gradient, not clip-path,
+   so the border and shadow stay intact. */
+.record::before {
+  content: ""; position: absolute; top: -1px; right: -1px;
+  width: var(--fold); height: var(--fold);
+  border-bottom-left-radius: var(--r-sm);
+  background: linear-gradient(to bottom left,
+    var(--tint) 50%,
+    var(--rule) 50%, var(--rule) calc(50% + 1px),
+    var(--tint-2) calc(50% + 1px));
+}
+
+.record-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "kicker stamp" "client stamp";
+  column-gap: var(--s-4);
+  margin-right: var(--fold);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--rule);
+}
+.record-kicker { grid-area: kicker; }
+.record-client {
+  grid-area: client;
+  margin-top: var(--s-1);
+  font-size: var(--fs-body); font-weight: var(--w-heading);
+  line-height: var(--lh-heading); color: var(--ink);
+}
+.record-stamp {
+  grid-area: stamp; align-self: center;
+  padding: 2px var(--s-2);
+  border: 1px solid var(--brand-deep); border-radius: var(--r-sm);
+  color: var(--brand-deep);
+  font-size: var(--fs-caption); font-weight: var(--w-semibold);
+  letter-spacing: var(--tracking-small); line-height: var(--lh-label);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  transform: rotate(-2deg);
+}
+
+/* The path: six stops, always all six, in the same order */
+.path { margin: var(--s-5) 0; }
+.stop {
+  position: relative;
+  display: grid; grid-template-columns: 24px 28px minmax(0, 1fr);
+  column-gap: var(--s-2);
+  padding-bottom: var(--s-4);
+}
+.stop:last-child { padding-bottom: 0; }
+.stop:nth-child(1) { --i: 0; }
+.stop:nth-child(2) { --i: 1; }
+.stop:nth-child(3) { --i: 2; }
+.stop:nth-child(4) { --i: 3; }
+.stop:nth-child(5) { --i: 4; }
+.stop:nth-child(6) { --i: 5; }
+
+.stop-dot {
+  grid-column: 1; grid-row: 1; justify-self: center;
+  width: 10px; height: 10px; margin-top: 6px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px solid var(--rule-strong);
+  transition: box-shadow var(--t-base) var(--ease);
+}
+.stop.is-lit .stop-dot {
+  width: 12px; height: 12px; margin-top: 5px;
+  border: 0; background: var(--brand);
+  box-shadow: 0 0 0 3px var(--surface);
+}
+/* Connector from this dot down to the next, with a small gap at each end */
+.stop:not(:last-child)::after {
+  content: ""; position: absolute;
+  left: 11px; top: 21px; bottom: 2px;
+  width: 2px; background: var(--rule);
+  transform-origin: top;
+}
+/* Red only between two lit stops */
+.stop.is-lit:has(+ .stop.is-lit)::after { background: var(--brand); }
+
+.stop-n {
+  grid-column: 2; grid-row: 1;
+  font-size: var(--fs-caption); line-height: 22px;
+  color: var(--muted); font-variant-numeric: tabular-nums;
+}
+.stop.is-lit .stop-n { color: var(--brand-deep); font-weight: var(--w-semibold); }
+.stop-label {
+  grid-column: 3; grid-row: 1;
+  font-size: var(--fs-body); line-height: 22px; color: var(--muted);
+}
+.stop.is-lit .stop-label { color: var(--ink); font-weight: var(--w-semibold); }
+.stop-proof {
+  grid-column: 3;
+  font-size: var(--fs-small); line-height: var(--lh-snug);
+  color: var(--body); font-variant-numeric: tabular-nums;
+}
+
+/* Temenos: a branch off stop 02, never a lit migration stop */
+.stop-branch {
+  grid-column: 3; justify-self: start;
+  position: relative;
+  margin-top: var(--s-2);
+  padding: var(--s-1) var(--s-3);
+  background: var(--tint);
+  border: 1px solid var(--rule-strong); border-radius: var(--r-sm);
+  font-size: var(--fs-small); line-height: var(--lh-snug); color: var(--body);
+}
+.stop-branch strong { color: var(--ink); font-weight: var(--w-semibold); }
+/* Dashed spur from the spine (x = 13px) to the box (x = 24 + 8 + 28 + 8 = 68px) */
+.stop-branch::before {
+  content: ""; position: absolute; top: 50%; right: 100%;
+  width: calc(11px + 28px + 2 * var(--s-2));
+  border-top: 1.5px dashed var(--brand-deep);
+}
+
+.record-modules {
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-caption); line-height: var(--lh-lead); color: var(--body);
+}
+.record-modules-k { margin-right: var(--s-2); font-weight: var(--w-semibold); color: var(--ink); }
+.record-legend {
+  display: flex; align-items: center; gap: var(--s-2);
+  margin-top: var(--s-2);
+  font-size: var(--fs-caption); line-height: var(--lh-label); color: var(--muted);
+}
+.legend-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--brand); }
+
+/* ---- Two-way highlight: stop <-> bullet (pointer only, no extra tab stops) */
 @media (hover: hover) {
-  .cov tbody tr:not(.cov-group):hover > * { background: var(--tint-2); }
-  .cov tbody tr:hover .mark { background: var(--brand); }
-}
-.cov[data-hl="1"] [data-col="1"],
-.cov[data-hl="2"] [data-col="2"],
-.cov[data-hl="3"] [data-col="3"],
-.cov[data-hl="4"] [data-col="4"],
-.cov[data-hl="5"] [data-col="5"] { background: var(--tint-2); }
-.cov[data-hl="1"] [data-col="1"] .mark,
-.cov[data-hl="2"] [data-col="2"] .mark,
-.cov[data-hl="3"] [data-col="3"] .mark,
-.cov[data-hl="4"] [data-col="4"] .mark,
-.cov[data-hl="5"] [data-col="5"] .mark { background: var(--brand); }
+  .contribs li:hover,
+  .show:has(.stop.is-lit[data-step="1"]:hover) .contribs li[data-steps~="1"],
+  .show:has(.stop.is-lit[data-step="2"]:hover) .contribs li[data-steps~="2"],
+  .show:has(.stop.is-lit[data-step="3"]:hover) .contribs li[data-steps~="3"],
+  .show:has(.stop.is-lit[data-step="4"]:hover) .contribs li[data-steps~="4"],
+  .show:has(.stop.is-lit[data-step="5"]:hover) .contribs li[data-steps~="5"],
+  .show:has(.stop.is-lit[data-step="6"]:hover) .contribs li[data-steps~="6"] { background: var(--brand-tint); }
 
-/* Entrance: marks settle in column by column. Only under .js-motion. */
-@keyframes mark-in {
-  from { opacity: 0; transform: scale(.6); }
-  to   { opacity: 1; transform: none; }
-}
-.cov [data-col="2"] { --i: 1; }
-.cov [data-col="3"] { --i: 2; }
-.cov [data-col="4"] { --i: 3; }
-.cov [data-col="5"] { --i: 4; }
-.js-motion .cov:not(.is-in) .mark { opacity: 0; }
-.js-motion .cov.is-in .mark {
-  animation: mark-in var(--t-base) var(--ease) backwards;
-  animation-delay: calc(var(--i, 0) * var(--stagger));
+  /* Keep the tag readable when its row takes the same tint */
+  .contribs li:hover .step-tag,
+  .show:has(.stop.is-lit[data-step="1"]:hover) .contribs li[data-steps~="1"] .step-tag,
+  .show:has(.stop.is-lit[data-step="2"]:hover) .contribs li[data-steps~="2"] .step-tag,
+  .show:has(.stop.is-lit[data-step="3"]:hover) .contribs li[data-steps~="3"] .step-tag,
+  .show:has(.stop.is-lit[data-step="4"]:hover) .contribs li[data-steps~="4"] .step-tag,
+  .show:has(.stop.is-lit[data-step="5"]:hover) .contribs li[data-steps~="5"] .step-tag,
+  .show:has(.stop.is-lit[data-step="6"]:hover) .contribs li[data-steps~="6"] .step-tag { background: var(--surface); }
+
+  .show:has(.contribs li[data-steps~="1"]:hover) .stop.is-lit[data-step="1"] .stop-dot,
+  .show:has(.contribs li[data-steps~="2"]:hover) .stop.is-lit[data-step="2"] .stop-dot,
+  .show:has(.contribs li[data-steps~="3"]:hover) .stop.is-lit[data-step="3"] .stop-dot,
+  .show:has(.contribs li[data-steps~="4"]:hover) .stop.is-lit[data-step="4"] .stop-dot,
+  .show:has(.contribs li[data-steps~="5"]:hover) .stop.is-lit[data-step="5"] .stop-dot,
+  .show:has(.contribs li[data-steps~="6"]:hover) .stop.is-lit[data-step="6"] .stop-dot {
+    box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--brand);
+  }
 }
 
 /* ---- Najdi mark: the contact band's sharafat, small -------------------- */
@@ -742,198 +924,144 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E") repeat-x left center / 28px 10px;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E") repeat-x left center / 28px 10px;
 }
+.showcase + .najdi-mark { margin: var(--s-7) 0 0; }
 
-/* ---- Delivery ledger ---------------------------------------------------- */
-.ledger { padding: 0 var(--s-6) var(--s-2); }
-.ledger-group {
-  padding: var(--s-5) 0 var(--s-3);
-  font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ink);
-  border-bottom: 1px solid var(--rule-strong);
-}
-
-.entry {
-  display: grid; grid-template-columns: 280px minmax(0, 1fr);
-  gap: var(--s-6);
-  margin-inline: calc(-1 * var(--s-6));
-  padding: var(--s-6);
-  border-top: 1px solid var(--rule);
-}
-.ledger-group + .entry { border-top: 0; }
-.entry[hidden] { display: none; }
-
-.entry-logo {
-  display: block;
-  height: 36px; width: auto; max-width: 120px;
-  object-fit: contain; object-position: left center;
-  margin-bottom: var(--s-4);
-}
-.entry-name {
-  font-size: var(--fs-h4); font-weight: var(--w-heading);
-  letter-spacing: var(--tracking-h4); line-height: var(--lh-heading);
-}
-.entry-meta {
-  margin-top: var(--s-2);
-  font-size: var(--fs-small); letter-spacing: var(--tracking-small); color: var(--body);
-}
-.entry-type {
-  margin-top: var(--s-1);
-  font-size: var(--fs-small); font-weight: var(--w-medium); color: var(--body);
-}
-.entry-type.is-full { color: var(--brand-deep); font-weight: var(--w-semibold); }
-
-/* Labelled facts: Modules / OUM documents / Integration */
-.entry-facts { display: grid; gap: var(--s-2); margin: 0 0 var(--s-5); max-width: var(--measure); }
-.entry-facts > div { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: var(--s-4); }
-.entry-facts dt {
-  font-size: var(--fs-small); font-weight: var(--w-semibold);
-  color: var(--ink); line-height: var(--lh-lead);
-}
-.entry-facts dd {
-  margin: 0;
-  font-size: var(--fs-small); color: var(--body); line-height: var(--lh-lead);
-}
-.entry-facts dd.codes { font-variant-numeric: tabular-nums; font-weight: var(--w-medium); color: var(--ink); }
-
-.entry-label {
-  margin-bottom: var(--s-3);
-  font-size: var(--fs-small); font-weight: var(--w-semibold);
-  letter-spacing: normal; line-height: var(--lh-label);
-}
-.entry-back {
-  display: inline-block;
-  margin-top: var(--s-4); padding-block: var(--s-1);
-  font-size: var(--fs-small);
-}
-
-/* Filter: re-trigger the shared settle keyframes on what is still shown.
-   The script removes .is-filtering when settle ends. */
-.ledger.is-filtering .entry:not([hidden]) { animation: settle var(--t-base) var(--ease) backwards; }
-
-/* Arriving from a client link: a brief tint that fades out.
-   Declared after the filter rule and with equal specificity, so it wins. */
-@keyframes target-fade {
-  from { background-color: var(--brand-tint); }
-  to   { background-color: transparent; }
-}
-.ledger .entry:not([hidden]):target { animation: target-fade calc(var(--t-enter) * 4) var(--ease) var(--t-slow) backwards; }
-
-@media (min-width: 1001px) {
-  .entry-id {
-    position: sticky;
-    top: calc(var(--h-masthead) + var(--s-5));
-    align-self: start;
-  }
-}
-
-/* Focus: an ink ring on the control only, never a red box around a card.
-   Scoped to the new links; the chips only change ring colour and keep their radius. */
-#engagements :is(.cov-client, .entry-back):focus-visible { outline-color: var(--ink); outline-offset: 3px; border-radius: var(--r-sm); }
-#engagements .chip:focus-visible { outline-color: var(--ink); }
-
-/* Dark mode: logos are drawn for light grounds, so give them a tight plate */
+/* ---- Dark mode: tab logos sit on the section tint, so give them the plate */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) :is(.cov-logo, .entry-logo) {
-    box-sizing: content-box; padding: 4px 6px;
+  :root:not([data-theme="light"]) .show-tab-logo {
+    box-sizing: content-box; padding: 2px 4px;
     background: var(--logo-plate); border-radius: var(--r-sm);
   }
 }
-:root[data-theme="dark"] :is(.cov-logo, .entry-logo) {
-  box-sizing: content-box; padding: 4px 6px;
+:root[data-theme="dark"] .show-tab-logo {
+  box-sizing: content-box; padding: 2px 4px;
   background: var(--logo-plate); border-radius: var(--r-sm);
 }
 
 /* ---- Responsive --------------------------------------------------------- */
 @media (max-width: 1000px) {
-  .cov .cov-tiers td { width: 160px; }
-  .cov .cov-clients th { padding-inline: var(--s-2); }
-  .cov-meta,
-  .cov-type { font-size: var(--fs-caption); }
-  .cov .cov-clients .cov-corner { padding-left: 0; }
-  .cov .cov-tiers th { padding-inline: var(--s-2); }
-  .cov .cov-tiers th::after { left: var(--s-2); right: var(--s-2); }
-}
-
-@media (max-width: 860px) {
-  .cov-sheet { padding-inline: var(--s-4); }
-  .cov .cov-tiers td { width: 140px; }
-  .cov-logo { display: none; }
-  .cov-client { font-size: var(--fs-small); }
-  .cov tbody th[scope="row"] { font-size: var(--fs-small); }
-  .ledger { padding-inline: var(--s-5); }
-  .entry {
-    grid-template-columns: minmax(0, 1fr); gap: var(--s-4);
-    margin-inline: calc(-1 * var(--s-5)); padding: var(--s-5);
+  .show { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s-5); }
+  .show-head { padding: var(--s-5) var(--s-5) 0; }
+  .show-body { padding: var(--s-5); }
+  .record { padding: var(--s-5); }
+  /* Half-width sheet: the stamp moves under the title so nothing wraps awkwardly */
+  .record-head {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "kicker" "client" "stamp";
   }
+  .record-stamp { justify-self: start; margin-top: var(--s-3); white-space: normal; }
+  .show-tabs {
+    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+    padding-top: 4px;   /* room for the focus ring, which the scroll box would clip */
+  }
+  .show-tabs::-webkit-scrollbar { display: none; }
+  .show-tab { flex: 0 0 auto; }
+  .show-tab-logo { height: 24px; max-width: 72px; }
+  #engagements .show-tab:focus-visible { outline-offset: -2px; }
 }
 
-/* Phones and small tablets: the same table, same orientation, short names, no horizontal scroll */
+/* Phones and small tablets: one column, only the tab strip scrolls sideways */
 @media (max-width: 760px) {
-  .cov-sheet { padding: var(--s-2); }
-  /* Content-sized layout: five narrow client columns, labels take the rest */
-  .cov { table-layout: auto; }
-  .cov .cov-tiers td { width: auto; }
-  .cov th,
-  .cov td { padding: 0; }
-  .cov .cov-clients .cov-corner { padding-right: var(--s-2); font-size: var(--fs-caption); }
-  /* 4px each side keeps a visible gap between neighbouring short names */
-  .cov .cov-clients th[data-col] {
-    width: 40px;
-    padding: var(--s-3) var(--s-1) var(--s-2);
-    text-align: center; vertical-align: bottom;
+  .show {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "record" "body";
+    grid-template-rows: auto;
+    row-gap: var(--s-5);
   }
-  .cov-meta,
-  .cov-type { display: none; }
-  .cov-full {
-    position: absolute; width: 1px; height: 1px;
-    clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+  .show::before { display: none; }
+  .show-head, .show-body { padding: 0; }
+  .show-label { padding-top: 0; border-top: 0; }
+
+  .show-bar { margin-inline: calc(-1 * var(--gutter)); margin-bottom: var(--s-5); }
+  .show-tabs {
+    flex: 1;
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
   }
-  .cov-short {
-    display: block;
-    font-size: var(--fs-caption); font-weight: var(--w-semibold); line-height: 1.2;
-    overflow-wrap: normal; hyphens: manual;
+  .show-tab { min-height: 56px; scroll-snap-align: start; }
+  .show-nav { display: none; }
+
+  .show-pager:not([hidden]) {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--s-3);
+    margin-top: var(--s-6); padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
   }
-  .cov-client { display: flex; align-items: flex-end; justify-content: center; min-height: 44px; }
-  /* Tier headers show short labels here; the full wording stays for screen readers */
-  .cov .cov-tiers th {
-    padding: var(--s-2) var(--s-1);
-    font-size: var(--fs-caption);
-    overflow-wrap: normal; hyphens: manual;
+  .pager-btn {
+    display: inline-flex; align-items: center; gap: var(--s-2);
+    flex: 0 1 auto; min-width: 0; min-height: var(--h-control);
+    padding: 0 var(--s-3);
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--rule-strong); border-radius: var(--r-md);
+    font: inherit; font-size: var(--fs-small); font-weight: var(--w-semibold);
+    cursor: pointer;
+    transition: border-color var(--t-base) var(--ease), color var(--t-base) var(--ease), transform var(--t-press) var(--ease);
   }
-  .cov .cov-tiers th::after { left: var(--s-1); right: var(--s-1); }
-  .cov .cov-group th { padding: var(--s-4) 0 var(--s-1); }
-  .cov tbody:first-of-type .cov-group th { padding-top: var(--s-3); }
-  .cov tbody th[scope="row"] { padding-right: var(--s-2); font-size: var(--fs-small); }
-  .cov tbody tr:not(.cov-group) > * { height: 40px; }
-  .mark { width: 10px; height: 10px; }
-  .cov-note { padding-inline: var(--s-1); }
+  .pager-btn svg { flex: none; }
+  .show-pager .show-count { flex: none; }
+  .pager-btn:hover { border-color: var(--brand-deep); color: var(--brand-deep); }
+  .pager-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Compact record */
+  .record { padding: var(--s-4); }
+  .record-client { display: none; }   /* the name is right above */
+  .record-head { grid-template-areas: "kicker" "stamp"; }
+  .path { margin: var(--s-4) 0; }
+  .stop { padding-bottom: var(--s-3); }
 }
 
 @media (max-width: 560px) {
-  .ledger { padding-inline: var(--s-4); }
-  .entry { margin-inline: calc(-1 * var(--s-4)); padding: var(--s-5) var(--s-4); }
-  .entry-logo { height: 28px; }
-  .entry-facts > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .stop-proof { display: none; }     /* the contributions below carry the proof */
+  .branch-more { display: none; }    /* the branch reads only "Temenos integration" */
+  .stop-branch { margin-top: var(--s-1); padding-block: 2px; }
+  .stop { padding-bottom: var(--s-2); }
 }
 
-/* ---- Reduced motion ----------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .ledger .entry:not([hidden]):target { animation: none; background-color: var(--brand-tint); }
-  .js-motion .cov:not(.is-in) .mark { opacity: 1; }
-}
-
-/* ---- Filtered results ------------------------------------------------- */
+/* ---- Motion: only under .js-motion, only on a newly shown project ------- */
 @keyframes settle {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: none; }
 }
+@keyframes record-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes dot-in {
+  from { transform: scale(.3); }
+  to   { transform: none; }
+}
+@keyframes line-in {
+  from { transform: scaleY(0); }
+  to   { transform: none; }
+}
+.js-motion .show.is-entering :is(.show-head, .show-body) { animation: settle var(--t-base) var(--ease) backwards; }
+.js-motion .show.is-entering .record { animation: record-in var(--t-slow) var(--ease) backwards; }
+.js-motion .show.is-entering .stop.is-lit .stop-dot {
+  animation: dot-in var(--t-base) var(--ease) backwards;
+  animation-delay: calc(120ms + var(--i) * (var(--stagger) - 20ms));
+}
+.js-motion .show.is-entering .stop.is-lit:has(+ .stop.is-lit)::after {
+  animation: line-in var(--t-base) var(--ease) backwards;
+  animation-delay: calc(160ms + var(--i) * (var(--stagger) - 20ms));
+}
 
 /* ---- Entrances --------------------------------------------------------
-   Both are opt-in via a class the script adds, so with JavaScript off or
-   motion reduced the content is simply there — never parked at opacity 0. */
+   Opt-in via a class the script adds, so with JavaScript off or motion
+   reduced the content is simply there — never parked at opacity 0. */
 .js-motion .identity,
 .js-motion .intro h1,
 .js-motion .intro-side,
 .js-motion .scope { animation: settle var(--t-enter) var(--ease) backwards; }
+
+/* ---- Print: every project, no controls ---------------------------------- */
+@media print {
+  .show[hidden] { display: grid !important; content-visibility: visible; }
+  .show-bar, .show-pager { display: none !important; }
+  .show + .show { margin-top: var(--s-6); padding-top: var(--s-6); border-top: 1px solid var(--rule); }
+  .show { break-inside: avoid; }
+  .record { box-shadow: none; }
+}
 
 /* --------------------------------------------------------------------------
    16. CONTACT + FOOTER
@@ -1034,7 +1162,6 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
   .masthead-inner { gap: var(--s-2); }
   :root { --h-wordmark: 20px; }
   .masthead .btn { padding: 0 var(--s-3); }
-  .toolbar { align-items: flex-start; }
 }
 
 html { scroll-behavior: smooth; scroll-padding-top: var(--h-masthead); }
