@@ -597,53 +597,95 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .show-bar[hidden],
 .show-pager[hidden] { display: none; }
 
-.show-tabs { display: flex; gap: var(--s-1); min-width: 0; }
+/* Two groups sit on the bar's rule; only the first carries a caption */
+.show-tabs { display: flex; align-items: flex-end; gap: var(--s-5); min-width: 0; }
+.show-group { display: flex; flex-direction: column; gap: var(--s-2); }
+.show-group-tabs { display: flex; gap: var(--s-1); }
 
+/* Caption with a bracket rule that spans the whole group: ┌ FULL-CYCLE ──┐ */
+.show-group-cap {
+  display: flex; align-items: center; gap: var(--s-2);
+  padding-inline: var(--s-3);
+  font-size: var(--fs-caption); font-weight: var(--w-label);
+  letter-spacing: var(--tracking-label); line-height: var(--lh-label);
+  text-transform: uppercase; white-space: nowrap;
+  color: var(--muted);
+}
+.show-group-cap::before,
+.show-group-cap::after {
+  content: ""; align-self: stretch;
+  margin-top: .65em;   /* the rule starts at the letters' middle, the tick drops down */
+  border-top: 1px solid var(--rule-strong);
+}
+.show-group-cap::before { flex: 0 0 var(--s-2); margin-left: calc(-1 * var(--s-3)); border-left: 1px solid var(--rule-strong); }
+.show-group-cap::after  { flex: 1; min-width: var(--s-5); margin-right: calc(-1 * var(--s-3)); border-right: 1px solid var(--rule-strong); }
+
+/* A tab is an index tab: flat at rest, a raised surface with a red top edge when open.
+   The border is always there (transparent at rest) so nothing shifts on select. */
 .show-tab {
   position: relative;
-  display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
-  gap: var(--s-2);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  gap: 2px;
   min-height: var(--h-control);
   padding: var(--s-2) var(--s-3) var(--s-3);
-  background: none; border: 0;
+  background: none;
+  border: 1px solid transparent; border-bottom: 0;
+  border-radius: var(--r-md) var(--r-md) 0 0;
   font: inherit; font-size: var(--fs-small); font-weight: var(--w-medium);
   line-height: var(--lh-snug); white-space: nowrap;
   color: var(--body);
   cursor: pointer;
-  transition: color var(--t-base) var(--ease);
+  transition: color var(--t-base) var(--ease), background-color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
 }
 .show-tab:hover { color: var(--ink); }
-.show-tab[aria-selected="true"] { color: var(--ink); font-weight: var(--w-semibold); }
+.show-tab[aria-selected="true"] {
+  color: var(--ink);
+  background: var(--surface);   /* covers the bar's rule, so the tab opens onto the project */
+  border-color: var(--rule);
+}
+.show-tab-meta { font-size: var(--fs-caption); color: var(--muted); }
 
-/* One height per tab: square marks get more height so they read the same size as wide ones */
-.show-tab { --logo-h: 32px; }
-:is(#tab-thiqah, #tab-shift, #tab-nis) { --logo-h: 36px; }
+/* Same-size tile for every logo; each mark gets its own height and resting strength
+   so a solid square (Shift) or dark crest (NIS) no longer outweighs a thin wordmark. */
+.show-tab-mark {
+  display: grid; place-items: center;
+  width: 96px; height: 40px;
+  margin-bottom: var(--s-1);
+  overflow: hidden; border-radius: var(--r-sm);
+}
+.show-tab { --logo-h: 32px; --logo-idle: .8; }
+#tab-saudi-cement { --logo-h: 28px; }
+#tab-warba-bank   { --logo-h: 44px; --logo-idle: .95; }   /* the SVG has empty space around its ink */
+#tab-thiqah       { --logo-h: 34px; }
+#tab-shift        { --logo-h: 28px; --logo-idle: .55; }
+#tab-nis          { --logo-h: 32px; --logo-idle: .7; }
 .show-tab-logo {
   display: block;
-  height: var(--logo-h); width: auto; max-width: 96px;
-  object-fit: contain; object-position: left center;
-  filter: grayscale(1); opacity: .85;
+  height: var(--logo-h); width: auto; max-width: 84px;
+  object-fit: contain;
+  filter: grayscale(1); opacity: var(--logo-idle);
   transition: filter var(--t-base) var(--ease), opacity var(--t-base) var(--ease);
 }
 .show-tab:hover .show-tab-logo,
 .show-tab[aria-selected="true"] .show-tab-logo { filter: none; opacity: 1; }
 
-/* Active tab: a 2px red underline drawn from the left */
+/* Active tab: a 2px red edge along the top, drawn from the left */
 .show-tab::after {
   content: ""; position: absolute;
-  left: var(--s-3); right: var(--s-3); bottom: 0;
+  left: -1px; right: -1px; top: -1px;
   height: 2px; background: var(--brand);
+  border-radius: var(--r-md) var(--r-md) 0 0;
   transform: scaleX(0); transform-origin: left;
   transition: transform var(--t-base) var(--ease);
 }
 .show-tab[aria-selected="true"]::after { transform: none; }
 
-/* Quiet divider between full-cycle and the other projects. No text label. */
-.show-tab[data-group-start] { margin-left: var(--s-3); }
-.show-tab[data-group-start]::before {
-  content: ""; position: absolute;
-  left: calc(-1 * var(--s-2)); top: var(--s-3); bottom: var(--s-3);
-  width: 1px; background: var(--rule-strong);
+/* Wide screens: tabs share the row, so the strip reads as the header of the project */
+@media (min-width: 1001px) {
+  .show-tabs { flex: 1; }
+  .show-group:first-child { flex: 2 1 0; }
+  .show-group:last-child  { flex: 3 1 0; }
+  .show-group-tabs .show-tab { flex: 1 1 0; }
 }
 
 .show-nav {
@@ -676,7 +718,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 #engagements :is(.show-tab, .show-arrow, .pager-btn, .show):focus-visible {
   outline: 2px solid var(--ink); outline-offset: 3px;
 }
-#engagements :is(.show-tab, .pager-btn):focus-visible { border-radius: var(--r-sm); }
+#engagements .pager-btn:focus-visible { border-radius: var(--r-sm); }
 #engagements .show:focus-visible { border-radius: var(--r-lg); }
 
 /* ---- The featured project ----------------------------------------------- */
@@ -965,17 +1007,11 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 }
 .showcase + .najdi-mark { margin: var(--s-7) 0 0; }
 
-/* ---- Dark mode: tab logos sit on the section tint, so give them the plate */
+/* ---- Dark mode: logos are drawn for light grounds, so every tile is a plate of the same size */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .show-tab-logo {
-    box-sizing: content-box; padding: 2px 4px;
-    background: var(--logo-plate); border-radius: var(--r-sm);
-  }
+  :root:not([data-theme="light"]) .show-tab-mark { background: var(--logo-plate); }
 }
-:root[data-theme="dark"] .show-tab-logo {
-  box-sizing: content-box; padding: 2px 4px;
-  background: var(--logo-plate); border-radius: var(--r-sm);
-}
+:root[data-theme="dark"] .show-tab-mark { background: var(--logo-plate); }
 
 /* ---- Sticky sheet: travels beside long contribution lists (two columns only) */
 @media (min-width: 761px) and (min-height: 720px) {
@@ -999,8 +1035,22 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
     padding-top: 4px;   /* room for the focus ring, which the scroll box would clip */
   }
   .show-tabs::-webkit-scrollbar { display: none; }
-  .show-tab { flex: 0 0 auto; }
-  .show-tab-logo { height: calc(var(--logo-h) * .85); max-width: 80px; }
+  .show-group, .show-tab { flex: 0 0 auto; }
+  .show-tab-mark { width: 80px; height: 34px; }
+  .show-tab-logo { height: calc(var(--logo-h) * .8); max-width: 70px; }
+  /* Fade an edge only while more tabs are hidden past it (script.js sets the flags) */
+  .show-tabs[data-more-end] {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--s-7)), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - var(--s-7)), transparent);
+  }
+  .show-tabs[data-more-start] {
+    -webkit-mask-image: linear-gradient(to left, #000 calc(100% - var(--s-7)), transparent);
+            mask-image: linear-gradient(to left, #000 calc(100% - var(--s-7)), transparent);
+  }
+  .show-tabs[data-more-start][data-more-end] {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--s-7), #000 calc(100% - var(--s-7)), transparent);
+            mask-image: linear-gradient(to right, transparent, #000 var(--s-7), #000 calc(100% - var(--s-7)), transparent);
+  }
   #engagements .show-tab:focus-visible { outline-offset: -2px; }
 }
 
