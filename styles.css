@@ -39,6 +39,7 @@
   --band-ink:    #ffffff;
   --band-body:   #b3b8b2;
   --band-rule:   #333833;
+  --band-vent:   #4d534c;   /* Najdi wall vents: quiet but clearly drawn */
 
   /* Status */
   --ok:          #2f7d46;
@@ -147,6 +148,7 @@
     --band-ink:    #f1f3ef;
     --band-body:   #a6aca5;
     --band-rule:   #3d423c;
+    --band-vent:   #555b54;
     --ok:          #5fb36c;
     --logo-plate:  #e8eae5;
     --e-1: 0 0 0 1px rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.6);
@@ -181,6 +183,7 @@
   --band-ink:    #f1f3ef;
   --band-body:   #a6aca5;
   --band-rule:   #3d423c;
+  --band-vent:   #555b54;
   --ok:          #5fb36c;
   --logo-plate:  #e8eae5;
   --e-1: 0 0 0 1px rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.6);
@@ -278,7 +281,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* Footer lockup */
 .colophon .wordmark { height: 22px; }
 /* Arabic name in the footer, in the same face as the intro. */
-.colophon-ar { font-family: "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif; font-weight: 500; }
+.colophon-ar { font-family: "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif; font-weight: 500; font-size: 1.08em; line-height: 1; }
 
 .mainnav {
   display: flex; gap: var(--s-1); margin-left: auto;
@@ -353,7 +356,8 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .btn-ghost:hover { border-color: var(--brand-deep); color: var(--brand-deep); }
 
 .btn-invert { background: var(--band-ink); color: var(--band); }
-.btn-invert:hover { background: var(--brand-hover); color: var(--on-brand); }
+/* Stays light on the dark band; the red line inside is the site's hover signal */
+.btn-invert:hover { background: var(--band-ink); color: var(--band); box-shadow: inset 0 -3px 0 var(--brand); }
 
 .btn-ico {
   width: 17px; height: 17px; margin-right: var(--s-2);
@@ -368,6 +372,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 
 .contact-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
 .contact-copy .contact-actions .btn { margin-top: 0; }
+.contact-actions .btn-invert { min-width: 9.5rem; }   /* fits "Email copied" without growing */
 
 .masthead .btn { min-height: var(--h-control-sm); padding: 0 var(--s-4); font-size: var(--fs-small); }
 /* Contact button while the contact band is in view: the nav's red line, inside the button. */
@@ -1121,9 +1126,9 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 }
 .contact::after {
   top: var(--s-6); height: 10px;
-  background: var(--band-rule);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M24 10L28 2L32 10Z'/%3E%3C/svg%3E");
-          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M24 10L28 2L32 10Z'/%3E%3C/svg%3E");
+  background: var(--band-vent);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M23 10L28 1L33 10Z'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10'%3E%3Cpath d='M23 10L28 1L33 10Z'/%3E%3C/svg%3E");
   -webkit-mask-size: 56px 10px; mask-size: 56px 10px;
 }
 .contact > .wrap { position: relative; }
@@ -1147,6 +1152,11 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .contact-list a { color: var(--band-ink); font-size: var(--fs-body); word-break: break-word; }
 .contact-list a[href^="tel"] { font-variant-numeric: tabular-nums; }
 .contact-list a:hover { color: var(--brand-on-band); }
+/* Brief note after the address once it is copied */
+.contact-list a.is-copied::after {
+  content: "Copied"; display: inline-block; margin-left: var(--s-2);
+  color: var(--band-body); font-size: var(--fs-small);
+}
 .cl-plain { color: var(--band-ink); font-size: var(--fs-body); }
 
 .colophon { background: var(--page); }
