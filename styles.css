@@ -526,6 +526,18 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .sidenote h3 { margin-bottom: var(--s-3); }
 .sidenote h3.mt { margin-top: var(--s-6); }
 .sidenote-text { font-size: var(--fs-small); }
+/* Family name on its own quiet line above the module names */
+.sidenote-group { display: block; font-size: var(--fs-caption); color: var(--muted); margin-bottom: 2px; }
+.sidenote-text + .sidenote-text { margin-top: var(--s-3); }
+
+/* About, desktop only: grid follows the reading measure, the reference column gets
+   a hairline edge, and the story paragraph reads first. Stacked layout keeps the
+   existing border-top from the 1000px query. */
+@media (min-width: 1001px) {
+  #about .two-col { grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); }
+  #about .sidenote { border-left: 1px solid var(--rule); padding-left: var(--s-6); }
+  #about .prose p:first-child { font-size: var(--fs-lead); line-height: var(--lh-lead); font-weight: var(--w-lead); color: var(--ink); }
+}
 
 /* --------------------------------------------------------------------------
    10. FILTER CHIPS
