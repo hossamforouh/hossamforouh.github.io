@@ -61,7 +61,7 @@
       // State the relation, not just the number — "1 engagement" cannot be told
       // apart from a broken filter.
       countEl.textContent = key === "all"
-        ? "Showing all " + projects.length + " engagements"
+        ? ""
         : "Showing " + shown + " of " + projects.length;
     }
   }
@@ -91,6 +91,18 @@
     .map(function (a) { return document.querySelector(a.getAttribute("href")); })
     .filter(function (el) { return el; });
 
+  // Sticky header height changes per breakpoint, so measure it.
+  // Feeds scroll-padding-top (via --h-masthead) and the observer below.
+  var masthead = document.querySelector(".masthead");
+  var headerOffset = masthead ? masthead.offsetHeight : 90;
+  function syncHeaderOffset() {
+    if (!masthead) return;
+    headerOffset = masthead.offsetHeight;
+    root.style.setProperty("--h-masthead", headerOffset + "px");
+  }
+  syncHeaderOffset();
+  window.addEventListener("resize", syncHeaderOffset);
+
   if ("IntersectionObserver" in window && sections.length) {
     var visible = {};
 
@@ -111,7 +123,7 @@
         if (on) a.setAttribute("aria-current", "true");
         else a.removeAttribute("aria-current");
       });
-    }, { rootMargin: "-90px 0px -60% 0px", threshold: 0 });
+    }, { rootMargin: "-" + headerOffset + "px 0px -60% 0px", threshold: 0 });
 
     sections.forEach(function (s) { observer.observe(s); });
   }
@@ -140,7 +152,7 @@
     function tick() {
       var now = fmt.format(new Date());
       clocks.forEach(function (el) {
-        el.textContent = now + " local time (GMT+3)";
+        el.textContent = now + " GMT+3";
         el.setAttribute("datetime", now);
       });
     }
@@ -186,7 +198,7 @@
     var timer;
 
     btn.addEventListener("click", function () {
-      var address = btn.getAttribute("href").replace("mailto:", "");
+      var address = btn.getAttribute("href").replace("mailto:", "").split("?")[0];
 
       copyText(address).then(function () {
         btn.textContent = "Email copied";
@@ -209,6 +221,9 @@
       .then(function (res) {
         if (!res.ok) return;
         cvLinks.forEach(function (a) { a.hidden = false; });
+        // Download CV replaces the stand-in LinkedIn button in the hero.
+        var heroLinkedIn = document.getElementById("linkedin-hero");
+        if (heroLinkedIn) heroLinkedIn.hidden = true;
       })
       .catch(function () { /* leave the buttons hidden */ });
   }
