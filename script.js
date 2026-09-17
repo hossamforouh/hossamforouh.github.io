@@ -225,13 +225,14 @@
   })();
 
   /* ---- Highlight the nav item for the section currently in view --------- */
-  var links = Array.prototype.slice.call(document.querySelectorAll('.mainnav a[href^="#"]'));
+  // The masthead Contact button counts as a nav item, so the contact band can be marked too.
+  var links = Array.prototype.slice.call(document.querySelectorAll('.mainnav a[href^="#"], .masthead-actions a[href="#contact"]'));
   var sections = links
     .map(function (a) { return document.querySelector(a.getAttribute("href")); })
     .filter(function (el) { return el; });
 
   // Sticky header height changes per breakpoint, so measure it.
-  // Feeds scroll-padding-top (via --h-masthead) and the observer below.
+  // Feeds scroll-padding-top (via --h-masthead) and the highlight below.
   var masthead = document.querySelector(".masthead");
   var headerOffset = masthead ? masthead.offsetHeight : 90;
   function syncHeaderOffset() {
@@ -242,29 +243,43 @@
   syncHeaderOffset();
   window.addEventListener("resize", syncHeaderOffset);
 
-  if ("IntersectionObserver" in window && sections.length) {
-    var visible = {};
+  if (sections.length) {
+    var queued = false;
 
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        visible[entry.target.id] = entry.isIntersecting;
+    // Measured on every check, so a header that changes height never leaves it stale.
+    var markCurrent = function () {
+      queued = false;
+
+      // The last section whose top has passed 40% of the way down the screen wins.
+      var line = headerOffset + (window.innerHeight - headerOffset) * 0.4;
+      var active = null;
+      sections.forEach(function (s) {
+        var box = s.getBoundingClientRect();
+        if (box.top <= line && box.bottom > headerOffset) active = s.id;
       });
 
-      // The topmost visible section wins.
-      var active = null;
-      for (var i = 0; i < sections.length; i++) {
-        if (visible[sections[i].id]) { active = sections[i].id; break; }
-      }
+      // The contact band is short: once the page cannot scroll further, it is the one in view.
+      var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom && document.getElementById("contact")) active = "contact";
 
       links.forEach(function (a) {
         var on = a.getAttribute("href") === "#" + active;
         a.classList.toggle("is-current", on);
-        if (on) a.setAttribute("aria-current", "true");
+        if (on) a.setAttribute("aria-current", "location");
         else a.removeAttribute("aria-current");
       });
-    }, { rootMargin: "-" + headerOffset + "px 0px -60% 0px", threshold: 0 });
+    };
 
-    sections.forEach(function (s) { observer.observe(s); });
+    // At most one check per frame while scrolling or resizing.
+    var queueCheck = function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(markCurrent);
+    };
+
+    window.addEventListener("scroll", queueCheck, { passive: true });
+    window.addEventListener("resize", queueCheck);
+    markCurrent();
   }
 
   /* ---- Portrait ---------------------------------------------------------
@@ -340,7 +355,7 @@
       var address = btn.getAttribute("href").replace("mailto:", "").split("?")[0];
 
       copyText(address).then(function () {
-        btn.textContent = "Email copied";
+        btn.textContent = "Copied";
         if (status) status.textContent = address + " copied to clipboard";
         clearTimeout(timer);
         timer = setTimeout(function () {
