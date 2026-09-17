@@ -281,7 +281,10 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 /* Footer lockup */
 .colophon .wordmark { height: 22px; }
 /* Arabic name in the footer, in the same face as the intro. */
-.colophon-ar { font-family: "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif; font-weight: 500; font-size: 1.08em; line-height: 1; }
+.colophon-ar { font-family: "IBM Plex Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif; font-weight: 500; font-size: 1.08em; line-height: 1.4; }
+/* Bilingual signature: wordmark | Arabic name. The span is dir="rtl", so the divider uses the physical left edge. */
+.colophon-sign { display: flex; align-items: center; gap: var(--s-3); }
+.colophon-sign .colophon-ar { padding-left: var(--s-3); border-left: 1px solid var(--rule); color: var(--body); white-space: nowrap; }
 
 .mainnav {
   display: flex; gap: var(--s-1); margin-left: auto;
@@ -375,6 +378,9 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .contact-actions .btn-invert { min-width: 9.5rem; }   /* fits "Email copied" without growing */
 
 .masthead .btn { min-height: var(--h-control-sm); padding: 0 var(--s-4); font-size: var(--fs-small); }
+/* Theme toggle sized and bordered like Contact beside it; hover restated because this rule has equal specificity. */
+.masthead .icon-btn { width: var(--h-control-sm); height: var(--h-control-sm); border-color: var(--rule-strong); color: var(--ink); }
+.masthead .icon-btn:hover { color: var(--brand-deep); border-color: var(--brand-deep); }
 /* Contact button while the contact band is in view: the nav's red line, inside the button. */
 .masthead .btn-ghost[aria-current] { border-color: var(--brand); color: var(--ink); box-shadow: inset 0 -3px 0 var(--brand); }
 
@@ -1161,7 +1167,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 
 .colophon { background: var(--page); }
 .colophon-inner {
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-2);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--s-3) var(--s-5);
   padding-block: var(--s-5);
   font-size: var(--fs-small); color: var(--muted);
 }
