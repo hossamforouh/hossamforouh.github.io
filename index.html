@@ -45,7 +45,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400..800&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&text=%D8%AD%D8%B3%D8%A7%D9%85%20%D9%85%D8%AC%D8%AF%D9%8A%20%D9%81%D8%B1%D9%88%D8%AD&display=swap">
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 
 <a class="skip" href="#main">Skip to content</a>
 
@@ -143,182 +143,281 @@
         <p class="result-count" id="filter-count" aria-live="polite"></p>
       </div>
 
-      <ul class="projects" id="dossiers">
+      <!-- Coverage sheet: modules are rows, clients are columns, at every width -->
+      <div class="sheet cov-sheet">
+        <table class="cov" id="coverage" aria-describedby="cov-note">
+          <caption class="visually-hidden">Oracle Fusion modules listed on each project</caption>
+          <colgroup span="1"></colgroup>
+          <colgroup span="2" data-cols="1 2"></colgroup>
+          <colgroup span="3" data-cols="3 4 5"></colgroup>
+          <thead>
+            <tr class="cov-tiers">
+              <td></td>
+              <th scope="colgroup" colspan="2" data-cols="1 2"><span class="cov-full">Full-cycle implementations</span><span class="cov-short" aria-hidden="true">Full-cycle</span></th>
+              <th scope="colgroup" colspan="3" data-cols="3 4 5"><span class="cov-full">Module implementations and support</span><span class="cov-short" aria-hidden="true">Modules &amp; support</span></th>
+            </tr>
+            <tr class="cov-clients">
+              <th scope="col" class="cov-corner">Oracle Fusion module</th>
+              <th scope="col" data-col="1">
+                <a class="cov-client" href="#p-saudi-cement">
+                  <img class="cov-logo" src="logos/saudi-cement.png" alt="" width="218" height="75" loading="lazy">
+                  <span class="cov-full">Saudi Cement Company</span><span class="cov-short" aria-hidden="true">Saudi Cement</span>
+                </a>
+                <span class="cov-meta">Cement manufacturing · Saudi Arabia</span>
+                <span class="cov-type is-full">Full-cycle implementation</span>
+              </th>
+              <th scope="col" data-col="2">
+                <a class="cov-client" href="#p-warba-bank">
+                  <img class="cov-logo" src="logos/warba-bank.svg" alt="" width="120" height="65" loading="lazy">
+                  <span class="cov-full">Warba Bank</span><span class="cov-short" aria-hidden="true">Warba</span>
+                </a>
+                <span class="cov-meta">Banking · Kuwait</span>
+                <span class="cov-type is-full">Full-cycle implementation</span>
+              </th>
+              <th scope="col" data-col="3">
+                <a class="cov-client" href="#p-thiqah">
+                  <img class="cov-logo" src="logos/thiqah.png" alt="" width="144" height="110" loading="lazy">
+                  <span class="cov-full">Thiqah Business Services</span><span class="cov-short" aria-hidden="true">Thiqah</span>
+                </a>
+                <span class="cov-meta">Business services · Saudi Arabia</span>
+                <span class="cov-type">Contracts implementation &amp; support</span>
+              </th>
+              <th scope="col" data-col="4">
+                <a class="cov-client" href="#p-shift">
+                  <img class="cov-logo" src="logos/shift.png" alt="" width="96" height="96" loading="lazy">
+                  <span class="cov-full">Shift Inc.</span><span class="cov-short" aria-hidden="true">Shift</span>
+                </a>
+                <span class="cov-meta">Transportation · Saudi Arabia</span>
+                <span class="cov-type">Functional support</span>
+              </th>
+              <th scope="col" data-col="5">
+                <a class="cov-client" href="#p-nis">
+                  <img class="cov-logo" src="logos/nis.png" alt="" width="112" height="93" loading="lazy">
+                  <span class="cov-full">Advanced Education Schools — NIS</span><span class="cov-short" aria-hidden="true">NIS</span>
+                </a>
+                <span class="cov-meta">Education · Egypt · In-house</span>
+                <span class="cov-type">Implementation &amp; support</span>
+              </th>
+            </tr>
+          </thead>
 
-        <li class="project" data-modules="inventory procurement producthub maintenance ksa">
-          <details open>
-            <summary>
-              <span class="p-lead">
-                <span class="p-logo"><img src="logos/saudi-cement.png" alt="" width="218" height="75" loading="lazy"></span>
-                <span class="p-main">
-                  <span class="p-name" role="heading" aria-level="3">Saudi Cement Company</span>
-                  <span class="p-meta">Cement manufacturing · Saudi Arabia</span>
-                </span>
-              </span>
-              <span class="p-side">
-                <span class="badge badge-strong">Full-cycle implementation</span>
-                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-            </summary>
-            <div class="p-detail">
-              <div class="p-row">
-                <h4>Modules</h4>
-                <ul class="tags">
-                  <li>Inventory Management</li><li>Procurement</li><li>Product Hub</li><li>Maintenance</li>
-                </ul>
-              </div>
-              <div class="p-row">
-                <h4>Scope of work</h4>
-                <ul class="bullets">
-                  <li>Ran the functional analysis sessions and mapped the plant's manufacturing requirements to Oracle Fusion SCM.</li>
-                  <li>Authored the Future Process Model (RD.011) and Master Data Management documents for Item Master, Organization Structure and Suppliers, plus functional designs (MD.050) for custom BI reports and automated alerts.</li>
-                  <li>Configured Inventory Management, Procurement, Product Hub and Maintenance, and migrated the master data.</li>
-                  <li>Facilitated CRP and UAT workshops to train business users and validate readiness before go-live.</li>
-                </ul>
-              </div>
-            </div>
-          </details>
-        </li>
+          <!-- Procurement -->
+          <tbody>
+            <tr class="cov-group"><th scope="rowgroup">Procurement</th><td data-col="1"></td><td data-col="2"></td><td data-col="3"></td><td data-col="4"></td><td data-col="5"></td></tr>
+            <tr>
+              <th scope="row">Procurement<span class="cov-fn" aria-hidden="true">*</span></th>
+              <td data-col="1" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="2"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="3"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5"><span class="visually-hidden">Not listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Self Service Procurement</th>
+              <td data-col="1"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="2" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="3" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Purchasing</th>
+              <td data-col="1"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="2" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="3" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="4" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="5" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Sourcing</th>
+              <td data-col="1"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="2" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="3" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5"><span class="visually-hidden">Not listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Procurement Contracts</th>
+              <td data-col="1"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="2"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="3" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5"><span class="visually-hidden">Not listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Supplier Qualification Management</th>
+              <td data-col="1"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="2" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="3"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5"><span class="visually-hidden">Not listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Supplier Portal</th>
+              <td data-col="1"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="2" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="3" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5"><span class="visually-hidden">Not listed</span></td>
+            </tr>
+          </tbody>
 
-        <li class="project" data-modules="inventory procurement sourcing supplier">
-          <details>
-            <summary>
-              <span class="p-lead">
-                <span class="p-logo"><img src="logos/warba-bank.svg" alt="" width="120" height="65" loading="lazy"></span>
-                <span class="p-main">
-                  <h3 class="p-name">Warba Bank</h3>
-                  <span class="p-meta">Banking · Kuwait</span>
-                </span>
-              </span>
-              <span class="p-side">
-                <span class="badge badge-strong">Full-cycle implementation</span>
-                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-            </summary>
-            <div class="p-detail">
-              <div class="p-row">
-                <h4>Modules</h4>
-                <ul class="tags">
-                  <li>Self Service Procurement</li><li>Purchasing</li><li>Inventory Management</li>
-                  <li>Sourcing</li><li>Supplier Qualification Management</li><li>Supplier Portal</li>
-                </ul>
-              </div>
-              <div class="p-row">
-                <h4>Scope of work</h4>
-                <ul class="bullets">
-                  <li>Led functional analysis sessions and CRP workshops mapping banking requirements to Self Service Procurement, Purchasing and Inventory Management.</li>
-                  <li>Designed the Temenos integration functionally and validated the end-to-end data flow between the two systems.</li>
-                  <li>Authored OUM documentation: RD.011, MD.050, TE.040 and DO.070.</li>
-                  <li>Ran UAT and end-user training, then provided post-go-live support across the core SCM modules.</li>
-                </ul>
-              </div>
-            </div>
-          </details>
-        </li>
+          <!-- Supply chain -->
+          <tbody>
+            <tr class="cov-group"><th scope="rowgroup">Supply chain</th><td data-col="1"></td><td data-col="2"></td><td data-col="3"></td><td data-col="4"></td><td data-col="5"></td></tr>
+            <tr>
+              <th scope="row">Inventory Management</th>
+              <td data-col="1" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="2" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="3"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="4" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="5" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Maintenance</th>
+              <td data-col="1" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="2"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="3"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+            </tr>
+          </tbody>
 
-        <li class="tier-label">Module implementations and support</li>
+          <!-- Product -->
+          <tbody>
+            <tr class="cov-group"><th scope="rowgroup">Product</th><td data-col="1"></td><td data-col="2"></td><td data-col="3"></td><td data-col="4"></td><td data-col="5"></td></tr>
+            <tr>
+              <th scope="row">Product Hub</th>
+              <td data-col="1" class="is-on"><span class="mark" aria-hidden="true"></span><span class="visually-hidden">Listed</span></td>
+              <td data-col="2"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="3"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="4"><span class="visually-hidden">Not listed</span></td>
+              <td data-col="5"><span class="visually-hidden">Not listed</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="cov-note" id="cov-note">* Procurement is shown as listed on the Saudi Cement Company project.</p>
+      </div>
 
-        <li class="project" data-modules="procurement sourcing supplier contracts ksa">
-          <details>
-            <summary>
-              <span class="p-lead">
-                <span class="p-logo"><img src="logos/thiqah.png" alt="" width="144" height="110" loading="lazy"></span>
-                <span class="p-main">
-                  <h3 class="p-name">Thiqah Business Services</h3>
-                  <span class="p-meta">Business services · Saudi Arabia</span>
-                </span>
-              </span>
-              <span class="p-side">
-                <span class="badge">Contracts implementation &amp; support</span>
-                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-            </summary>
-            <div class="p-detail">
-              <div class="p-row">
-                <h4>Modules</h4>
-                <ul class="tags">
-                  <li>Procurement Contracts</li><li>Self Service Procurement</li><li>Purchasing</li>
-                  <li>Sourcing</li><li>Supplier Portal</li>
-                </ul>
-              </div>
-              <div class="p-row">
-                <h4>Scope of work</h4>
-                <ul class="bullets">
-                  <li>Implemented Oracle Fusion Procurement Contracts and authored the setup documentation.</li>
-                  <li>Supported business users on Self Service Procurement, Purchasing and Supplier Portal, resolving configuration and process issues before they reached the business.</li>
-                </ul>
-              </div>
-            </div>
-          </details>
-        </li>
+      <!-- Saudi touch: the contact band's sharafat, small -->
+      <div class="najdi-mark" aria-hidden="true"></div>
 
-        <li class="project" data-modules="inventory procurement ksa">
-          <details>
-            <summary>
-              <span class="p-lead">
-                <span class="p-logo"><img src="logos/shift.png" alt="" width="96" height="96" loading="lazy"></span>
-                <span class="p-main">
-                  <h3 class="p-name">Shift Inc.</h3>
-                  <span class="p-meta">Transportation · Saudi Arabia</span>
-                </span>
-              </span>
-              <span class="p-side">
-                <span class="badge">Functional support</span>
-                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-            </summary>
-            <div class="p-detail">
-              <div class="p-row">
-                <h4>Modules</h4>
-                <ul class="tags"><li>Purchasing</li><li>Inventory Management</li></ul>
-              </div>
-              <div class="p-row">
-                <h4>Scope of work</h4>
-                <ul class="bullets">
-                  <li>Resolved system issues and gave day-to-day functional support on Purchasing and Inventory Management to business users.</li>
-                </ul>
-              </div>
-            </div>
-          </details>
-        </li>
+      <!-- Delivery ledger: always open, one entry per project -->
+      <div class="sheet ledger" id="ledger">
 
-        <li class="project" data-modules="inventory procurement maintenance">
-          <details>
-            <summary>
-              <span class="p-lead">
-                <span class="p-logo"><img src="logos/nis.png" alt="" width="112" height="93" loading="lazy"></span>
-                <span class="p-main">
-                  <h3 class="p-name">Advanced Education Schools — NIS</h3>
-                  <span class="p-meta">Education · Egypt · In-house</span>
-                </span>
-              </span>
-              <span class="p-side">
-                <span class="badge">Implementation &amp; support</span>
-                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-            </summary>
-            <div class="p-detail">
-              <div class="p-row">
-                <h4>Modules</h4>
-                <ul class="tags">
-                  <li>Self Service Procurement</li><li>Purchasing</li><li>Inventory Management</li><li>Maintenance</li>
-                </ul>
-              </div>
-              <div class="p-row">
-                <h4>Scope of work</h4>
-                <ul class="bullets">
-                  <li>Analyzed and documented business requirements for Self Service Procurement, Purchasing and Inventory Management.</li>
-                  <li>Tested and validated custom reports so management had accurate data for decisions and inventory control.</li>
-                  <li>Implemented Oracle Fusion Maintenance to digitize tracking and preventative maintenance of school assets and facility equipment.</li>
-                  <li>Provided ongoing functional support and end-user training to drive adoption.</li>
-                </ul>
-              </div>
-            </div>
-          </details>
-        </li>
+        <p class="ledger-group">Full-cycle implementations</p>
 
+        <article class="entry" id="p-saudi-cement" data-col="1" data-place="ksa">
+          <div class="entry-id">
+            <img class="entry-logo" src="logos/saudi-cement.png" alt="" width="218" height="75" loading="lazy">
+            <h3 class="entry-name">Saudi Cement Company</h3>
+            <p class="entry-meta">Cement manufacturing · Saudi Arabia</p>
+            <p class="entry-type is-full">Full-cycle implementation</p>
+          </div>
+          <div class="entry-body">
+            <dl class="entry-facts">
+              <div><dt>Modules</dt><dd>Inventory Management · Procurement · Product Hub · Maintenance</dd></div>
+              <div><dt>OUM documents</dt><dd class="codes">RD.011 · MD.050</dd></div>
+            </dl>
+            <h4 class="entry-label">Scope of work</h4>
+            <ul class="bullets">
+              <li>Ran the functional analysis sessions and mapped the plant's manufacturing requirements to Oracle Fusion SCM.</li>
+              <li>Authored the Future Process Model (RD.011) and Master Data Management documents for Item Master, Organization Structure and Suppliers, plus functional designs (MD.050) for custom BI reports and automated alerts.</li>
+              <li>Configured Inventory Management, Procurement, Product Hub and Maintenance, and migrated the master data.</li>
+              <li>Facilitated CRP and UAT workshops to train business users and validate readiness before go-live.</li>
+            </ul>
+            <a class="entry-back" href="#coverage">Back to module coverage</a>
+          </div>
+        </article>
 
-      </ul>
+        <article class="entry" id="p-warba-bank" data-col="2">
+          <div class="entry-id">
+            <img class="entry-logo" src="logos/warba-bank.svg" alt="" width="120" height="65" loading="lazy">
+            <h3 class="entry-name">Warba Bank</h3>
+            <p class="entry-meta">Banking · Kuwait</p>
+            <p class="entry-type is-full">Full-cycle implementation</p>
+          </div>
+          <div class="entry-body">
+            <dl class="entry-facts">
+              <div><dt>Modules</dt><dd>Self Service Procurement · Purchasing · Inventory Management · Sourcing · Supplier Qualification Management · Supplier Portal</dd></div>
+              <div><dt>OUM documents</dt><dd class="codes">RD.011 · MD.050 · TE.040 · DO.070</dd></div>
+              <div><dt>Integration</dt><dd>Temenos</dd></div>
+            </dl>
+            <h4 class="entry-label">Scope of work</h4>
+            <ul class="bullets">
+              <li>Led functional analysis sessions and CRP workshops mapping banking requirements to Self Service Procurement, Purchasing and Inventory Management.</li>
+              <li>Designed the Temenos integration functionally and validated the end-to-end data flow between the two systems.</li>
+              <li>Authored OUM documentation: RD.011, MD.050, TE.040 and DO.070.</li>
+              <li>Ran UAT and end-user training, then provided post-go-live support across the core SCM modules.</li>
+            </ul>
+            <a class="entry-back" href="#coverage">Back to module coverage</a>
+          </div>
+        </article>
+
+        <p class="ledger-group">Module implementations and support</p>
+
+        <article class="entry" id="p-thiqah" data-col="3" data-place="ksa">
+          <div class="entry-id">
+            <img class="entry-logo" src="logos/thiqah.png" alt="" width="144" height="110" loading="lazy">
+            <h3 class="entry-name">Thiqah Business Services</h3>
+            <p class="entry-meta">Business services · Saudi Arabia</p>
+            <p class="entry-type">Contracts implementation &amp; support</p>
+          </div>
+          <div class="entry-body">
+            <dl class="entry-facts">
+              <div><dt>Modules</dt><dd>Procurement Contracts · Self Service Procurement · Purchasing · Sourcing · Supplier Portal</dd></div>
+            </dl>
+            <h4 class="entry-label">Scope of work</h4>
+            <ul class="bullets">
+              <li>Implemented Oracle Fusion Procurement Contracts and authored the setup documentation.</li>
+              <li>Supported business users on Self Service Procurement, Purchasing and Supplier Portal, resolving configuration and process issues before they reached the business.</li>
+            </ul>
+            <a class="entry-back" href="#coverage">Back to module coverage</a>
+          </div>
+        </article>
+
+        <article class="entry" id="p-shift" data-col="4" data-place="ksa">
+          <div class="entry-id">
+            <img class="entry-logo" src="logos/shift.png" alt="" width="96" height="96" loading="lazy">
+            <h3 class="entry-name">Shift Inc.</h3>
+            <p class="entry-meta">Transportation · Saudi Arabia</p>
+            <p class="entry-type">Functional support</p>
+          </div>
+          <div class="entry-body">
+            <dl class="entry-facts">
+              <div><dt>Modules</dt><dd>Purchasing · Inventory Management</dd></div>
+            </dl>
+            <h4 class="entry-label">Scope of work</h4>
+            <ul class="bullets">
+              <li>Resolved system issues and gave day-to-day functional support on Purchasing and Inventory Management to business users.</li>
+            </ul>
+            <a class="entry-back" href="#coverage">Back to module coverage</a>
+          </div>
+        </article>
+
+        <article class="entry" id="p-nis" data-col="5">
+          <div class="entry-id">
+            <img class="entry-logo" src="logos/nis.png" alt="" width="112" height="93" loading="lazy">
+            <h3 class="entry-name">Advanced Education Schools — NIS</h3>
+            <p class="entry-meta">Education · Egypt · In-house</p>
+            <p class="entry-type">Implementation &amp; support</p>
+          </div>
+          <div class="entry-body">
+            <dl class="entry-facts">
+              <div><dt>Modules</dt><dd>Self Service Procurement · Purchasing · Inventory Management · Maintenance</dd></div>
+            </dl>
+            <h4 class="entry-label">Scope of work</h4>
+            <ul class="bullets">
+              <li>Analyzed and documented business requirements for Self Service Procurement, Purchasing and Inventory Management.</li>
+              <li>Tested and validated custom reports so management had accurate data for decisions and inventory control.</li>
+              <li>Implemented Oracle Fusion Maintenance to digitize tracking and preventative maintenance of school assets and facility equipment.</li>
+              <li>Provided ongoing functional support and end-user training to drive adoption.</li>
+            </ul>
+            <a class="entry-back" href="#coverage">Back to module coverage</a>
+          </div>
+        </article>
+
+      </div>
     </div>
   </section>
 
@@ -447,5 +546,5 @@
 </footer>
 
 <p class="visually-hidden" id="copy-status" aria-live="polite"></p>
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 </html>

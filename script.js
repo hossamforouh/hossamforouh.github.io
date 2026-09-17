@@ -37,33 +37,64 @@
     });
   }
 
-  /* ---- Engagement filter ------------------------------------------------ */
-  var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
-  var projects = Array.prototype.slice.call(document.querySelectorAll(".project"));
+  /* ---- Project filter ---------------------------------------------------
+     Hides non-Saudi columns in the coverage table and their ledger entries.
+     Column spans are recounted so the table never gains a phantom column. */
+  var chips = Array.prototype.slice.call(document.querySelectorAll("#engagements .chip"));
+  var cov = document.getElementById("coverage");
+  var ledger = document.getElementById("ledger");
+  var entries = Array.prototype.slice.call(document.querySelectorAll("#ledger .entry"));
   var countEl = document.getElementById("filter-count");
 
-  var list = document.getElementById("dossiers");
-
   function applyFilter(key) {
+    var off = {};
     var shown = 0;
-    projects.forEach(function (item) {
-      var mods = item.getAttribute("data-modules") || "";
-      var match = key === "all" || mods.split(" ").indexOf(key) !== -1;
-      item.hidden = !match;
-      if (match) shown++;
+
+    // Ledger entries decide which client columns are switched off.
+    entries.forEach(function (entry) {
+      var match = key === "all" || entry.getAttribute("data-place") === key;
+      entry.hidden = !match;
+      if (match) {
+        shown++;
+      } else {
+        off[entry.getAttribute("data-col")] = true;
+      }
     });
-    if (list) {
-      // Hide the tier heading while filtered, or it labels nothing.
-      list.classList.toggle("is-filtered", key !== "all");
-      list.classList.toggle("is-empty", shown === 0);
+
+    if (cov) {
+      // Hide every header and cell that belongs to a hidden column
+      // (group rows carry their own data-col cells, so no span recount is needed).
+      Array.prototype.slice.call(cov.querySelectorAll("[data-col]")).forEach(function (cell) {
+        cell.hidden = !!off[cell.getAttribute("data-col")];
+      });
+
+      // Tier headers and colgroups: span only the columns still showing.
+      Array.prototype.slice.call(cov.querySelectorAll("[data-cols]")).forEach(function (el) {
+        var n = el.getAttribute("data-cols").split(" ").filter(function (c) {
+          return !off[c];
+        }).length;
+        if (el.tagName === "COLGROUP") {
+          el.setAttribute("span", Math.max(n, 1));   // span cannot be 0
+        } else {
+          el.hidden = n === 0;
+          el.setAttribute("colspan", Math.max(n, 1));
+        }
+      });
     }
+
     if (countEl) {
-      // State the relation, not just the number — "1 engagement" cannot be told
-      // apart from a broken filter.
+      // State the relation, not just the number.
       countEl.textContent = key === "all"
         ? ""
-        : "Showing " + shown + " of " + projects.length;
+        : "Showing " + shown + " of " + entries.length;
     }
+  }
+
+  // Drop the class once settle ends, so it never outranks the :target tint later.
+  if (ledger) {
+    ledger.addEventListener("animationend", function (e) {
+      if (e.animationName === "settle") ledger.classList.remove("is-filtering");
+    });
   }
 
   chips.forEach(function (chip) {
@@ -77,13 +108,50 @@
       applyFilter(chip.getAttribute("data-filter"));
 
       // Re-trigger the settle animation on whatever is now showing.
-      if (list && allowMotion) {
-        list.classList.remove("is-filtering");
-        void list.offsetWidth;              // force reflow so the animation restarts
-        list.classList.add("is-filtering");
+      if (ledger && allowMotion) {
+        ledger.classList.remove("is-filtering");
+        void ledger.offsetWidth;              // force reflow so the animation restarts
+        ledger.classList.add("is-filtering");
       }
     });
   });
+
+  /* ---- Coverage table: column highlight and entrance ------------------- */
+  if (cov) {
+    // Pointer or keyboard on a client column tints that column and reddens its marks.
+    var setHl = function (e) {
+      var cell = e.target.closest ? e.target.closest("[data-col]") : null;
+      if (cell) cov.setAttribute("data-hl", cell.getAttribute("data-col"));
+      else cov.removeAttribute("data-hl");
+    };
+    var clearHl = function () { cov.removeAttribute("data-hl"); };
+
+    // Mouse hover only on devices with a real hover pointer: a touch tap fires
+    // mouseover but never mouseleave, which would leave a column stuck red.
+    if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
+      cov.addEventListener("mouseover", setHl);
+      cov.addEventListener("mouseleave", clearHl);
+    }
+    cov.addEventListener("focusin", setHl);
+    // Following a client link never leaves a column lit behind.
+    cov.addEventListener("click", clearHl);
+    cov.addEventListener("focusout", function (e) {
+      if (!cov.contains(e.relatedTarget)) cov.removeAttribute("data-hl");
+    });
+
+    // Marks scale in once, column by column, when the table first scrolls into view.
+    if (allowMotion && "IntersectionObserver" in window) {
+      var covObserver = new IntersectionObserver(function (seen) {
+        if (seen[0] && seen[0].isIntersecting) {
+          cov.classList.add("is-in");
+          covObserver.disconnect();
+        }
+      }, { threshold: 0.2 });
+      covObserver.observe(cov);
+    } else {
+      cov.classList.add("is-in");
+    }
+  }
 
   /* ---- Highlight the nav item for the section currently in view --------- */
   var links = Array.prototype.slice.call(document.querySelectorAll('.mainnav a[href^="#"]'));

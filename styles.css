@@ -372,8 +372,7 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
    -------------------------------------------------------------------------- */
 /* Every uppercase label in the system is declared once, here. The selectors
    below override only what genuinely differs. */
-.kicker, .sidenote h3,
-.p-row h4, .cl-label, .badge, .hero-name, .tier-label {
+.kicker, .sidenote h3, .cl-label, .hero-name {
   font-size: var(--fs-caption);
   font-weight: var(--w-label);
   letter-spacing: var(--tracking-label);
@@ -549,134 +548,383 @@ a:hover { color: var(--brand-hover); text-decoration-thickness: 2px; }
 .result-count { font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* --------------------------------------------------------------------------
-   11. ENGAGEMENT ROWS
+   11. PROJECTS — coverage matrix and delivery ledger
+   --------------------------------------------------------------------------
+   This block REPLACES all current CSS for the engagements section.
+   Delete these selectors from styles.css (see notes.md for line numbers):
+
+   Section 5 shared uppercase label list: remove only
+     .p-row h4, .badge, .tier-label
+   Section 11 (all of it except the settle keyframes and .js-motion entrances):
+     .projects
+     .tier-label
+     .projects.is-filtered .tier-label
+     .projects-empty
+     .projects.is-empty .projects-empty
+     .project[hidden]
+     .project details
+     .project details[open]
+     .project details:has(> summary:hover)
+     .project summary:hover .chev
+     .project summary:focus-visible
+     .project details:focus-within
+     .project summary
+     .project summary::-webkit-details-marker
+     .p-lead
+     .p-logo, .p-logo img
+     .p-main, .p-name, .p-meta
+     .p-side
+     .badge, .section-tint .badge:not(.badge-strong), .badge-strong
+     .chev, details[open] .chev
+     .p-detail, .p-row, .p-row + .p-row, .p-row h4, .p-when
+     .tags, .tags li, .section-tint .tags li
+     @keyframes disclose
+     .project details[open] .p-detail
+     @supports selector(::details-content) { .project details ... }
+     .projects.is-filtering .project:not([hidden])
+   Section 17 (responsive):
+     @media (max-width: 860px)  .p-row
+     @media (max-width: 560px)  .p-side, .p-side .badge, .project summary,
+                                .p-logo, .p-logo img
+   KEEP: @keyframes settle and the .js-motion entrance rule (this block uses settle).
    -------------------------------------------------------------------------- */
-.projects { display: flex; flex-direction: column; gap: var(--s-2); }
 
-/* A named category, not a size gradient — the short engagements are a
-   different kind of work, not the weak end of one list. */
-.tier-label {
-  margin-top: var(--s-5); padding-top: var(--s-5);
-  border-top: 1px solid var(--rule);
-}
-.projects.is-filtered .tier-label { display: none; }
-
-.projects-empty { display: none; }
-.projects.is-empty .projects-empty {
-  display: block; padding: var(--s-7) var(--s-5); text-align: center;
-  color: var(--muted); font-size: var(--fs-small);
-  background: var(--surface); border: 1px dashed var(--rule-strong);
-  border-radius: var(--r-md);
-}
-.project[hidden] { display: none; }
-
-.project details {
+/* Shared sheet: the one surface both the matrix and the ledger sit on */
+.sheet {
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-left: 4px solid var(--rule-strong);
-  border-radius: 0 var(--r-md) var(--r-md) 0;
-  transition: border-left-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease);
+  border-radius: var(--r-md);
 }
-.project details[open] { border-left-color: var(--brand); box-shadow: var(--e-1); }
-.project details:has(> summary:hover) { box-shadow: var(--e-2); }
-.project summary:hover .chev { stroke: var(--ink); }
-.project summary:focus-visible { outline-offset: -2px; border-radius: var(--r-sm); }
-.project details:focus-within { border-left-color: var(--brand); }
 
-.project summary {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--s-5); flex-wrap: wrap;
-  padding: var(--s-5); cursor: pointer; list-style: none;
+/* ---- Coverage matrix ---------------------------------------------------- */
+.cov-sheet { padding: var(--s-4) var(--s-5); }
+
+/* Fixed layout: the label column is set once, the client columns share the rest equally */
+.cov { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.cov .cov-tiers td { width: 240px; padding: 0; }
+.cov th,
+.cov td {
+  padding: 0 var(--s-3);
+  font-weight: var(--w-regular);
+  text-align: center; vertical-align: middle;
 }
-.project summary::-webkit-details-marker { display: none; }
 
-.p-lead { display: flex; align-items: center; gap: var(--s-4); min-width: 0; }
+/* Tier headers: the existing framing, sentence case, with a hairline under each */
+.cov .cov-tiers th {
+  position: relative;
+  padding: var(--s-2) var(--s-3);
+  text-align: left; vertical-align: bottom;
+  font-size: var(--fs-small); font-weight: var(--w-semibold);
+  color: var(--ink); line-height: var(--lh-snug);
+}
+.cov .cov-tiers th::after {
+  content: ""; position: absolute; left: var(--s-3); right: var(--s-3); bottom: 0;
+  height: 1px; background: var(--rule-strong);
+}
 
-.p-logo {
-  flex: none; width: 96px; height: 64px;
-  display: grid; place-items: center;
-  background: var(--logo-plate);
-  border: 1px solid var(--rule-strong);
+/* Client columns: identity lives in the header, no clicks needed */
+.cov .cov-clients th {
+  padding: var(--s-4) var(--s-3);
+  text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.cov .cov-clients .cov-corner {
+  padding-left: 0;
+  vertical-align: bottom;
+  font-size: var(--fs-small); font-weight: var(--w-medium);
+  color: var(--muted); line-height: var(--lh-snug);
+}
+/* A long word breaks rather than spilling out of a narrow column */
+.cov .cov-tiers th,
+.cov .cov-clients th { overflow-wrap: break-word; }
+
+.cov-client {
+  display: block;
+  color: var(--ink); text-decoration: none;
+  font-size: var(--fs-body); font-weight: var(--w-semibold); line-height: var(--lh-snug);
+}
+.cov-client:hover { color: var(--ink); }
+.cov-client:hover :is(.cov-full, .cov-short) {
+  color: var(--brand-deep);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.cov-logo {
+  display: block;
+  height: 28px; width: auto; max-width: 88px;
+  object-fit: contain; object-position: left center;
+  margin-bottom: var(--s-3);
+}
+.cov-short { display: none; }
+.cov-meta {
+  display: block; margin-top: var(--s-1);
+  font-size: var(--fs-small); color: var(--body); line-height: var(--lh-snug);
+}
+.cov-type {
+  display: block; margin-top: var(--s-2);
+  font-size: var(--fs-small); font-weight: var(--w-medium);
+  color: var(--body); line-height: var(--lh-snug);
+}
+.cov-type.is-full { color: var(--brand-deep); font-weight: var(--w-semibold); }
+
+/* Tier divider: one quiet vertical hairline between the two kinds of work */
+.cov [data-col="3"],
+.cov .cov-tiers th[data-cols="3 4 5"] { border-left: 1px solid var(--rule); }
+
+/* Module groups: plain sentence-case row labels. The row keeps its five empty
+   column cells so the tier divider and the column highlight run unbroken. */
+.cov .cov-group th {
+  padding: var(--s-5) 0 var(--s-2);
+  text-align: left;
+  font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ink);
+}
+.cov tbody:first-of-type .cov-group th { padding-top: var(--s-4); }
+
+.cov tbody tr:not(.cov-group) > * { height: 44px; border-top: 1px solid var(--rule); }
+.cov tbody th[scope="row"] {
+  padding-left: 0;
+  text-align: left;
+  font-size: var(--fs-body); color: var(--body); line-height: var(--lh-snug);
+}
+
+/* Marks: every listed module is an ink square; not listed is a faint dot */
+.mark {
+  display: inline-block; width: 12px; height: 12px;
   border-radius: var(--r-sm);
-  overflow: hidden;
+  background: var(--ink);
+  vertical-align: middle;
+  transition: background-color var(--t-base) var(--ease);
 }
-.p-logo img { max-width: 76px; max-height: 44px; width: auto; height: auto; object-fit: contain; }
+.cov tbody tr:not(.cov-group) > td:not(.is-on)::before {
+  content: ""; display: inline-block;
+  width: 4px; height: 4px; border-radius: var(--r-pill);
+  background: var(--rule-strong);
+  vertical-align: middle;
+}
+.cov-fn { margin-left: 2px; color: var(--muted); }
+.cov-note { margin-top: var(--s-3); font-size: var(--fs-small); color: var(--muted); }
 
-.p-main { display: block; min-width: 0; }
-.p-name {
-  display: block; color: var(--ink);
+/* Highlight: the only place red enters the matrix */
+@media (hover: hover) {
+  .cov tbody tr:not(.cov-group):hover > * { background: var(--tint-2); }
+  .cov tbody tr:hover .mark { background: var(--brand); }
+}
+.cov[data-hl="1"] [data-col="1"],
+.cov[data-hl="2"] [data-col="2"],
+.cov[data-hl="3"] [data-col="3"],
+.cov[data-hl="4"] [data-col="4"],
+.cov[data-hl="5"] [data-col="5"] { background: var(--tint-2); }
+.cov[data-hl="1"] [data-col="1"] .mark,
+.cov[data-hl="2"] [data-col="2"] .mark,
+.cov[data-hl="3"] [data-col="3"] .mark,
+.cov[data-hl="4"] [data-col="4"] .mark,
+.cov[data-hl="5"] [data-col="5"] .mark { background: var(--brand); }
+
+/* Entrance: marks settle in column by column. Only under .js-motion. */
+@keyframes mark-in {
+  from { opacity: 0; transform: scale(.6); }
+  to   { opacity: 1; transform: none; }
+}
+.cov [data-col="2"] { --i: 1; }
+.cov [data-col="3"] { --i: 2; }
+.cov [data-col="4"] { --i: 3; }
+.cov [data-col="5"] { --i: 4; }
+.js-motion .cov:not(.is-in) .mark { opacity: 0; }
+.js-motion .cov.is-in .mark {
+  animation: mark-in var(--t-base) var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+/* ---- Najdi mark: the contact band's sharafat, small -------------------- */
+.najdi-mark {
+  width: 168px; height: 10px;
+  margin: var(--s-6) 0;
+  background: var(--rule-strong);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E") repeat-x left center / 28px 10px;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='20'%3E%3Cpath d='M10 20V14H16V8H22V2H34V8H40V14H46V20Z'/%3E%3C/svg%3E") repeat-x left center / 28px 10px;
+}
+
+/* ---- Delivery ledger ---------------------------------------------------- */
+.ledger { padding: 0 var(--s-6) var(--s-2); }
+.ledger-group {
+  padding: var(--s-5) 0 var(--s-3);
+  font-size: var(--fs-small); font-weight: var(--w-semibold); color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.entry {
+  display: grid; grid-template-columns: 280px minmax(0, 1fr);
+  gap: var(--s-6);
+  margin-inline: calc(-1 * var(--s-6));
+  padding: var(--s-6);
+  border-top: 1px solid var(--rule);
+}
+.ledger-group + .entry { border-top: 0; }
+.entry[hidden] { display: none; }
+
+.entry-logo {
+  display: block;
+  height: 36px; width: auto; max-width: 120px;
+  object-fit: contain; object-position: left center;
+  margin-bottom: var(--s-4);
+}
+.entry-name {
   font-size: var(--fs-h4); font-weight: var(--w-heading);
   letter-spacing: var(--tracking-h4); line-height: var(--lh-heading);
 }
-.p-meta {
-  display: block; margin-top: var(--s-2);
-  font-size: var(--fs-small); letter-spacing: var(--tracking-small);
-  color: var(--body);
+.entry-meta {
+  margin-top: var(--s-2);
+  font-size: var(--fs-small); letter-spacing: var(--tracking-small); color: var(--body);
+}
+.entry-type {
+  margin-top: var(--s-1);
+  font-size: var(--fs-small); font-weight: var(--w-medium); color: var(--body);
+}
+.entry-type.is-full { color: var(--brand-deep); font-weight: var(--w-semibold); }
+
+/* Labelled facts: Modules / OUM documents / Integration */
+.entry-facts { display: grid; gap: var(--s-2); margin: 0 0 var(--s-5); max-width: var(--measure); }
+.entry-facts > div { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: var(--s-4); }
+.entry-facts dt {
+  font-size: var(--fs-small); font-weight: var(--w-semibold);
+  color: var(--ink); line-height: var(--lh-lead);
+}
+.entry-facts dd {
+  margin: 0;
+  font-size: var(--fs-small); color: var(--body); line-height: var(--lh-lead);
+}
+.entry-facts dd.codes { font-variant-numeric: tabular-nums; font-weight: var(--w-medium); color: var(--ink); }
+
+.entry-label {
+  margin-bottom: var(--s-3);
+  font-size: var(--fs-small); font-weight: var(--w-semibold);
+  letter-spacing: normal; line-height: var(--lh-label);
+}
+.entry-back {
+  display: inline-block;
+  margin-top: var(--s-4); padding-block: var(--s-1);
+  font-size: var(--fs-small);
 }
 
-.p-side { display: flex; align-items: center; gap: var(--s-3); flex: none; }
-.badge {
-  color: var(--body); background: var(--tint);
-  border: 0; border-radius: var(--r-sm);
-  padding: 4px var(--s-3); white-space: nowrap;
-}
-.section-tint .badge:not(.badge-strong) { background: var(--surface); }
-.badge-strong { color: var(--brand-deep); background: var(--brand-tint); }
+/* Filter: re-trigger the shared settle keyframes on what is still shown.
+   The script removes .is-filtering when settle ends. */
+.ledger.is-filtering .entry:not([hidden]) { animation: settle var(--t-base) var(--ease) backwards; }
 
-.chev {
-  width: 20px; height: 20px; flex: none;
-  fill: none; stroke: var(--body); stroke-width: 1.8;
-  stroke-linecap: round; stroke-linejoin: round;
-  transition: transform var(--t-base) var(--ease);
+/* Arriving from a client link: a brief tint that fades out.
+   Declared after the filter rule and with equal specificity, so it wins. */
+@keyframes target-fade {
+  from { background-color: var(--brand-tint); }
+  to   { background-color: transparent; }
 }
-details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
+.ledger .entry:not([hidden]):target { animation: target-fade calc(var(--t-enter) * 4) var(--ease) var(--t-slow) backwards; }
 
-.p-detail { padding: 0 var(--s-5) var(--s-6); }
-.p-row {
-  display: grid; grid-template-columns: 124px minmax(0, 1fr);
-  gap: var(--s-5);
-  padding-top: var(--s-5); border-top: 1px solid var(--rule);
-}
-.p-row + .p-row { margin-top: var(--s-5); }
-.p-row h4 { margin-bottom: var(--s-2); }
-.p-when { font-size: var(--fs-small); color: var(--body); }
-
-.tags { display: flex; flex-wrap: wrap; gap: var(--s-2); }
-.tags li {
-  font-size: var(--fs-small); letter-spacing: var(--tracking-small); color: var(--ink);
-  background: var(--tint); border: 1px solid var(--rule);
-  padding: 4px var(--s-3); border-radius: var(--r-sm);
-}
-.section-tint .tags li { background: var(--surface); }
-
-/* ---- Engagement disclosure -------------------------------------------- */
-@keyframes disclose {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-.project details[open] .p-detail {
-  animation: disclose var(--t-slow) var(--ease) backwards;
-}
-
-/* Progressive enhancement: real height animation on browsers that have it. */
-@supports selector(::details-content) {
-  .project details { interpolate-size: allow-keywords; }
-  .project details::details-content {
-    block-size: 0;
-    overflow: hidden;
-    transition: block-size var(--t-slow) var(--ease),
-                content-visibility var(--t-slow) allow-discrete;
+@media (min-width: 1001px) {
+  .entry-id {
+    position: sticky;
+    top: calc(var(--h-masthead) + var(--s-5));
+    align-self: start;
   }
-  .project details[open]::details-content { block-size: auto; }
+}
+
+/* Focus: an ink ring on the control only, never a red box around a card.
+   Scoped to the new links; the chips only change ring colour and keep their radius. */
+#engagements :is(.cov-client, .entry-back):focus-visible { outline-color: var(--ink); outline-offset: 3px; border-radius: var(--r-sm); }
+#engagements .chip:focus-visible { outline-color: var(--ink); }
+
+/* Dark mode: logos are drawn for light grounds, so give them a tight plate */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) :is(.cov-logo, .entry-logo) {
+    box-sizing: content-box; padding: 4px 6px;
+    background: var(--logo-plate); border-radius: var(--r-sm);
+  }
+}
+:root[data-theme="dark"] :is(.cov-logo, .entry-logo) {
+  box-sizing: content-box; padding: 4px 6px;
+  background: var(--logo-plate); border-radius: var(--r-sm);
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .cov .cov-tiers td { width: 160px; }
+  .cov .cov-clients th { padding-inline: var(--s-2); }
+  .cov-meta,
+  .cov-type { font-size: var(--fs-caption); }
+  .cov .cov-clients .cov-corner { padding-left: 0; }
+  .cov .cov-tiers th { padding-inline: var(--s-2); }
+  .cov .cov-tiers th::after { left: var(--s-2); right: var(--s-2); }
+}
+
+@media (max-width: 860px) {
+  .cov-sheet { padding-inline: var(--s-4); }
+  .cov .cov-tiers td { width: 140px; }
+  .cov-logo { display: none; }
+  .cov-client { font-size: var(--fs-small); }
+  .cov tbody th[scope="row"] { font-size: var(--fs-small); }
+  .ledger { padding-inline: var(--s-5); }
+  .entry {
+    grid-template-columns: minmax(0, 1fr); gap: var(--s-4);
+    margin-inline: calc(-1 * var(--s-5)); padding: var(--s-5);
+  }
+}
+
+/* Phones and small tablets: the same table, same orientation, short names, no horizontal scroll */
+@media (max-width: 760px) {
+  .cov-sheet { padding: var(--s-2); }
+  /* Content-sized layout: five narrow client columns, labels take the rest */
+  .cov { table-layout: auto; }
+  .cov .cov-tiers td { width: auto; }
+  .cov th,
+  .cov td { padding: 0; }
+  .cov .cov-clients .cov-corner { padding-right: var(--s-2); font-size: var(--fs-caption); }
+  /* 4px each side keeps a visible gap between neighbouring short names */
+  .cov .cov-clients th[data-col] {
+    width: 40px;
+    padding: var(--s-3) var(--s-1) var(--s-2);
+    text-align: center; vertical-align: bottom;
+  }
+  .cov-meta,
+  .cov-type { display: none; }
+  .cov-full {
+    position: absolute; width: 1px; height: 1px;
+    clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+  }
+  .cov-short {
+    display: block;
+    font-size: var(--fs-caption); font-weight: var(--w-semibold); line-height: 1.2;
+    overflow-wrap: normal; hyphens: manual;
+  }
+  .cov-client { display: flex; align-items: flex-end; justify-content: center; min-height: 44px; }
+  /* Tier headers show short labels here; the full wording stays for screen readers */
+  .cov .cov-tiers th {
+    padding: var(--s-2) var(--s-1);
+    font-size: var(--fs-caption);
+    overflow-wrap: normal; hyphens: manual;
+  }
+  .cov .cov-tiers th::after { left: var(--s-1); right: var(--s-1); }
+  .cov .cov-group th { padding: var(--s-4) 0 var(--s-1); }
+  .cov tbody:first-of-type .cov-group th { padding-top: var(--s-3); }
+  .cov tbody th[scope="row"] { padding-right: var(--s-2); font-size: var(--fs-small); }
+  .cov tbody tr:not(.cov-group) > * { height: 40px; }
+  .mark { width: 10px; height: 10px; }
+  .cov-note { padding-inline: var(--s-1); }
+}
+
+@media (max-width: 560px) {
+  .ledger { padding-inline: var(--s-4); }
+  .entry { margin-inline: calc(-1 * var(--s-4)); padding: var(--s-5) var(--s-4); }
+  .entry-logo { height: 28px; }
+  .entry-facts > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ledger .entry:not([hidden]):target { animation: none; background-color: var(--brand-tint); }
+  .js-motion .cov:not(.is-in) .mark { opacity: 1; }
 }
 
 /* ---- Filtered results ------------------------------------------------- */
 @keyframes settle {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: none; }
-}
-.projects.is-filtering .project:not([hidden]) {
-  animation: settle var(--t-base) var(--ease) backwards;
 }
 
 /* ---- Entrances --------------------------------------------------------
@@ -765,14 +1013,10 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
     padding-block: var(--s-2) 4px;
     border-top: 1px solid var(--rule);
   }
-  .p-row { grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
 }
 
 @media (max-width: 560px) {
   :root { --s-9: 48px; --gutter: 20px; }
-  .p-side { width: 100%; flex: 1 1 100%; min-width: 0; justify-content: space-between; }
-  .p-side .badge { white-space: normal; }   /* long badges wrap instead of pushing the chevron off-screen */
-  .project summary { align-items: flex-start; }
   .intro { padding-block: var(--s-6); }
   .intro h1 { font-size: 2.125rem; max-width: none; }
   .mainnav { display: none; }
@@ -787,8 +1031,6 @@ details[open] .chev { transform: rotate(180deg); stroke: var(--ink); }
   .scope { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-7); }
   .scope li { flex-direction: row; align-items: baseline; gap: var(--s-3); padding: var(--s-3) 0; }
   .scope li + li { border-left: 0; border-top: 1px solid var(--rule); }
-  .p-logo { width: 72px; height: 48px; }
-  .p-logo img { max-width: 60px; max-height: 34px; }
   .masthead-inner { gap: var(--s-2); }
   :root { --h-wordmark: 20px; }
   .masthead .btn { padding: 0 var(--s-3); }
