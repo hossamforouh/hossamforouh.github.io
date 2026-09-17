@@ -96,6 +96,16 @@
       tablist.scrollLeft += (box.left - strip.left) - (strip.width - box.width) / 2;
     }
 
+    // Flag the edges of the scrolling strip that still hide tabs, for the CSS fade.
+    // Above 1000px nothing overflows, so both flags stay off.
+    function markEdges() {
+      var max = tablist.scrollWidth - tablist.clientWidth;
+      tablist.toggleAttribute("data-more-start", tablist.scrollLeft > 1);
+      tablist.toggleAttribute("data-more-end", tablist.scrollLeft < max - 1);
+    }
+    tablist.addEventListener("scroll", markEdges, { passive: true });
+    window.addEventListener("resize", markEdges);
+
     // Replay the entrance on a panel (motion only).
     function playEntrance(panel) {
       if (!allowMotion) return;
@@ -150,6 +160,7 @@
         try { history.replaceState(null, "", "#" + panels[i].id); } catch (e) { /* file:// etc. */ }
       }
       revealTab(tabs[i]);
+      markEdges();
       if (changed && opts.animate) playEntrance(panels[i]);
     }
 

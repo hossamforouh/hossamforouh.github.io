@@ -45,7 +45,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400..800&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&text=%D8%AD%D8%B3%D8%A7%D9%85%20%D9%85%D8%AC%D8%AF%D9%8A%20%D9%81%D8%B1%D9%88%D8%AD&display=swap">
-<link rel="stylesheet" href="styles.css?v=17">
+<link rel="stylesheet" href="styles.css?v=18">
 
 <a class="skip" href="#main">Skip to content</a>
 
@@ -137,27 +137,43 @@
       <div class="showcase" id="showcase">
         <!-- Controls ship hidden: without JavaScript nobody sees dead buttons -->
         <div class="show-bar" hidden>
+          <!-- Groups are role="none" so the tabs still belong to the tablist.
+               Caption and country lines copy the pills and .show-meta below: change them together. -->
           <div class="show-tabs" role="tablist" aria-label="Projects">
-            <button class="show-tab" type="button" role="tab" id="tab-saudi-cement" aria-controls="p-saudi-cement" aria-selected="true" tabindex="0">
-              <img class="show-tab-logo" src="logos/saudi-cement.png" alt="" width="218" height="75">
-              <span class="show-tab-name">Saudi Cement</span>
-            </button>
-            <button class="show-tab" type="button" role="tab" id="tab-warba-bank" aria-controls="p-warba-bank" aria-selected="false" tabindex="-1">
-              <img class="show-tab-logo" src="logos/warba-bank.svg" alt="" width="120" height="65">
-              <span class="show-tab-name">Warba Bank</span>
-            </button>
-            <button class="show-tab" type="button" role="tab" id="tab-thiqah" aria-controls="p-thiqah" aria-selected="false" tabindex="-1" data-group-start>
-              <img class="show-tab-logo" src="logos/thiqah.png" alt="" width="144" height="110">
-              <span class="show-tab-name">Thiqah</span>
-            </button>
-            <button class="show-tab" type="button" role="tab" id="tab-shift" aria-controls="p-shift" aria-selected="false" tabindex="-1">
-              <img class="show-tab-logo" src="logos/shift.png" alt="" width="96" height="96">
-              <span class="show-tab-name">Shift</span>
-            </button>
-            <button class="show-tab" type="button" role="tab" id="tab-nis" aria-controls="p-nis" aria-selected="false" tabindex="-1">
-              <img class="show-tab-logo" src="logos/nis.png" alt="" width="112" height="93">
-              <span class="show-tab-name">NIS</span>
-            </button>
+            <div class="show-group" role="none">
+              <span class="show-group-cap" aria-hidden="true">Full-cycle implementation</span>
+              <div class="show-group-tabs" role="none">
+                <button class="show-tab" type="button" role="tab" id="tab-saudi-cement" aria-controls="p-saudi-cement" aria-selected="true" tabindex="0">
+                  <span class="show-tab-mark"><img class="show-tab-logo" src="logos/saudi-cement.png" alt="" width="218" height="75"></span>
+                  <span class="show-tab-name">Saudi Cement</span>
+                  <span class="show-tab-meta">Saudi Arabia<span class="visually-hidden">, full-cycle implementation</span></span>
+                </button>
+                <button class="show-tab" type="button" role="tab" id="tab-warba-bank" aria-controls="p-warba-bank" aria-selected="false" tabindex="-1">
+                  <span class="show-tab-mark"><img class="show-tab-logo" src="logos/warba-bank.svg" alt="" width="120" height="65"></span>
+                  <span class="show-tab-name">Warba Bank</span>
+                  <span class="show-tab-meta">Kuwait<span class="visually-hidden">, full-cycle implementation</span></span>
+                </button>
+              </div>
+            </div>
+            <div class="show-group" role="none">
+              <div class="show-group-tabs" role="none">
+                <button class="show-tab" type="button" role="tab" id="tab-thiqah" aria-controls="p-thiqah" aria-selected="false" tabindex="-1">
+                  <span class="show-tab-mark"><img class="show-tab-logo" src="logos/thiqah.png" alt="" width="144" height="110"></span>
+                  <span class="show-tab-name">Thiqah</span>
+                  <span class="show-tab-meta">Saudi Arabia</span>
+                </button>
+                <button class="show-tab" type="button" role="tab" id="tab-shift" aria-controls="p-shift" aria-selected="false" tabindex="-1">
+                  <span class="show-tab-mark"><img class="show-tab-logo" src="logos/shift.png" alt="" width="96" height="96"></span>
+                  <span class="show-tab-name">Shift</span>
+                  <span class="show-tab-meta">Saudi Arabia</span>
+                </button>
+                <button class="show-tab" type="button" role="tab" id="tab-nis" aria-controls="p-nis" aria-selected="false" tabindex="-1">
+                  <span class="show-tab-mark"><img class="show-tab-logo" src="logos/nis.png" alt="" width="112" height="93"></span>
+                  <span class="show-tab-name">NIS</span>
+                  <span class="show-tab-meta">Egypt · In-house</span>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="show-nav">
             <button class="show-arrow" type="button" data-dir="-1" aria-label="Previous project: Advanced Education Schools — NIS"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -644,5 +660,5 @@
 </footer>
 
 <p class="visually-hidden" id="copy-status" aria-live="polite"></p>
-<script src="script.js?v=9"></script>
+<script src="script.js?v=10"></script>
 </html>
